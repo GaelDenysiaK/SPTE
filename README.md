@@ -38,4 +38,4 @@ Elle est compatible avec l'extension GlotDict.
 * Initial
 
 ## Remerciements
-Merci à Loïc Blascos pour avoir fait passer mon code de l'âge de pierre à l'âge de raison en me faisant découvrir l'api DOM et l'api CSSOM et en me convertissant aux expressions régulières.
+Merci à <a href="https://wpgridbuilder.com/">Loïc Blascos</a> pour avoir fait passer mon code de l'âge de pierre à l'âge de raison en me faisant découvrir l'api DOM et l'api CSSOM et en me convertissant aux expressions régulières.
