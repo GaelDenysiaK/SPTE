@@ -65,6 +65,9 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.8.5 - 4 Oct 2020
+*  Reprogrammation spécifique des caractères parenthèses ouvrantes et fermantes, accolades ouvrantes et fermantes, crochets ouvrants et fermants pour accepter des doubles crochets et doubles accolades ainsi que l’utilisation des parenthèses dans des informations de développement, gestion du point d’interrogation lorsqu’il est utilisé pour passer un paramètre en URL
+
 ### 0.9.8.0 - 3 Oct 2020
 * Initial
 
