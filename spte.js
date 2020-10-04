@@ -165,7 +165,7 @@ const rgxSlash = new RegExp(`((?<= | )\\${data.slash}|\\${data.slash}(?= | ))`
 const rgxOpenHook = new RegExp(`(?<! |\\${data.openHook}|^)\\${data.openHook}(?!\\${data.openHook})|\\${data.openHook}(?=[ | ])`, 'gmi');
 
 // Match opening parenthesis in different cases: typographic rules "space before" plus (e) (s) (% () cases.
-const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|e\\))|(?<!^)\\${data.openParenthesis}(?=[ | ])`, 'gmi'); 
+const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|e\\))|(?<!^)\\${data.openParenthesis}(?=[ | ])`, 'gmi');
 
 // Match opening brace in different cases : typographic rules "space before" plus double opening brace case.
 const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ | ])`, 'gmi');
@@ -193,7 +193,7 @@ const theNbkSpaceBefore = `${data.nbkSpaceBefore.map(escapeRegExp).join('|')}`;
 const rgxNbkSpaceBefore = new RegExp(`(?<! )(?<!${exceptions})[${theNbkSpaceBefore}](?!${exceptions})|(?<!${exceptions})[${theNbkSpaceBefore}](?! |${exceptions}|$)`, 'gmi');
 
 // Match question mark in different cases: typographic rules "non-breaking space before" plus URL
-const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|^)\\${data.questionMark}|(?<!\/|\.php|^)\\${data.questionMark}(?! |$)`, 'gmi');
+const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
 
 // Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL plus style= plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack).
 const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3})|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|$)`, 'gmi');
