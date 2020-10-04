@@ -30,7 +30,7 @@ Sur les traductions, la même coloration syntaxique est utilisée :
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-2.png "Coloration syntaxique")
 
-Au survol de chaque élément surligné apparait une info-bulle dans laquelle une explication du problème est décrit.
+Au survol de chaque élément surligné apparait une info-bulle dans laquelle une explication du problème est décrite.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-3.png "Info-bulle au survol")
 
@@ -40,10 +40,11 @@ Le texte est en blanc sur fond noir et sa taille est agrandie afin d’en facili
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-4.png "Info-bulle sans surlignage")
 
 En modification de traduction, la traduction à corriger est reprise juste au dessus du champ de saisie avec ses informations surlignées pour aider à la correction.
+Elle est sur fond gris pour permettre de voir les espaces insécables qui sont en blanc.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-5.png "Correction de la traduction")
 
-Les espaces (normaux : sécables) sont affichés en bleu afin d’être différenciés des espaces insécables, et afin d’être vus car ils peuvent être une erreur, ou réellement voulus.
+Les espaces (normaux : sécables) sont affichés en bleu afin d’être différenciés des espaces insécables, et aussi parce qu’ils peuvent être une erreur, ou réellement voulus.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-6.png "Espaces sécables en début ou fin de ligne")
 
