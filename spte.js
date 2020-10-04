@@ -43,8 +43,6 @@ const data = {
 	],
 	spaceAfter: [
 		'…',
-		']',
-		'}',
 	],
 	period: [
 		'.',
@@ -52,13 +50,21 @@ const data = {
 	comma: [
 		',',
 	],
+	closeHook: [
+		']',
+	],
 	closeParenthesis: [
 		')',
 	],
+	closeBrace: [
+		'}',
+	],
 	nbkSpaceBefore: [
-		'?',
 		'!',
 		'+',
+	],
+	questionMark: [
+		'?',
 	],
 	colon: [
 		':',
@@ -164,10 +170,8 @@ const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%
 // Match opening brace in different cases : typographic rules "space before" plus double opening brace case.
 const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ | ])`, 'gmi');
 
-// Match characters typographic rules "space after": preceded by space (breaking or non breaking)
-// OR not preceded by an exception and followed by letter or number or ending space (breaking or non breaking) and not followed by an exception.
-const theSpaceAfter = `${data.spaceAfter.map(escapeRegExp).join('|')}`;
-const rgxSpaceAfter = new RegExp(`(?<=[ | ])[${theSpaceAfter}]|(?!<${exceptions})[${theSpaceAfter}](?=[a-z]|[0-9]| $| $)(?!${exceptions})`, 'gmi');
+// Match characters typographic rules "space after": preceded by space (breaking or non breaking) OR followed by letter or number or ending space (breaking or non breaking).
+const rgxSpaceAfter = new RegExp(`(?<=[ | ])[${data.spaceAfter}]|[${data.spaceAfter}](?=[a-z]|[0-9]| $| $)`, 'gmi');
 
 // Match period in different cases: typographic rules "spaceAfter" plus URL plus version numbers plus .htaccess and .maintenance.
 const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<![a-z0-9\\${data.period}]*?)\\${data.period}(?=[a-z])|\\${data.period}( $| $)`, 'gmi');
@@ -175,12 +179,21 @@ const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<
 // Match comma in different cases: typographic rules "spaceAfter" plus decimals.
 const rgxComma = new RegExp(`(?<=[ | ])[${data.comma}]|[${data.comma}](?=[a-z]| $| $)`, 'gmi');
 
-// Match closing parenthesis in different cases: typographic rules "spaceAfter" plus (e) (s) (%x) cases.
+// Match closing hook in different cases: typographic rules "space after" plus double closing hook case.
+const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-z]|[0-9]| $| $)`, 'gmi');
+
+// Match closing parenthesis in different cases: typographic rules "space after" plus (e) (s) (%x) cases.
 const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|(?<!\\%[a-z]|\\(s|\\(e)\\${data.closeParenthesis}(?=[a-z]|[0-9]| )`, 'gmi');
+
+// Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
+const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-z]|[0-9]| $| $)`, 'gmi');
 
 // Match characters "nbkSpaceBefore" not preceded by non breaking space nor by an exception and not followed by an exception OR not preceded by an exception and followed by breaking space.
 const theNbkSpaceBefore = `${data.nbkSpaceBefore.map(escapeRegExp).join('|')}`;
 const rgxNbkSpaceBefore = new RegExp(`(?<! )(?<!${exceptions})[${theNbkSpaceBefore}](?!${exceptions})|(?<!${exceptions})[${theNbkSpaceBefore}](?! |${exceptions}|$)`, 'gmi');
+
+// Match question mark in different cases: typographic rules "non-breaking space before" plus URL
+const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|^)\\${data.questionMark}|(?<!\/|\.php|^)\\${data.questionMark}(?! |$)`, 'gmi');
 
 // Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL plus style= plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack).
 const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3})|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|$)`, 'gmi');
@@ -202,6 +215,10 @@ const colorCheck = 'magenta';
 const styleWordError = `background-color:${colorError};color:white;font-weight:bold;padding:1px;margin:0 1px`;
 const styleCharError = `display:inline-block;line-height:16px;box-shadow:${colorError} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
 const styleCharCheck = `display:inline-block;line-height:16px;box-shadow:${colorCheck} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
+const spaceBeforeTitle = 'Espace précédent manquante et/ou espace suivant en trop';
+const spaceAfterTitle = 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale';
+const nbkSpaceBeforeTitle = 'Non précédé par une espace insécable et/ou non suivi par une espace';
+const nbkSpaceAfterTitle = 'Non précédé par une espace et/ou non suivi par une espace insécable';
 
 const cases = {
 	badWords: {
@@ -238,7 +255,7 @@ const cases = {
 	},
 	openHook: {
 		title: charTitle,
-		cssTitle: 'Espace précédent manquante et/ou espace suivant en trop',
+		cssTitle: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -246,7 +263,7 @@ const cases = {
 	},
 	openParenthesis: {
 		title: charTitle,
-		cssTitle: 'Espace précédent manquante et/ou espace suivant en trop',
+		cssTitle: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -254,7 +271,7 @@ const cases = {
 	},
 	openBrace: {
 		title: charTitle,
-		cssTitle: 'Espace précédent manquante et/ou espace suivant en trop',
+		cssTitle: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -262,7 +279,7 @@ const cases = {
 	},
 	spaceAfter: {
 		title: charTitle,
-		cssTitle: 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale',
+		cssTitle: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -270,7 +287,7 @@ const cases = {
 	},
 	period: {
 		title: charTitle,
-		cssTitle: 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale',
+		cssTitle: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -278,31 +295,55 @@ const cases = {
 	},
 	comma: {
 		title: charTitle,
-		cssTitle: 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale',
+		cssTitle: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
 		regex: rgxComma,
 	},
+	closeHook: {
+		title: charTitle,
+		cssTitle: spaceAfterTitle,
+		cssClass: charClass,
+		style: styleCharCheck,
+		counter: 0,
+		regex: rgxCloseHook,
+	},
 	closeParenthesis: {
 		title: charTitle,
-		cssTitle: 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale',
+		cssTitle: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
 		regex: rgxCloseParenthesis,
 	},
+	closeBrace: {
+		title: charTitle,
+		cssTitle: spaceAfterTitle,
+		cssClass: charClass,
+		style: styleCharCheck,
+		counter: 0,
+		regex: rgxCloseBrace,
+	},
 	nbkSpaceBefore: {
 		title: charTitle,
-		cssTitle: 'Non précédé par une espace insécable et/ou non suivi par une espace',
+		cssTitle: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
 		regex: rgxNbkSpaceBefore,
 	},
+	questionMark: {
+		title: charTitle,
+		cssTitle: nbkSpaceBeforeTitle,
+		cssClass: charClass,
+		style: styleCharCheck,
+		counter: 0,
+		regex: rgxQuestionMark,
+	},
 	colon: {
 		title: charTitle,
-		cssTitle: 'Non précédé par une espace insécable et/ou non suivi par une espace',
+		cssTitle: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -310,7 +351,7 @@ const cases = {
 	},
 	semiColon: {
 		title: charTitle,
-		cssTitle: 'Non précédé par une espace insécable et/ou non suivi par une espace',
+		cssTitle: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -318,7 +359,7 @@ const cases = {
 	},
 	closingFrQuote: {
 		title: charTitle,
-		cssTitle: 'Non précédé par une espace insécable et/ou non suivi par une espace',
+		cssTitle: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -326,7 +367,7 @@ const cases = {
 	},
 	nbkSpaceAfter: {
 		title: charTitle,
-		cssTitle: 'Non précédé par une espace et/ou non suivi par une espace insécable',
+		cssTitle: nbkSpaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
