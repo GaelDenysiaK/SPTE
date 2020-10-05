@@ -492,10 +492,12 @@ function showResults() {
 	addStyle('.original__tooltip', 'display:none;position:absolute;width:calc(-5em - 10px + 42.5vw);top:100%;right:5em;z-index:666;padding:20px 10px;background:#000;color:#fff;text-align:left;font-size:17px;line-height:1.66;box-shadow:0 10px 10px rgba(0,0,0,.3)');
 	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
 	addStyle('.help-copycat', 'margin:1em 0;padding:10px 3px;font-size:15px;background-color:#d9e1e8');
+	addStyle('[style*="background-color:yellow"]', 'display:inline-block!important;line-height:16px!important;background-color:white!important;border:2px solid white!important');
 
 	if (nbTotal) {
 		addStyle('#results', 'font-weight:bold');
 		addStyle('.results__title', 'margin:10px 0px 5px;color:red;text-transform:uppercase');
+		addStyle('.results__links', 'font-weight:normal;margin:.3em 0');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
 
@@ -506,6 +508,14 @@ function showResults() {
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('results__title');
+		const typographyLink = document.createElement('p');
+		const glossaryLink = document.createElement('p');
+		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour comprendre ce qu’il faut corriger sur les caractères ou les apostrophes.';
+		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/le-glossaire-et-les-erreurs-de-traduction-les-plus-frequentes/">le glossaire</a> pour comprendre ce qu’il faut corriger sur les mots déconseillés.';
+		typographyLink.classList.add('results__links');
+		glossaryLink.classList.add('results__links');
+		results.append(typographyLink);
+		results.append(glossaryLink);
 		resultsPlace.append(results);
 	}
 }
