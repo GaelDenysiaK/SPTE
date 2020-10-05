@@ -66,6 +66,9 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.8.7 - 5 Oct 2020
+*  Ajout d’un bouton radio pour n’afficher que les avertissements.
+
 ### 0.9.8.6 - 5 Oct 2020
 *  Ajout de liens vers le glossaire et les règles typographiques
 *  ajout des mots "popup", "popups", "responsif" aux badWords

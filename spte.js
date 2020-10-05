@@ -409,8 +409,11 @@ function addTextOriginalToolTip(translation) {
 	hook.append(toolTip);
 }
 
-function addHelpTranslationWrapper(translation) {
+function addHelpTranslationWrapper(translation, hasWarning) {
 	const origin = translation.closest('tr');
+	if (!hasWarning) {
+		origin.classList.add('has-nope-warning');
+	}
 	const brother = origin.nextElementSibling;
 	if (origin.classList.contains('has-translations')) {
 		const help = document.createElement('div');
@@ -427,6 +430,8 @@ function addHelpTranslationWrapper(translation) {
 
 function checkTranslation(translation) {
 	let text = translation.innerHTML;
+	let hasWarning = false;
+
 	// Remove GlotDict tags on translation since we highlight non breaking spaces and for incompatibility.
 	text = removeGlotDictTags(text);
 
@@ -435,12 +440,15 @@ function checkTranslation(translation) {
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
 			cases[type].counter++;
+			if (!hasWarning && type !== 'nbkSpaces') {
+				hasWarning = true;
+			}
 			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
 		});
 	}
 	translation.innerHTML = text;
 
-	addHelpTranslationWrapper(translation);
+	addHelpTranslationWrapper(translation, hasWarning);
 }
 
 function addStyle(selector, rules) {
@@ -500,6 +508,7 @@ function showResults() {
 		addStyle('.results__links', 'font-weight:normal;margin:.3em 0');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
+		addStyle('#showEverything, #showOnlyWarning', 'margin:1.5em .5em 0 1em');
 
 		const legend = document.createElement('p');
 		legend.textContent = 'Les avertissements en rouge sont avérés. Attention, ceux en magenta sont à vérifier mais peuvent compter des faux positifs car des exceptions sont possibles.';
@@ -508,6 +517,7 @@ function showResults() {
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('results__title');
+
 		const typographyLink = document.createElement('p');
 		const glossaryLink = document.createElement('p');
 		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
@@ -516,9 +526,50 @@ function showResults() {
 		glossaryLink.classList.add('results__links');
 		results.append(typographyLink);
 		results.append(glossaryLink);
+
+		const showEverything = document.createElement('input');
+		showEverything.type = 'radio';
+		showEverything.id = 'showEverything';
+		showEverything.name = 'showEverything';
+		showEverything.value = 'showEverything';
+		showEverything.checked = 'checked';
+		results.append(showEverything);
+		const showEverythingLabel = document.createElement('label');
+		showEverythingLabel.textContent = 'Tout afficher';
+		showEverythingLabel.setAttribute('for', 'showEverything');
+		results.append(showEverythingLabel);
+		const showOnlyWarning = document.createElement('input');
+		showOnlyWarning.type = 'radio';
+		showOnlyWarning.id = 'showOnlyWarning';
+		showOnlyWarning.name = 'showOnlyWarning';
+		showOnlyWarning.value = 'showOnlyWarning';
+		results.append(showOnlyWarning);
+		const showOnlyWarningLabel = document.createElement('label');
+		showOnlyWarningLabel.textContent = 'N’afficher que les avertissements';
+		showOnlyWarningLabel.setAttribute('for', 'showOnlyWarning');
+		results.append(showOnlyWarningLabel);
+
 		resultsPlace.append(results);
 	}
 }
 
 translations.forEach(checkTranslation);
 showResults();
+
+const showOnlyWarning = document.querySelector('#showOnlyWarning');
+const showEverything = document.querySelector('#showEverything');
+
+showOnlyWarning.addEventListener('click', function() {
+	showOnlyWarning.checked = 'checked';
+	showEverything.checked = '';
+	document.querySelectorAll('.has-nope-warning').forEach(function(el) {
+		el.style.display = 'none';
+	});
+});
+showEverything.addEventListener('click', function() {
+	showEverything.checked = 'checked';
+	showOnlyWarning.checked = '';
+	document.querySelectorAll('.has-nope-warning').forEach(function(el) {
+		el.style.display = 'table-row';
+	});
+});
