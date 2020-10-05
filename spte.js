@@ -238,7 +238,7 @@ const cases = {
 	},
 	quotes: {
 		title: 'Apostrophes droites : ',
-		cssTitle: 'Apostrophe droite',
+		cssTitle: 'Apostrophe droite au lieu d’une apostrophe courbe',
 		cssClass: 'quote--warning',
 		style: styleCharError,
 		counter: 0,
@@ -510,8 +510,8 @@ function showResults() {
 		resultsTitle.classList.add('results__title');
 		const typographyLink = document.createElement('p');
 		const glossaryLink = document.createElement('p');
-		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour comprendre ce qu’il faut corriger sur les caractères ou les apostrophes.';
-		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/le-glossaire-et-les-erreurs-de-traduction-les-plus-frequentes/">le glossaire</a> pour comprendre ce qu’il faut corriger sur les mots déconseillés.';
+		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
+		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/le-glossaire-et-les-erreurs-de-traduction-les-plus-frequentes/">le glossaire officiel</a> à respecter pour les mots.';
 		typographyLink.classList.add('results__links');
 		glossaryLink.classList.add('results__links');
 		results.append(typographyLink);

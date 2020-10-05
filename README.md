@@ -66,6 +66,11 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.8.6 - 5 Oct 2020
+*  Ajout de liens vers le glossaire et les règles typographiques
+*  ajout des mots "popup", "popups", "responsif" aux badWords
+*  correction apportée lorsqu’en sortie de correction sur une chaîne comprenant un espace insécable la coloration de GlotDict réapparaissait
+
 ### 0.9.8.5 - 4 Oct 2020
 *  Reprogrammation spécifique des caractères parenthèses ouvrantes et fermantes, accolades ouvrantes et fermantes, crochets ouvrants et fermants pour accepter des doubles crochets et doubles accolades ainsi que l’utilisation des parenthèses dans des informations de développement, gestion du point d’interrogation lorsqu’il est utilisé pour passer un paramètre en URL
 
