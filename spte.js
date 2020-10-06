@@ -374,6 +374,7 @@ const cases = {
 	},
 };
 
+// I delete the GlotDict tags in the right column, to recreate them later.
 function removeGlotDictTags(text) {
 	let textWithoutG = text;
 	textWithoutG = text.replaceAll(/<span style="background-color:yellow">&nbsp;<\/span>/gmi, ' ');
