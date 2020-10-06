@@ -9,6 +9,7 @@ const data = {
 		'font-sise',
 		'limace',
 		'limaces',
+		'melle',
 		'n4est',
 		'plugin',
 		'plugins',
