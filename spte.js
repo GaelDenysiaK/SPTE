@@ -505,13 +505,13 @@ function showResults() {
 	if (nbTotal) {
 		addStyle('#results', 'font-weight:bold');
 		addStyle('.results__title', 'margin:10px 0px 5px;color:red;text-transform:uppercase');
-		addStyle('.results__links', 'font-weight:normal;margin:.3em 0');
+		addStyle('.results__links', 'display:inline;font-weight:normal;margin:.3em 1em .3em 0');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
 		addStyle('#showEverything, #showOnlyWarning', 'margin:1.5em .5em 0 1em');
 
 		const legend = document.createElement('p');
-		legend.textContent = 'Les avertissements en rouge sont avérés. Attention, ceux en magenta sont à vérifier mais peuvent compter des faux positifs car des exceptions sont possibles.';
+		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en magenta sont à vérifier mais peuvent compter des faux positifs car des exceptions sont possibles.';
 		legend.style.fontWeight = 'normal';
 		legend.style.fontStyle = 'italic';
 		results.append(legend);
@@ -527,27 +527,30 @@ function showResults() {
 		results.append(typographyLink);
 		results.append(glossaryLink);
 
+		const controls = document.createElement('div');
+		controls.id = 'controls';
 		const showEverything = document.createElement('input');
 		showEverything.type = 'radio';
 		showEverything.id = 'showEverything';
 		showEverything.name = 'showEverything';
 		showEverything.value = 'showEverything';
 		showEverything.checked = 'checked';
-		results.append(showEverything);
+		controls.append(showEverything);
 		const showEverythingLabel = document.createElement('label');
 		showEverythingLabel.textContent = 'Tout afficher';
 		showEverythingLabel.setAttribute('for', 'showEverything');
-		results.append(showEverythingLabel);
+		controls.append(showEverythingLabel);
 		const showOnlyWarning = document.createElement('input');
 		showOnlyWarning.type = 'radio';
 		showOnlyWarning.id = 'showOnlyWarning';
 		showOnlyWarning.name = 'showOnlyWarning';
 		showOnlyWarning.value = 'showOnlyWarning';
-		results.append(showOnlyWarning);
+		controls.append(showOnlyWarning);
 		const showOnlyWarningLabel = document.createElement('label');
 		showOnlyWarningLabel.textContent = 'N’afficher que les avertissements';
 		showOnlyWarningLabel.setAttribute('for', 'showOnlyWarning');
-		results.append(showOnlyWarningLabel);
+		controls.append(showOnlyWarningLabel);
+		results.append(controls);
 
 		resultsPlace.append(results);
 	}
