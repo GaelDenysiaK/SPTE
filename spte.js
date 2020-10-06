@@ -195,9 +195,9 @@ const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${
 // Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
 const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-z]|[0-9]| $| $)`, 'gmi');
 
-// Match characters "nbkSpaceBefore" not preceded by non breaking space nor by an exception and not followed by an exception OR not preceded by an exception and followed by breaking space.
+// Match characters "nbkSpaceBefore" not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
 const theNbkSpaceBefore = `${data.nbkSpaceBefore.map(escapeRegExp).join('|')}`;
-const rgxNbkSpaceBefore = new RegExp(`(?<! )(?<!${exceptions})[${theNbkSpaceBefore}](?!${exceptions})|(?<!${exceptions})[${theNbkSpaceBefore}](?! |${exceptions}|$)`, 'gmi');
+const rgxNbkSpaceBefore = new RegExp(`(?<! |^)[${theNbkSpaceBefore}]|[${theNbkSpaceBefore}](?! |$)`, 'gmi');
 
 // Match question mark in different cases: typographic rules "non-breaking space before" plus URL
 const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
