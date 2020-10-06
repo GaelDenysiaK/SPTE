@@ -79,7 +79,7 @@ const data = {
 	closingFrQuote: [
 		'»',
 	],
-	nbkSpaceAfter: [
+	openFrQuote: [
 		'«',
 	],
 	fileExtensions: [
@@ -98,6 +98,8 @@ const data = {
 		'htaccess',
 		'html',
 		'ico',
+		'jpg',
+		'jpeg',
 		'js',
 		'log',
 		'maintenance',
@@ -211,9 +213,8 @@ const rgxSemiColon = new RegExp(`(?<! |:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]
 // Match closing french quote in different cases: typographic rules "nbkSpaceBefore" plus followed by colon or comma.
 const rgxClosingFrQuote = new RegExp(`(?<! )${data.closingFrQuote}|${data.closingFrQuote}(?! |\\.|\\,|$)`, 'gmi');
 
-// Match characters "nbkSpaceAfter" not preceded by breaking space nor by an exception OR not preceded by an exception and followed by non breaking space.
-const theNbkSpaceAfter = `${data.nbkSpaceAfter.map(escapeRegExp).join('|')}`;
-const rgxNbkSpaceAfter = new RegExp(`(?<! |${exceptions}|^)[${theNbkSpaceAfter}](?!${exceptions})|(?<!${exceptions})[${theNbkSpaceAfter}](?! |${exceptions}|$)`, 'gmi');
+// Match characters open french quote not preceded by breaking space OR followed by non breaking space.
+const rgxOpenFrQuote = new RegExp(`(?<! |^)[${data.openFrQuote}]|[${data.openFrQuote}](?! |$)`, 'gmi');
 
 const charTitle = 'Caractères à vérifier : ';
 const charClass = 'char--warning';
@@ -364,13 +365,13 @@ const cases = {
 		counter: 0,
 		regex: rgxClosingFrQuote,
 	},
-	nbkSpaceAfter: {
+	openFrQuote: {
 		title: charTitle,
 		cssTitle: nbkSpaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
-		regex: rgxNbkSpaceAfter,
+		regex: rgxOpenFrQuote,
 	},
 	nbkSpaces: {
 		title: '',
