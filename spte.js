@@ -244,14 +244,6 @@ const cases = {
 		counter: 0,
 		regex: /\u0027/gm,
 	},
-	Space: {
-		title: '',
-		cssTitle: 'Espace en début ou en fin de chaîne',
-		cssClass: 'spaces--showing',
-		style: 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue',
-		counter: 0,
-		regex: /^ | $/gm,
-	},
 	slash: {
 		title: charTitle,
 		cssTitle: 'Espace précédent en trop et/ou espace suivant en trop',
@@ -387,6 +379,14 @@ const cases = {
 		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
 		counter: 0,
 		regex: /\u00A0/gm,
+	},
+	Space: {
+		title: '',
+		cssTitle: 'Espace en début ou en fin de chaîne',
+		cssClass: 'spaces--showing',
+		style: 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue',
+		counter: 0,
+		regex: /^ | $/gm,
 	},
 };
 

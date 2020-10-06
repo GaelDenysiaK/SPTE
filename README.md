@@ -66,6 +66,9 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.8.9 - 6 Oct 2020
+* Correction faux positif sur deux points précédés par un espace insécable et suivi par un espace
+
 ### 0.9.8.8 - 6 Oct 2020
 *  Amélioration du markup HTML du header
 *  Factorisation de la fonction showControls
