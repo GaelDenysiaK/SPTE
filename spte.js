@@ -556,23 +556,26 @@ function showResults() {
 	}
 }
 
+function showControls() {
+	const showOnlyWarning = document.querySelector('#showOnlyWarning');
+	const showEverything = document.querySelector('#showEverything');
+
+	showOnlyWarning.addEventListener('click', () => {
+		showOnlyWarning.checked = 'checked';
+		showEverything.checked = '';
+		document.querySelectorAll('.has-nope-warning').forEach((el) => {
+			el.style.display = 'none';
+		});
+	});
+	showEverything.addEventListener('click', () => {
+		showEverything.checked = 'checked';
+		showOnlyWarning.checked = '';
+		document.querySelectorAll('.has-nope-warning').forEach((el) => {
+			el.style.display = 'table-row';
+		});
+	});
+}
+
 translations.forEach(checkTranslation);
 showResults();
-
-const showOnlyWarning = document.querySelector('#showOnlyWarning');
-const showEverything = document.querySelector('#showEverything');
-
-showOnlyWarning.addEventListener('click', function() {
-	showOnlyWarning.checked = 'checked';
-	showEverything.checked = '';
-	document.querySelectorAll('.has-nope-warning').forEach(function(el) {
-		el.style.display = 'none';
-	});
-});
-showEverything.addEventListener('click', function() {
-	showEverything.checked = 'checked';
-	showOnlyWarning.checked = '';
-	document.querySelectorAll('.has-nope-warning').forEach(function(el) {
-		el.style.display = 'table-row';
-	});
-});
+showControls();
