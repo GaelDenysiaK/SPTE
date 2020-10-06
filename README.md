@@ -70,6 +70,13 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.9.0 - 6 Oct 2020
+*  Suppression de la détection du guillement français ouvrant lorsqu'en début de chaîne
+*  Suppression des exceptions rendues inutiles par le traitement unitaire de chaque caractère
+*  Ajout jpg et jpeg aux extensions et suppression de l'avertissement sur les apostrophes simples lorsqu'elles sont précédées par href=
+*  Ajout commentaire sur GlotDict dans readme et js
+*  Ajout 'Melle' aux badwords
+
 ### 0.9.8.9 - 6 Oct 2020
 * Correction faux positif sur deux points précédés par un espace insécable et suivi par un espace
 
