@@ -508,12 +508,12 @@ function showResults() {
 		addStyle('.results__links', 'display:inline;font-weight:normal;margin:.3em 1em .3em 0');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
+		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 .3em 0');
 		addStyle('#showEverything, #showOnlyWarning', 'margin:1.5em .5em 0 1em');
 
 		const legend = document.createElement('p');
-		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en magenta sont à vérifier mais peuvent compter des faux positifs car des exceptions sont possibles.';
-		legend.style.fontWeight = 'normal';
-		legend.style.fontStyle = 'italic';
+		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en magenta sont à vérifier mais peuvent compter des faux positifs.';
+		legend.classList.add('warning-legend');
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('results__title');
