@@ -132,31 +132,11 @@ const data = {
 		'xml',
 		'zip',
 	],
-	stringException: [
-		'http',
-		'https',
-		'hh',
-		'mm',
-		'ss',
-		'aaaa',
-		'jj',
-		'href',
-		'style=',
-		'com',
-		'&lt',
-		'&gt',
-		'php',
-		'com',
-		'org',
-		'www',
-		'%s',
-	],
 };
 
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 const translations = document.querySelectorAll('.translation-text');
 const fileExtensions = data.fileExtensions.join('|');
-const exceptions = data.stringException.map(escapeRegExp).join('|');
 
 // Escape data.
 function escapeRegExp(data) {
