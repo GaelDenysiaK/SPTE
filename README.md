@@ -66,6 +66,11 @@ Elle est compatible avec l’extension GlotDict.
 
 ## Changelog
 
+### 0.9.8.8 - 6 Oct 2020
+*  Amélioration du markup HTML du header
+*  Factorisation de la fonction showControls
+*  Réduction de la taille de la légende
+
 ### 0.9.8.7 - 5 Oct 2020
 *  Ajout d’un bouton radio pour n’afficher que les avertissements.
 
