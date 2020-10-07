@@ -1,9 +1,6 @@
 # SPTE
 
-Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française. Elle est donc complémentaire.
-Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais elle permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
-
-Cette extension est utilisable exclusivement sur https://translate.wordpress.org/ et permet de visualiser sur les traductions en français les éléments suivants :
+Cette extension est utilisable sur https://translate.wordpress.org/ et permet de visualiser sur les traductions en français les éléments suivants :
 * les espaces insécables en blanc
 * les espaces sécables en début et en fin de chaîne en bleu
 
@@ -18,6 +15,9 @@ Le survol du lien Détails en fin de ligne permet de voir la chaîne d’origine
 La chaine avec ses erreurs est également affichée dans la partie saisie/modification.
 
 Un bouton radio permet de n’afficher que les traductions ayant des avertissements.
+
+Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française. Elle est donc complémentaire.
+Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais elle permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
 
 ## Utilisation
 
@@ -64,11 +64,20 @@ Si vous souhaitez contribuer sur le code et tester vos modifications avant de le
 ## Installation
 
 Cette extension est utilisable avec le navigateur Firefox.
+
 https://addons.mozilla.org/fr/firefox/addon/spte/
 
 Elle est compatible avec l’extension GlotDict.
 
+Il peut être nécessaire de désactiver l’extension uBlock Origin sur translate.wordpress.org dans certains cas, en ajoutant une exception pour cette URL.
+Toute extension bloquant les scripts peut avoir besoin du même processus.
+
 ## Changelog
+
+### 0.9.9.1 - 7 Oct 2020
+*  Suppression détection des apostrophes simples encadrant un paramètre, exemple : '%s'
+*  Suppression détection des signes slash doublés
+*  Correction slash lorsque suivi par un supérieur dans le cas d'une balise XHTML auto-fermante
 
 ### 0.9.9.0 - 6 Oct 2020
 *  Suppression de la détection du guillement français ouvrant lorsqu'en début de chaîne
