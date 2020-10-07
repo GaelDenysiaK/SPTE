@@ -1,7 +1,7 @@
 # SPTE
 
-Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française.
-Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
+Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française. Elle est donc complémentaire.
+Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais elle permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
 
 Cette extension est utilisable exclusivement sur https://translate.wordpress.org/ et permet de visualiser sur les traductions en français les éléments suivants :
 * les espaces insécables en blanc
@@ -48,7 +48,7 @@ Elle est sur fond gris pour permettre de voir les espaces insécables qui sont e
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-5.png "Correction de la traduction")
 
-Les espaces (normaux : sécables) sont affichés en bleu afin d’être différenciés des espaces insécables, et aussi parce qu’ils peuvent être une erreur, ou réellement voulus.
+Les espaces (normaux : sécables) sont affichées en bleu afin d’être différenciées des espaces insécables : il peut s’agir d’une erreur, mais il peut aussi s’agir d’une espace voulue. Bien réfléchir avant de les supprimer.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-6.png "Espaces sécables en début ou fin de ligne")
 

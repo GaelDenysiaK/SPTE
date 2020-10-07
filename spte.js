@@ -487,6 +487,7 @@ function showResults() {
 	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
 	addStyle('.help-copycat', 'margin:1em 0;padding:10px 3px;font-size:15px;background-color:#d9e1e8');
 	addStyle('[style*="background-color:yellow"]', 'display:inline-block!important;line-height:16px!important;background-color:white!important;border:2px solid white!important');
+	addStyle('@media only screen and (min-width:640px)', '.filter-toolbar{margin-bottom:-2.4em;}');
 
 	if (nbTotal) {
 		addStyle('#results', 'font-weight:bold');
@@ -494,8 +495,9 @@ function showResults() {
 		addStyle('.results__links', 'display:inline;font-weight:normal;margin:.3em 1em .3em 0');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
-		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 .3em 0');
-		addStyle('#showEverything, #showOnlyWarning', 'margin:1.5em .5em 0 1em');
+		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 0 0');
+		addStyle('#showEverything,#showOnlyWarning', 'margin:1em 0 0 0');
+		addStyle('#showEverything+label,#showOnlyWarning+label', 'margin:0 1.5em 0 .5em');
 
 		const legend = document.createElement('p');
 		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en magenta sont à vérifier mais peuvent compter des faux positifs.';
