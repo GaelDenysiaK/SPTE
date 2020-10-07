@@ -148,7 +148,7 @@ function escapeRegExp(data) {
 const rgxBadWords = new RegExp(`(?<=[\\s,.:;"']|^)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`, 'gmi');
 
 // Match single quotes.
-const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?)\u0027', 'gm');
+const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027(?!%)', 'gm');
 
 // Match slash with spaces(before and after, breaking or not).
 const rgxSlash = new RegExp(`((?<= | )\\${data.slash}|\\${data.slash}(?= | ))`, 'gmi');
