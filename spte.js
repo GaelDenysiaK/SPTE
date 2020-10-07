@@ -121,6 +121,8 @@ const data = {
 		'rtf',
 		'svg',
 		'sql',
+		'tar',
+		'gz',
 		'tiff',
 		'tif',
 		'ttf',
