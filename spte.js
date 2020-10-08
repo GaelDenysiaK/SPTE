@@ -104,6 +104,7 @@ const data = {
 		'js',
 		'log',
 		'maintenance',
+		'mail',
 		'mo',
 		'mov',
 		'mp3',
