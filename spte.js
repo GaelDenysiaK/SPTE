@@ -489,7 +489,6 @@ function showResults() {
 	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
 	addStyle('.help-copycat', 'margin:1em 0;padding:10px 3px;font-size:15px;background-color:#d9e1e8');
 	addStyle('[style*="background-color:yellow"]', 'display:inline-block!important;line-height:16px!important;background-color:white!important;border:2px solid white!important');
-	addStyle('@media only screen and (min-width:640px)', '.filter-toolbar{margin-bottom:-2.4em;}');
 
 	if (nbTotal) {
 		addStyle('#results', 'font-weight:bold');

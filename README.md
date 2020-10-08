@@ -74,6 +74,9 @@ Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ## Changelog
 
+### 0.9.9.2 - 7 Oct 2020
+*  Annulation gain de place en CSS qui provoquait un bug d'affichage pour les >PTE
+
 ### 0.9.9.1 - 7 Oct 2020
 *  Suppression détection des apostrophes simples encadrant un paramètre, exemple : '%s'
 *  Suppression détection des signes slash doublés
