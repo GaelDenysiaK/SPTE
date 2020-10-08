@@ -16,8 +16,12 @@ La chaine avec ses erreurs est également affichée dans la partie saisie/modifi
 
 Un bouton radio permet de n’afficher que les traductions ayant des avertissements.
 
+## GlotDict & SPTE
+
 Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française. Elle est donc complémentaire.
 Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais elle permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
+Parce qu'elle travaille en profondeur sur la colonne ".translation.foreign-text", SPTE est obligé de forcer 2 paramètres de GlotDict par compatibilité.
+Il s'agit des valeurs localStorage suivantes : gd_curly_apostrophe_warning et gd_localized_quote_warning sont forcés à True.
 
 ## Utilisation
 
@@ -73,6 +77,9 @@ Il peut être nécessaire de désactiver l’extension uBlock Origin sur transla
 Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ## Changelog
+
+### 0.9.9.3 - 7 Oct 2020
+*  Modification de la surcharge des styles GlotDict par une surcharge des paramètres GlotDict
 
 ### 0.9.9.2 - 7 Oct 2020
 *  Annulation gain de place en CSS qui provoquait un bug d'affichage pour les >PTE

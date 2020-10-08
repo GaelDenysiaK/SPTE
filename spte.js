@@ -377,21 +377,16 @@ const cases = {
 	},
 };
 
-// I delete the GlotDict tags in the right column, to recreate them later.
-function removeGlotDictTags(text) {
-	let textWithoutG = text;
-	textWithoutG = text.replaceAll(/<span style="background-color:yellow">&nbsp;<\/span>/gmi, ' ');
-	textWithoutG = text.replaceAll(/&nbsp;/gmi, ' ');
-	return textWithoutG;
-}
-
 function addTextOriginalToolTip(translation) {
 	const origin = translation.closest('tr');
 	const toolTip = document.createElement('span');
 	const translated = origin.querySelector('.translation-text');
 	const hook = origin.querySelector('td.actions');
 	hook.style.position = 'relative';
-	toolTip.innerHTML = removeGlotDictTags(translated.innerHTML);
+	toolTip.innerHTML = translated.innerHTML;
+	// Force GlotDict parameters for compatibility.
+	localStorage.setItem('gd_curly_apostrophe_warning', true);
+	localStorage.setItem('gd_localized_quote_warning', true);
 	// Displays the translated string without any markup.
 	toolTip.classList.add('original__tooltip');
 	hook.append(toolTip);
