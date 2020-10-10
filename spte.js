@@ -399,16 +399,21 @@ function addTextOriginalToolTip(translation) {
 	hook.append(toolTip);
 }
 
-function addHelpTranslationWrapper(translation, hasWarning) {
+function addHelpTranslationWrapper(translation) {
 	const origin = translation.closest('tr');
-	if (!hasWarning) {
-		origin.classList.add('has-nospte-warning');
-	}
 	const brother = origin.nextElementSibling;
 	if (origin.classList.contains('has-translations')) {
 		const help = document.createElement('div');
 		help.classList.add('help-copycat');
 		const trad = origin.querySelector('.translation-text');
+		const spteWarning = trad.querySelector('span[class$="--warning"]');
+		if (spteWarning) {
+			origin.classList.add('has-spte-warning');
+			if (spteWarning.classList.contains('word--warning') || spteWarning.classList.contains('quote--warning')) {
+				origin.classList.add('has-spte-error');
+			}
+		}
+
 		const hook = brother.querySelector('.source-details');
 		const copycat = trad.cloneNode(true);
 		help.append(copycat);
@@ -420,7 +425,6 @@ function addHelpTranslationWrapper(translation, hasWarning) {
 
 function checkTranslation(translation) {
 	let text = translation.innerHTML;
-	let hasWarning = false;
 
 	addTextOriginalToolTip(translation);
 
@@ -432,15 +436,13 @@ function checkTranslation(translation) {
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
 			cases[type].counter++;
-			if (!hasWarning && type !== 'nbkSpaces') {
-				hasWarning = true;
-			}
+
 			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
 		});
 	}
 	translation.innerHTML = text;
 
-	addHelpTranslationWrapper(translation, hasWarning);
+	addHelpTranslationWrapper(translation);
 }
 
 function addStyle(selector, rules) {
@@ -501,11 +503,13 @@ function showResults() {
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
 		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 0 0');
-		addStyle('#showEverything,#showOnlyWarning', 'margin:1em 0 0 0');
+		addStyle('#showEverything,#showOnlyWarning', 'margin:1em 0 0 .6em');
 		addStyle('#showEverything+label,#showOnlyWarning+label', 'margin:0 1.5em 0 .5em');
+		addStyle('#spteSelectErrors', 'margin:1em .58em');
+		addStyle('#spteSelectErrors+label', 'margin:0 1.5em 0 0;font-weight:bold');
 
 		const legend = document.createElement('p');
-		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en magenta sont à vérifier mais peuvent compter des faux positifs.';
+		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.';
 		legend.classList.add('warning-legend');
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
@@ -514,7 +518,7 @@ function showResults() {
 		const typographyLink = document.createElement('p');
 		const glossaryLink = document.createElement('p');
 		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
-		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/le-glossaire-et-les-erreurs-de-traduction-les-plus-frequentes/">le glossaire officiel</a> à respecter pour les mots.';
+		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
 		typographyLink.classList.add('results__links');
 		glossaryLink.classList.add('results__links');
 		results.append(typographyLink);
@@ -546,17 +550,33 @@ function showResults() {
 		results.append(controls);
 
 		resultsPlace.append(results);
+
+		const bulkActions = document.getElementById('bulk-actions-toolbar-top');
+		if (bulkActions) {
+			const spteSelectErrors = document.createElement('input');
+			spteSelectErrors.type = 'checkbox';
+			spteSelectErrors.id = 'spteSelectErrors';
+			spteSelectErrors.name = 'spteSelectErrors';
+			spteSelectErrors.value = 'spteSelectErrors';
+			spteSelectErrors.checked = '';
+			const spteSelectErrorsLabel = document.createElement('label');
+			spteSelectErrorsLabel.textContent = 'Cocher les avertissements en rouge';
+			spteSelectErrorsLabel.setAttribute('for', 'spteSelectErrors');
+			bulkActions.append(spteSelectErrors);
+			bulkActions.append(spteSelectErrorsLabel);
+		}
 	}
 }
 
-function showControls() {
+function manageControls() {
 	const showOnlyWarning = document.querySelector('#showOnlyWarning');
 	const showEverything = document.querySelector('#showEverything');
+	const spteSelectErrors = document.querySelector('#spteSelectErrors');
 
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
-		document.querySelectorAll('.has-nospte-warning').forEach((el) => {
+		document.querySelectorAll('tr.preview.has-translations:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'none';
 			// We uncheck hidden elements to prevent bulk processing from non-visible elements.
 			el.firstElementChild.firstElementChild.checked = '';
@@ -565,12 +585,36 @@ function showControls() {
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
 		showOnlyWarning.checked = '';
-		document.querySelectorAll('.has-nospte-warning').forEach((el) => {
+		document.querySelectorAll('tr.preview.has-translations:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'table-row';
 		});
+	});
+	if (!spteSelectErrors) { return; }
+	spteSelectErrors.addEventListener('change', () => {
+		let nbSelectedRows = 0;
+		if (spteSelectErrors.checked) {
+			document.querySelectorAll('tr.preview.has-spte-error').forEach((el) => {
+				el.firstElementChild.firstElementChild.checked = 'checked';
+				nbSelectedRows++;
+			});
+		} else {
+			document.querySelectorAll('tr.preview.has-spte-error').forEach((el) => {
+				el.firstElementChild.firstElementChild.checked = '';
+			});
+			nbSelectedRows = 0;
+		}
+		if (document.querySelector('#gd-checked-count')) {
+			document.querySelector('#gd-checked-count').remove();
+		}
+		const gdCountNotice = document.createElement('div');
+		gdCountNotice.id = 'gd-checked-count';
+		gdCountNotice.textContent = `${nbSelectedRows} ligne(s) sélectionnée(s)`;
+		gdCountNotice.classList.add('notice');
+		const tableTranslations = document.querySelector('#translations');
+		tableTranslations.parentNode.insertBefore(gdCountNotice, tableTranslations);
 	});
 }
 
 translations.forEach(checkTranslation);
 showResults();
-showControls();
+manageControls();
