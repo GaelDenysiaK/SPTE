@@ -402,7 +402,7 @@ function addTextOriginalToolTip(translation) {
 function addHelpTranslationWrapper(translation, hasWarning) {
 	const origin = translation.closest('tr');
 	if (!hasWarning) {
-		origin.classList.add('has-nope-warning');
+		origin.classList.add('has-nospte-warning');
 	}
 	const brother = origin.nextElementSibling;
 	if (origin.classList.contains('has-translations')) {
@@ -556,14 +556,16 @@ function showControls() {
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
-		document.querySelectorAll('.has-nope-warning').forEach((el) => {
+		document.querySelectorAll('.has-nospte-warning').forEach((el) => {
 			el.style.display = 'none';
+			// We uncheck hidden elements to prevent bulk processing from non-visible elements.
+			el.firstElementChild.firstElementChild.checked = '';
 		});
 	});
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
 		showOnlyWarning.checked = '';
-		document.querySelectorAll('.has-nope-warning').forEach((el) => {
+		document.querySelectorAll('.has-nospte-warning').forEach((el) => {
 			el.style.display = 'table-row';
 		});
 	});
