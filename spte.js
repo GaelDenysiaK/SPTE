@@ -9,6 +9,8 @@ const data = {
 		'font-sise',
 		'limace',
 		'limaces',
+		'mail',
+		'mails',
 		'melle',
 		'n4est',
 		'plugin',
@@ -360,14 +362,6 @@ const cases = {
 		counter: 0,
 		regex: rgxOpenFrQuote,
 	},
-	nbkSpaces: {
-		title: '',
-		cssTitle: 'Espace insécable',
-		cssClass: 'nbkspaces--showing',
-		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
-		counter: 0,
-		regex: /\u00A0/gm,
-	},
 	Space: {
 		title: '',
 		cssTitle: 'Espace en début ou en fin de chaîne',
@@ -376,7 +370,21 @@ const cases = {
 		counter: 0,
 		regex: /^ | $/gm,
 	},
+	nbkSpaces: {
+		title: '',
+		cssTitle: 'Espace insécable',
+		cssClass: 'nbkspaces--showing',
+		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
+		counter: 0,
+		regex: /\u00A0/gm,
+	},
 };
+
+// Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
+function preventGlotDictTags() {
+	localStorage.setItem('gd_curly_apostrophe_warning', 'true');
+	localStorage.setItem('gd_no_non_breaking_space', 'true');
+}
 
 function addTextOriginalToolTip(translation) {
 	const origin = translation.closest('tr');
@@ -385,9 +393,7 @@ function addTextOriginalToolTip(translation) {
 	const hook = origin.querySelector('td.actions');
 	hook.style.position = 'relative';
 	toolTip.innerHTML = translated.innerHTML;
-	// Force GlotDict parameters for compatibility.
-	localStorage.setItem('gd_curly_apostrophe_warning', true);
-	localStorage.setItem('gd_localized_quote_warning', true);
+
 	// Displays the translated string without any markup.
 	toolTip.classList.add('original__tooltip');
 	hook.append(toolTip);
@@ -416,10 +422,12 @@ function checkTranslation(translation) {
 	let text = translation.innerHTML;
 	let hasWarning = false;
 
-	// Remove GlotDict tags on translation since we highlight non breaking spaces and for incompatibility.
-	text = removeGlotDictTags(text);
-
 	addTextOriginalToolTip(translation);
+
+	preventGlotDictTags();
+
+	// For regex compatibility.
+	text = text.replaceAll(/&nbsp;/gmi, ' ');
 
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
