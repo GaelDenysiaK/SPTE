@@ -143,6 +143,7 @@ const data = {
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 const translations = document.querySelectorAll('.translation-text');
 const fileExtensions = data.fileExtensions.join('|');
+const bulkActions = document.getElementById('bulk-actions-toolbar-top');
 
 // Escape data.
 function escapeRegExp(data) {
@@ -551,7 +552,6 @@ function showResults() {
 
 		resultsPlace.append(results);
 
-		const bulkActions = document.getElementById('bulk-actions-toolbar-top');
 		if (bulkActions) {
 			const spteSelectErrors = document.createElement('input');
 			spteSelectErrors.type = 'checkbox';
@@ -571,15 +571,16 @@ function showResults() {
 function manageControls() {
 	const showOnlyWarning = document.querySelector('#showOnlyWarning');
 	const showEverything = document.querySelector('#showEverything');
-	const spteSelectErrors = document.querySelector('#spteSelectErrors');
 
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
 		document.querySelectorAll('tr.preview.has-translations:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'none';
-			// We uncheck hidden elements to prevent bulk processing from non-visible elements.
-			el.firstElementChild.firstElementChild.checked = '';
+			if (bulkActions) {
+				// We uncheck hidden elements to prevent bulk processing from non-visible elements.
+				el.firstElementChild.firstElementChild.checked = '';
+			}
 		});
 	});
 	showEverything.addEventListener('click', () => {
@@ -589,6 +590,7 @@ function manageControls() {
 			el.style.display = 'table-row';
 		});
 	});
+	const spteSelectErrors = document.querySelector('#spteSelectErrors');
 	if (!spteSelectErrors) { return; }
 	spteSelectErrors.addEventListener('change', () => {
 		let nbSelectedRows = 0;
