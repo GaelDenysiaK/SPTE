@@ -80,6 +80,9 @@ Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ### 0.9.9.3 - 7 Oct 2020
 *  Modification de la surcharge des styles GlotDict par une surcharge des paramètres GlotDict
+*  Ajout alerte sur mots : mail, mails
+*  Sécurisation du masquage des lignes sans avertissements : si connecté en PTE les lignes masquées sont automatiquement décochées si elles l’étaient
+*  Ajout possibilité pour les PTE de sélectionner toutes les lignes avec avertissements en rouge, avec comptage des éléments
 
 ### 0.9.9.2 - 7 Oct 2020
 *  Annulation gain de place en CSS qui provoquait un bug d'affichage pour les >PTE
