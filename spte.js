@@ -575,7 +575,7 @@ function manageControls() {
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
-		document.querySelectorAll('tr.preview.has-translations:not(.has-spte-warning)').forEach((el) => {
+		document.querySelectorAll('tr.preview:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'none';
 			if (bulkActions) {
 				// We uncheck hidden elements to prevent bulk processing from non-visible elements.
@@ -586,7 +586,7 @@ function manageControls() {
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
 		showOnlyWarning.checked = '';
-		document.querySelectorAll('tr.preview.has-translations:not(.has-spte-warning)').forEach((el) => {
+		document.querySelectorAll('tr.preview:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'table-row';
 		});
 	});
