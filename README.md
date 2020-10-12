@@ -78,6 +78,11 @@ Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ## Changelog
 
+### 0.9.9.4 - 12 Oct 2020
+*  Masquer aussi les lignes non traduites lorsqu’on sélectionne « N’afficher que les avertissements » et que l’on est sur All
+*  Séparation du point d’exclamation et du signe plus et ajout de l’exception google+ au signe plus
+*  Passage de l’icône SPTE dans la barre d’adresse pour ne l’afficher que lorsqu’SPTE est actif c’est à dire sur translate
+
 ### 0.9.9.3 - 11 Oct 2020
 *  Modification de la surcharge des styles GlotDict par une surcharge des paramètres GlotDict
 *  Ajout alerte sur mots : mail, mails
