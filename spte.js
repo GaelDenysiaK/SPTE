@@ -66,8 +66,10 @@ const data = {
 	closeBrace: [
 		'}',
 	],
-	nbkSpaceBefore: [
+	exclamationPoint: [
 		'!',
+	],
+	plusSign: [
 		'+',
 	],
 	questionMark: [
@@ -187,11 +189,13 @@ const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${
 // Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
 const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-z]|[0-9]| $| $)`, 'gmi');
 
-// Match characters "nbkSpaceBefore" not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
-const theNbkSpaceBefore = `${data.nbkSpaceBefore.map(escapeRegExp).join('|')}`;
-const rgxNbkSpaceBefore = new RegExp(`(?<! |^)[${theNbkSpaceBefore}]|[${theNbkSpaceBefore}](?! |$)`, 'gmi');
+// Match exclamation point not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
+const rgxExclamationPoint = new RegExp(`(?<! |^)\\${data.exclamationPoint}|\\${data.exclamationPoint}(?! |$)`, 'gmi');
 
-// Match question mark in different cases: typographic rules "non-breaking space before" plus URL
+// Match plus sign not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
+const rgxPlusSign = new RegExp(`(?<! |google|^)\\${data.plusSign}|\\${data.plusSign}(?! |$)`, 'gmi');
+
+// Match question mark in different cases: typographic rules "non-breaking space before" plus URL.
 const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
 
 // Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL plus style= plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack).
@@ -315,13 +319,21 @@ const cases = {
 		counter: 0,
 		regex: rgxCloseBrace,
 	},
-	nbkSpaceBefore: {
+	exclamationPoint: {
 		title: charTitle,
 		cssTitle: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
-		regex: rgxNbkSpaceBefore,
+		regex: rgxExclamationPoint,
+	},
+	plusSign: {
+		title: charTitle,
+		cssTitle: nbkSpaceBeforeTitle,
+		cssClass: charClass,
+		style: styleCharCheck,
+		counter: 0,
+		regex: rgxPlusSign,
 	},
 	questionMark: {
 		title: charTitle,
