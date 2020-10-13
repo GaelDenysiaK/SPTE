@@ -145,6 +145,8 @@ const data = {
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 const translations = document.querySelectorAll('.translation-text');
 const fileExtensions = data.fileExtensions.join('|');
+
+const loggedIn = document.body.classList.contains('logged-in');
 const bulkActions = document.getElementById('bulk-actions-toolbar-top');
 if (bulkActions) {
 	document.body.classList.add('spte-is-on-board');
@@ -581,10 +583,6 @@ function showResults() {
 			bulkActions.append(spteSelectErrors);
 			bulkActions.append(spteSelectErrorsLabel);
 		}
-
-		const settingPages = document.createElement('div');
-		settingPages.id = 'settingPages';
-		resultsPlace.append(settingPages);
 	}
 }
 
