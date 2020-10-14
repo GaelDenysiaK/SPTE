@@ -183,7 +183,7 @@ const rgxSpaceAfter = new RegExp(`(?<=[ | ])[${data.spaceAfter}]|[${data.spaceA
 const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<![a-z0-9\\${data.period}]*?)\\${data.period}(?=[a-z])|\\${data.period}( $| $)`, 'gmi');
 
 // Match comma in different cases: typographic rules "spaceAfter" plus decimals.
-const rgxComma = new RegExp(`(?<=[ | ])[${data.comma}]|[${data.comma}](?=[a-z]| $| $)`, 'gmi');
+const rgxComma = new RegExp(`(?<=[ | ])\\${data.comma}|\\${data.comma}(?=[a-zÀ-ú]| $| $)`, 'gmi');
 
 // Match closing hook in different cases: typographic rules "space after" plus double closing hook case.
 const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-z]|[0-9]| $| $)`, 'gmi');
