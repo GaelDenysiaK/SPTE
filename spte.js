@@ -590,6 +590,8 @@ function manageControls() {
 	const showOnlyWarning = document.querySelector('#showOnlyWarning');
 	const showEverything = document.querySelector('#showEverything');
 
+	if (!showOnlyWarning || !showEverything) { return; }
+
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
