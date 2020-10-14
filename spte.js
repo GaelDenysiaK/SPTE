@@ -203,8 +203,8 @@ const rgxPlusSign = new RegExp(`(?<! |google|^)\\${data.plusSign}|\\${data.plus
 // Match question mark in different cases: typographic rules "non-breaking space before" plus URL.
 const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
 
-// Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL plus style= plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack).
-const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3})|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|$)`, 'gmi');
+// Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL case plus style="rule:value plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack).
+const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$)|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$|$)`, 'gmi');
 
 // Match semicolon in different cases: typographic rules "nbkSpaceBefore" plus not preceded by every HTML code (hex, dec, mnemo) and by CSS rules.
 const rgxSemiColon = new RegExp(`(?<! |:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}|(?<!:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}(?! )`, 'gmi');
