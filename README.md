@@ -78,6 +78,11 @@ Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ## Changelog
 
+### 0.9.9.5 - 14 Oct 2020
+*  Gestion des smileystextuels :) et :-)
+*  Gestion des cas supplémentaires pour les parenthèses ouvrantes et fermantes voir issue github #10
+*  Ajout caractères accentués à la règle des virgules
+
 ### 0.9.9.4 - 12 Oct 2020
 *  Masquer aussi les lignes non traduites lorsqu’on sélectionne « N’afficher que les avertissements » et que l’on est sur All
 *  Séparation du point d’exclamation et du signe plus et ajout de l’exception google+ au signe plus
