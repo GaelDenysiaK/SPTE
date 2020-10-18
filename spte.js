@@ -222,10 +222,10 @@ const colorCheck = 'magenta';
 const styleWordError = `background-color:${colorError};color:white;font-weight:bold;padding:1px;margin:0 1px`;
 const styleCharError = `display:inline-block;line-height:16px;box-shadow:${colorError} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
 const styleCharCheck = `display:inline-block;line-height:16px;box-shadow:${colorCheck} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
-const spaceBeforeTitle = 'Espace précédent manquante et/ou espace suivant en trop';
-const spaceAfterTitle = 'Précédé par une espace et/ou caractère suivant collé et/ou suivi par une espace finale';
-const nbkSpaceBeforeTitle = 'Non précédé par une espace insécable et/ou non suivi par une espace';
-const nbkSpaceAfterTitle = 'Non précédé par une espace et/ou non suivi par une espace insécable';
+const spaceBeforeTitle = 'Espace précédente manquante ou espace suivante en trop';
+const spaceAfterTitle = 'Précédé par une espace ou caractère suivant collé ou suivi par une espace finale';
+const nbkSpaceBeforeTitle = 'Non précédé par une espace insécable ou non suivi par une espace';
+const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une espace insécable';
 
 const cases = {
 	badWords: {
@@ -246,7 +246,7 @@ const cases = {
 	},
 	slash: {
 		title: charTitle,
-		cssTitle: 'Espace précédent en trop et/ou espace suivant en trop',
+		cssTitle: 'Espace précédente en trop ou espace suivante en trop',
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
