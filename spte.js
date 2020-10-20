@@ -147,7 +147,6 @@ const styleSheet = document.head.appendChild(document.createElement('style')).sh
 const translations = document.querySelectorAll('.translation-text');
 const fileExtensions = data.fileExtensions.join('|');
 
-const loggedIn = document.body.classList.contains('logged-in');
 const bulkActions = document.getElementById('bulk-actions-toolbar-top');
 if (bulkActions) {
 	document.body.classList.add('spte-is-on-board');
@@ -653,7 +652,10 @@ if ((/\/fr\//).test(currentUrl)) {
 	translations.forEach(checkTranslation);
 	showResults();
 	manageControls();
+	console.log('data2');
+	console.log(data2);
 }
+
 if ((/https:\/\/translate\.wordpress\.org\//).test(currentUrl)) {
 	frenchies();
 }
