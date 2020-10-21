@@ -1,3 +1,4 @@
+const currentUrl = window.location.href;
 const data = {
 	badWord: [
 		'email',
@@ -146,7 +147,6 @@ const styleSheet = document.head.appendChild(document.createElement('style')).sh
 const translations = document.querySelectorAll('.translation-text');
 const fileExtensions = data.fileExtensions.join('|');
 
-const loggedIn = document.body.classList.contains('logged-in');
 const bulkActions = document.getElementById('bulk-actions-toolbar-top');
 if (bulkActions) {
 	document.body.classList.add('spte-is-on-board');
@@ -637,6 +637,25 @@ function manageControls() {
 	});
 }
 
-translations.forEach(checkTranslation);
-showResults();
-manageControls();
+function frenchies() {
+	const frenchLocale = document.querySelector('#locales .native a[href="/locale/fr/"]').closest('div.locale');
+	if (frenchLocale) {
+		addStyle('.frenchies', 'position:relative');
+		addStyle('.frenchies:before', 'content:"";position:absolute;width:23px;height:15px;top:23px;left:132px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
+		frenchLocale.classList.add('frenchies');
+		const firstLocale = document.querySelector('div.locale:first-child');
+		firstLocale.before(frenchLocale);
+	}
+}
+
+if ((/\/fr\//).test(currentUrl)) {
+	translations.forEach(checkTranslation);
+	showResults();
+	manageControls();
+	console.log('data2');
+	console.log(data2);
+}
+
+if ((/https:\/\/translate\.wordpress\.org\//).test(currentUrl)) {
+	frenchies();
+}

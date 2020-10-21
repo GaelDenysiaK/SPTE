@@ -15,11 +15,11 @@
 			"48": "icons/icon48.png",
 			"128": "icons/icon128.png"
 		},
-		"show_matches": ["https://translate.wordpress.org/*/fr/default/*"],
+		"show_matches": ["https://translate.wordpress.org/*"],
 		"default_title": "SPTE"
 	},
 	"content_scripts": [{
-        "matches": ["https://translate.wordpress.org/*/fr/default/*"],
-        "js": ["spte.js"]
+        "matches": ["https://translate.wordpress.org/*"],
+        "js": ["data.js", "spte.js"]
 	}]
 }
