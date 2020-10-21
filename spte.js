@@ -1,402 +1,10 @@
 const currentUrl = window.location.href;
-const data = {
-	badWord: [
-		'email',
-		'emails',
-		'etes vous',
-		'etc...',
-		'ets',
-		'fdp',
-		'font-sise',
-		'limace',
-		'limaces',
-		'mail',
-		'mails',
-		'melle',
-		'n4est',
-		'plugin',
-		'plugins',
-		'plug-in',
-		'plug-ins',
-		'popup',
-		'popups',
-		'post',
-		'posts',
-		'roter l’image',
-		'roter l\'image',
-		'responsif',
-		'shortcode',
-		'shortcodes',
-		's4est',
-		'spam',
-		'step',
-		'tag',
-		'token',
-		'underscore',
-		'underscores',
-		'video',
-		'wysiwig',
-	],
-	slash: [
-		'/',
-	],
-	openHook: [
-		'[',
-	],
-	openParenthesis: [
-		'(',
-	],
-	openBrace: [
-		'{',
-	],
-	spaceAfter: [
-		'…',
-	],
-	period: [
-		'.',
-	],
-	comma: [
-		',',
-	],
-	closeHook: [
-		']',
-	],
-	closeParenthesis: [
-		')',
-	],
-	closeBrace: [
-		'}',
-	],
-	exclamationPoint: [
-		'!',
-	],
-	plusSign: [
-		'+',
-	],
-	questionMark: [
-		'?',
-	],
-	colon: [
-		':',
-	],
-	semiColon: [
-		';',
-	],
-	closingFrQuote: [
-		'»',
-	],
-	openFrQuote: [
-		'«',
-	],
-	fileExtensions: [
-		'avi',
-		'bak',
-		'bat',
-		'bin',
-		'bmp',
-		'css',
-		'csv',
-		'doc',
-		'docx',
-		'eot',
-		'exe',
-		'gif',
-		'htaccess',
-		'html',
-		'ico',
-		'jpg',
-		'jpeg',
-		'js',
-		'log',
-		'maintenance',
-		'mail',
-		'mo',
-		'mov',
-		'mp3',
-		'mp4',
-		'mpeg',
-		'pdf',
-		'php',
-		'po',
-		'pot',
-		'png',
-		'ppt',
-		'psd',
-		'ods',
-		'rar',
-		'rtf',
-		'svg',
-		'sql',
-		'tar',
-		'gz',
-		'tiff',
-		'tif',
-		'ttf',
-		'txt',
-		'vcf',
-		'wav',
-		'woff',
-		'xls',
-		'xlsx',
-		'xml',
-		'zip',
-	],
-};
-
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 const translations = document.querySelectorAll('.translation-text');
-const fileExtensions = data.fileExtensions.join('|');
-
-const bulkActions = document.getElementById('bulk-actions-toolbar-top');
+const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
 if (bulkActions) {
 	document.body.classList.add('spte-is-on-board');
 }
-
-// Escape data.
-function escapeRegExp(data) {
-	return data.replace(/[-[\]{}()*+?.,\\^$|#\s]/gm, '\\$&');
-}
-
-// Match bad words.
-const rgxBadWords = new RegExp(`(?<=[\\s,.:;"']|^)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`, 'gmi');
-
-// Match single quotes.
-const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027(?!%)', 'gm');
-
-// Match slash with spaces (before and after, breaking or not) and not preceded or not followed by another slash and not followed by a greater-than.
-const rgxSlash = new RegExp(`(?<= | )\\${data.slash}(?!\\${data.slash}|\\&gt\\;)|(?<!\\${data.slash})\\${data.slash}(?= | )`, 'gmi');
-
-// Match typographic rules "space before": not preceded by space (breaking or non breaking) and not as first character OR not as first character and followed by space (breaking or non breaking)
-// plus double opening hook case.
-const rgxOpenHook = new RegExp(`(?<! |\\${data.openHook}|^)\\${data.openHook}(?!\\${data.openHook})|\\${data.openHook}(?=[ | ])`, 'gmi');
-
-// Match opening parenthesis in different cases: typographic rules "space before" plus (s) (e) (es) (nt) (vent) (% () cases.
-const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|e\\)|es\\)|nt\\)|vent\\))|(?<!^)\\${data.openParenthesis}(?=[ | ])`, 'gmi');
-
-// Match opening brace in different cases : typographic rules "space before" plus double opening brace case.
-const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ | ])`, 'gmi');
-
-// Match characters typographic rules "space after": preceded by space (breaking or non breaking) OR followed by letter or number or ending space (breaking or non breaking).
-const rgxSpaceAfter = new RegExp(`(?<=[ | ])[${data.spaceAfter}]|[${data.spaceAfter}](?=[a-z]|[0-9]| $| $)`, 'gmi');
-
-// Match period in different cases: typographic rules "spaceAfter" plus URL plus version numbers plus .htaccess and .maintenance.
-const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<![a-z0-9\\${data.period}]*?)\\${data.period}(?=[a-z])|\\${data.period}( $| $)`, 'gmi');
-
-// Match comma in different cases: typographic rules "spaceAfter" plus decimals.
-const rgxComma = new RegExp(`(?<=[ | ])\\${data.comma}|\\${data.comma}(?=[a-zÀ-ú]| $| $)`, 'gmi');
-
-// Match closing hook in different cases: typographic rules "space after" plus double closing hook case.
-const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-z]|[0-9]| $| $)`, 'gmi');
-
-// Match closing parenthesis in different cases: typographic rules "space after" plus (s) (e) (es) (nt) (vent) (%x) cases.
-const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|(?<!\\%[a-z]|\\(s|\\(e|\\(es|\\(nt|\\(vent)\\${data.closeParenthesis}(?=[a-z]|[0-9]| )`, 'gmi');
-
-// Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
-const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-z]|[0-9]| $| $)`, 'gmi');
-
-// Match exclamation point not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
-const rgxExclamationPoint = new RegExp(`(?<! |^)\\${data.exclamationPoint}|\\${data.exclamationPoint}(?! |$)`, 'gmi');
-
-// Match plus sign not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
-const rgxPlusSign = new RegExp(`(?<! |google|^)\\${data.plusSign}|\\${data.plusSign}(?! |$)`, 'gmi');
-
-// Match question mark in different cases: typographic rules "non-breaking space before" plus URL.
-const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
-
-// Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL case plus style="rule:value plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack) plus smiling text smileys.
-const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$)|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$|$)`, 'gmi');
-
-// Match semicolon in different cases: typographic rules "nbkSpaceBefore" plus not preceded by every HTML code (hex, dec, mnemo) and by CSS rules.
-const rgxSemiColon = new RegExp(`(?<! |:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}|(?<!:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}(?! )`, 'gmi');
-
-// Match closing french quote in different cases: typographic rules "nbkSpaceBefore" plus followed by colon or comma.
-const rgxClosingFrQuote = new RegExp(`(?<! )${data.closingFrQuote}|${data.closingFrQuote}(?! |\\.|\\,|$)`, 'gmi');
-
-// Match characters open french quote not preceded by breaking space OR followed by non breaking space.
-const rgxOpenFrQuote = new RegExp(`(?<! |^)[${data.openFrQuote}]|[${data.openFrQuote}](?! |$)`, 'gmi');
-
-const charTitle = 'Caractères à vérifier : ';
-const charClass = 'char--warning';
-const colorError = 'red';
-const colorCheck = 'magenta';
-const styleWordError = `background-color:${colorError};color:white;font-weight:bold;padding:1px;margin:0 1px`;
-const styleCharError = `display:inline-block;line-height:16px;box-shadow:${colorError} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
-const styleCharCheck = `display:inline-block;line-height:16px;box-shadow:${colorCheck} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`;
-const spaceBeforeTitle = 'Espace précédente manquante ou espace suivante en trop';
-const spaceAfterTitle = 'Précédé par une espace ou caractère suivant collé ou suivi par une espace finale';
-const nbkSpaceBeforeTitle = 'Non précédé par une espace insécable ou non suivi par une espace';
-const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une espace insécable';
-
-const cases = {
-	badWords: {
-		title: 'Mots déconseillés ou mal orthographiés : ',
-		cssTitle: 'Mot déconseillé ou mal orthographié',
-		cssClass: 'word--warning',
-		style: styleWordError,
-		counter: 0,
-		regex: rgxBadWords,
-	},
-	quotes: {
-		title: 'Apostrophes droites : ',
-		cssTitle: 'Apostrophe droite au lieu d’une apostrophe courbe',
-		cssClass: 'quote--warning',
-		style: styleCharError,
-		counter: 0,
-		regex: rgxSingleQuotes,
-	},
-	slash: {
-		title: charTitle,
-		cssTitle: 'Espace précédente en trop ou espace suivante en trop',
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxSlash,
-	},
-	openHook: {
-		title: charTitle,
-		cssTitle: spaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxOpenHook,
-	},
-	openParenthesis: {
-		title: charTitle,
-		cssTitle: spaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxOpenParenthesis,
-	},
-	openBrace: {
-		title: charTitle,
-		cssTitle: spaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxOpenBrace,
-	},
-	spaceAfter: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxSpaceAfter,
-	},
-	period: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxPeriod,
-	},
-	comma: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxComma,
-	},
-	closeHook: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxCloseHook,
-	},
-	closeParenthesis: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxCloseParenthesis,
-	},
-	closeBrace: {
-		title: charTitle,
-		cssTitle: spaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxCloseBrace,
-	},
-	exclamationPoint: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxExclamationPoint,
-	},
-	plusSign: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxPlusSign,
-	},
-	questionMark: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxQuestionMark,
-	},
-	colon: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxColon,
-	},
-	semiColon: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxSemiColon,
-	},
-	closingFrQuote: {
-		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxClosingFrQuote,
-	},
-	openFrQuote: {
-		title: charTitle,
-		cssTitle: nbkSpaceAfterTitle,
-		cssClass: charClass,
-		style: styleCharCheck,
-		counter: 0,
-		regex: rgxOpenFrQuote,
-	},
-	Space: {
-		title: '',
-		cssTitle: 'Espace en début ou en fin de chaîne',
-		cssClass: 'spaces--showing',
-		style: 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue',
-		counter: 0,
-		regex: /^ | $/gm,
-	},
-	nbkSpaces: {
-		title: '',
-		cssTitle: 'Espace insécable',
-		cssClass: 'nbkspaces--showing',
-		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
-		counter: 0,
-		regex: /\u00A0/gm,
-	},
-};
 
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
 function preventGlotDictTags() {
@@ -404,6 +12,7 @@ function preventGlotDictTags() {
 	localStorage.setItem('gd_no_non_breaking_space', 'true');
 }
 
+// Displays the translated string without any markup.
 function addTextOriginalToolTip(translation) {
 	const origin = translation.closest('tr');
 	const toolTip = document.createElement('span');
@@ -411,8 +20,6 @@ function addTextOriginalToolTip(translation) {
 	const hook = origin.querySelector('td.actions');
 	hook.style.position = 'relative';
 	toolTip.innerHTML = translated.innerHTML;
-
-	// Displays the translated string without any markup.
 	toolTip.classList.add('original__tooltip');
 	hook.append(toolTip);
 }
@@ -431,7 +38,6 @@ function addHelpTranslationWrapper(translation) {
 				origin.classList.add('has-spte-error');
 			}
 		}
-
 		const hook = brother.querySelector('.source-details');
 		const copycat = trad.cloneNode(true);
 		help.append(copycat);
@@ -454,17 +60,12 @@ function checkTranslation(translation) {
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
 			cases[type].counter++;
-
 			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
 		});
 	}
 	translation.innerHTML = text;
 
 	addHelpTranslationWrapper(translation);
-}
-
-function addStyle(selector, rules) {
-	styleSheet.insertRule(`${selector}{${rules}}`, styleSheet.cssRules.length);
 }
 
 function showResults() {
@@ -637,25 +238,26 @@ function manageControls() {
 	});
 }
 
-function frenchies() {
-	const frenchLocale = document.querySelector('#locales .native a[href="/locale/fr/"]').closest('div.locale');
-	if (frenchLocale) {
-		addStyle('.frenchies', 'position:relative');
-		addStyle('.frenchies:before', 'content:"";position:absolute;width:23px;height:15px;top:23px;left:132px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
-		frenchLocale.classList.add('frenchies');
-		const firstLocale = document.querySelector('div.locale:first-child');
-		firstLocale.before(frenchLocale);
-	}
+function frenchiesGoFirst() {
+	const frenchLocaleLnk = document.querySelector('#locales .native a[href="/locale/fr/"]');
+	if (!frenchLocaleLnk) { return; }
+
+	const frenchLocale = frenchLocaleLnk.closest('div.locale');
+	if (!frenchLocale) { return; }
+
+	addStyle('.frenchies', 'position:relative');
+	addStyle('.frenchies:before', 'content:"";position:absolute;width:23px;height:15px;top:23px;left:132px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
+	frenchLocale.classList.add('frenchies');
+	const firstLocale = document.querySelector('div.locale:first-child');
+	firstLocale.before(frenchLocale);
 }
 
 if ((/\/fr\//).test(currentUrl)) {
 	translations.forEach(checkTranslation);
 	showResults();
 	manageControls();
-	console.log('data2');
-	console.log(data2);
 }
 
 if ((/https:\/\/translate\.wordpress\.org\//).test(currentUrl)) {
-	frenchies();
+	frenchiesGoFirst();
 }
