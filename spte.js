@@ -3,7 +3,7 @@ const styleSheet = document.head.appendChild(document.createElement('style')).sh
 const translations = document.querySelectorAll('.translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
 if (bulkActions) {
-	document.body.classList.add('spte-is-on-board');
+	document.body.classList.add('pte-is-on-board');
 }
 
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
@@ -105,7 +105,7 @@ function showResults() {
 
 	addStyle('.actions:hover .original__tooltip', 'display:inline-block');
 	addStyle('.original__tooltip', 'display:none;position:absolute;width:calc(-5em - 10px + 42.5vw);top:100%;right:5em;z-index:666;padding:20px 13px 20px 7px;background:#000;color:#fff;text-align:left;font-size:17px;line-height:1.66;box-shadow:0 10px 10px rgba(0,0,0,.3)');
-	addStyle('.spte-is-on-board .original__tooltip', 'width:calc(-5em - 22px + 42.5vw)');
+	addStyle('.pte-is-on-board .original__tooltip', 'width:calc(-5em - 22px + 42.5vw)');
 	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
 	addStyle('.help-copycat', 'margin:1em 0;padding:10px 3px;font-size:15px;background-color:#d9e1e8');
 	addStyle('[style*="background-color:yellow"]', 'display:inline-block!important;line-height:16px!important;background-color:white!important;border:2px solid white!important');
@@ -113,10 +113,10 @@ function showResults() {
 	if (nbTotal) {
 		addStyle('#results', 'font-weight:bold');
 		addStyle('.results__title', 'margin:10px 0px 5px;color:red;text-transform:uppercase');
-		addStyle('.results__links', 'display:inline;font-weight:normal;margin:.3em 1em .3em 0');
+		addStyle('.results__links', 'display:inline;font-weight:normal;margin:0 1em .3em 0;line-height:1');
 		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
 		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
-		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 0 0');
+		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 0 0;line-height:1');
 		addStyle('#showEverything,#showOnlyWarning', 'margin:1em 0 0 .6em');
 		addStyle('#showEverything+label,#showOnlyWarning+label', 'margin:0 1.5em 0 .5em');
 		addStyle('#spteSelectErrors', 'margin:1em .58em');
