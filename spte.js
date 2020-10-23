@@ -14,28 +14,27 @@ function preventGlotDictTags() {
 
 // Displays the translated string without any markup.
 function addTextOriginalToolTip(translation) {
-	const origin = translation.closest('tr');
-	const toolTip = document.createElement('span');
-	const translated = origin.querySelector('.translation-text');
-	const hook = origin.querySelector('td.actions');
+	const preview = translation.closest('tr');
+	const translated = preview.querySelector('.translation-text');
+	const hook = preview.querySelector('td.actions');
 	hook.style.position = 'relative';
+	const toolTip = createElement('SPAN', { class: 'original__tooltip' });
 	toolTip.innerHTML = translated.innerHTML;
-	toolTip.classList.add('original__tooltip');
 	hook.append(toolTip);
 }
 
+// Clone Preview with highlights in editor panel.
 function addHelpTranslationWrapper(translation) {
-	const origin = translation.closest('tr');
-	const brother = origin.nextElementSibling;
-	if (origin.classList.contains('has-translations')) {
-		const help = document.createElement('div');
-		help.classList.add('help-copycat');
-		const trad = origin.querySelector('.translation-text');
+	const preview = translation.closest('tr');
+	const brother = preview.nextElementSibling;
+	if (preview.classList.contains('has-translations')) {
+		const help = createElement('DIV', { class: 'help-copycat' });
+		const trad = preview.querySelector('.translation-text');
 		const spteWarning = trad.querySelector('span[class$="--warning"]');
 		if (spteWarning) {
-			origin.classList.add('has-spte-warning');
+			preview.classList.add('has-spte-warning');
 			if (spteWarning.classList.contains('word--warning') || spteWarning.classList.contains('quote--warning')) {
-				origin.classList.add('has-spte-error');
+				preview.classList.add('has-spte-error');
 			}
 		}
 		const hook = brother.querySelector('.source-details');
@@ -47,6 +46,7 @@ function addHelpTranslationWrapper(translation) {
 	}
 }
 
+// Check and treat translations, highlight elements.
 function checkTranslation(translation) {
 	let text = translation.innerHTML;
 
@@ -68,13 +68,13 @@ function checkTranslation(translation) {
 	addHelpTranslationWrapper(translation);
 }
 
+// Display stats results on header.
 function showResults() {
 	const resultsPlace = document.querySelector('#upper-filters-toolbar');
-	const results = document.createElement('div');
-	const resultsTitle = document.createElement('p');
-	results.id = 'results';
+	const results = createElement('DIV', { id: 'results' });
+	const resultsTitle = createElement('P');
 	results.append(resultsTitle);
-	let nbChar = 0;
+	let nbCharacter = 0;
 	let nbTotal = 0;
 
 	for (const item in cases) {
@@ -84,27 +84,21 @@ function showResults() {
 
 		addStyle(`.${cases[item].cssClass}`, `${cases[item].style}`);
 
-		const title = document.createElement('span');
-		const counter = document.createElement('span');
 		if (cases[item].title && cases[item].title !== charTitle) {
-			title.textContent = cases[item].title;
-			counter.textContent = cases[item].counter;
-			counter.classList.add(cases[item].cssClass, 'warning-title');
+			const title = createElement('SPAN', {}, cases[item].title);
+			const counter = createElement('SPAN', { class: `${cases[item].cssClass} warning-title` }, cases[item].counter);
 			title.append(counter);
 			results.append(title);
 			nbTotal += cases[item].counter;
 		} else if (cases[item].title === charTitle) {
-			nbChar += cases[item].counter;
+			nbCharacter += cases[item].counter;
 			nbTotal += cases[item].counter;
 		}
 	}
 
-	if (nbChar) {
-		const title = document.createElement('span');
-		const counter = document.createElement('span');
-		title.textContent = charTitle;
-		counter.textContent = nbChar;
-		counter.classList.add(charClass, 'warning-title');
+	if (nbCharacter) {
+		const title = createElement('SPAN', {}, charTitle);
+		const counter = createElement('SPAN', { class: `${charClass} warning-title` }, nbCharacter);
 		title.append(counter);
 		results.append(title);
 	}
@@ -128,65 +122,40 @@ function showResults() {
 		addStyle('#spteSelectErrors', 'margin:1em .58em');
 		addStyle('#spteSelectErrors+label', 'margin:0 1.5em 0 0;font-weight:bold');
 
-		const legend = document.createElement('p');
-		legend.textContent = 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.';
-		legend.classList.add('warning-legend');
+		const legend = createElement('P', { class: 'warning-legend' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('results__title');
 
-		const typographyLink = document.createElement('p');
-		const glossaryLink = document.createElement('p');
+		const typographyLink = createElement('P', { class: 'results__links' });
 		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
+		const glossaryLink = createElement('P', { class: 'results__links' });
 		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
-		typographyLink.classList.add('results__links');
-		glossaryLink.classList.add('results__links');
-		results.append(typographyLink);
-		results.append(glossaryLink);
+		results.append(typographyLink, glossaryLink);
 
-		const controls = document.createElement('div');
-		controls.id = 'controls';
-		const showEverything = document.createElement('input');
-		showEverything.type = 'radio';
-		showEverything.id = 'showEverything';
-		showEverything.name = 'showEverything';
-		showEverything.value = 'showEverything';
-		showEverything.checked = 'checked';
+		const controls = createElement('DIV', { id: 'controls' });
+		const showEverything = createElement('INPUT', { type: 'radio', id: 'showEverything', name: 'showEverything', value: 'showEverything', checked: 'checked' });
 		controls.append(showEverything);
-		const showEverythingLabel = document.createElement('label');
-		showEverythingLabel.textContent = 'Tout afficher';
-		showEverythingLabel.setAttribute('for', 'showEverything');
+		const showEverythingLabel = createElement('LABEL', { for: 'showEverything' }, 'Tout afficher');
 		controls.append(showEverythingLabel);
-		const showOnlyWarning = document.createElement('input');
-		showOnlyWarning.type = 'radio';
-		showOnlyWarning.id = 'showOnlyWarning';
-		showOnlyWarning.name = 'showOnlyWarning';
-		showOnlyWarning.value = 'showOnlyWarning';
+		const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'showOnlyWarning', name: 'showOnlyWarning', value: 'showOnlyWarning' });
 		controls.append(showOnlyWarning);
-		const showOnlyWarningLabel = document.createElement('label');
-		showOnlyWarningLabel.textContent = 'N’afficher que les avertissements';
-		showOnlyWarningLabel.setAttribute('for', 'showOnlyWarning');
+		const showOnlyWarningLabel = createElement('LABEL', { for: 'showOnlyWarning' }, 'N’afficher que les avertissements');
 		controls.append(showOnlyWarningLabel);
 		results.append(controls);
 
 		resultsPlace.append(results);
 
 		if (bulkActions) {
-			const spteSelectErrors = document.createElement('input');
-			spteSelectErrors.type = 'checkbox';
-			spteSelectErrors.id = 'spteSelectErrors';
-			spteSelectErrors.name = 'spteSelectErrors';
-			spteSelectErrors.value = 'spteSelectErrors';
-			spteSelectErrors.checked = '';
-			const spteSelectErrorsLabel = document.createElement('label');
-			spteSelectErrorsLabel.textContent = 'Cocher les avertissements en rouge';
-			spteSelectErrorsLabel.setAttribute('for', 'spteSelectErrors');
+			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'spteSelectErrors', name: 'spteSelectErrors', value: 'spteSelectErrors', checked: '' });
 			bulkActions.append(spteSelectErrors);
+			const spteSelectErrorsLabel = createElement('LABEL', { for: 'spteSelectErrors' }, 'Cocher les avertissements en rouge');
 			bulkActions.append(spteSelectErrorsLabel);
 		}
 	}
 }
 
+// Add display controls.
 function manageControls() {
 	const showOnlyWarning = document.querySelector('#showOnlyWarning');
 	const showEverything = document.querySelector('#showEverything');
@@ -199,7 +168,7 @@ function manageControls() {
 		document.querySelectorAll('tr.preview:not(.has-spte-warning)').forEach((el) => {
 			el.style.display = 'none';
 			if (bulkActions) {
-				// We uncheck hidden elements to prevent bulk processing from non-visible elements.
+				// We uncheck hidden items to prevent bulk processing of non-visible items.
 				el.firstElementChild.firstElementChild.checked = '';
 			}
 		});
@@ -211,8 +180,11 @@ function manageControls() {
 			el.style.display = 'table-row';
 		});
 	});
+
 	const spteSelectErrors = document.querySelector('#spteSelectErrors');
+
 	if (!spteSelectErrors) { return; }
+
 	spteSelectErrors.addEventListener('change', () => {
 		let nbSelectedRows = 0;
 		if (spteSelectErrors.checked) {
@@ -229,15 +201,13 @@ function manageControls() {
 		if (document.querySelector('#gd-checked-count')) {
 			document.querySelector('#gd-checked-count').remove();
 		}
-		const gdCountNotice = document.createElement('div');
-		gdCountNotice.id = 'gd-checked-count';
-		gdCountNotice.textContent = `${nbSelectedRows} ligne(s) sélectionnée(s)`;
-		gdCountNotice.classList.add('notice');
+		const gdCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
 		const tableTranslations = document.querySelector('#translations');
 		tableTranslations.parentNode.insertBefore(gdCountNotice, tableTranslations);
 	});
 }
 
+// Specific to translate.wordpress.org page, brings the FR locale up first to make it easier to access.
 function frenchiesGoFirst() {
 	const frenchLocaleLnk = document.querySelector('#locales .native a[href="/locale/fr/"]');
 	if (!frenchLocaleLnk) { return; }
