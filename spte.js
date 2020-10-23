@@ -7,7 +7,6 @@ const translateGP = document.querySelector('.gp-content');
 
 if (bulkActions) { document.body.classList.add('pte-is-on-board'); }
 
-
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
 function preventGlotDictTags() {
 	localStorage.setItem('gd_curly_apostrophe_warning', 'true');
