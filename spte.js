@@ -1,10 +1,12 @@
-const currentUrl = window.location.href;
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 const translations = document.querySelectorAll('.translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
-if (bulkActions) {
-	document.body.classList.add('pte-is-on-board');
-}
+const translateRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
+const translateFr = (/\/fr\//).test(window.location.href);
+const translateGP = document.querySelector('.gp-content');
+
+if (bulkActions) { document.body.classList.add('pte-is-on-board'); }
+
 
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
 function preventGlotDictTags() {
@@ -222,12 +224,12 @@ function frenchiesGoFirst() {
 	firstLocale.before(frenchLocale);
 }
 
-if ((/\/fr\//).test(currentUrl)) {
+if (translateFr && translateGP) {
 	translations.forEach(checkTranslation);
 	showResults();
 	manageControls();
 }
 
-if ((/https:\/\/translate\.wordpress\.org\//).test(currentUrl)) {
+if (translateRoot) {
 	frenchiesGoFirst();
 }
