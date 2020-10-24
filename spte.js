@@ -105,6 +105,7 @@ function showResults() {
 	}
 
 	addStyle('.actions:hover .original__tooltip', 'display:inline-block');
+	addStyle('.actions:hover', 'cursor:zoom-in');
 	addStyle('.original__tooltip', 'display:none;position:absolute;width:calc(-5em - 10px + 42.5vw);top:100%;right:5em;z-index:666;padding:20px 13px 20px 7px;background:#000;color:#fff;text-align:left;font-size:17px;line-height:1.66;box-shadow:0 10px 10px rgba(0,0,0,.3)');
 	addStyle('.pte-is-on-board .original__tooltip', 'width:calc(-5em - 22px + 42.5vw)');
 	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
