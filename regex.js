@@ -37,7 +37,7 @@ const rgxComma = new RegExp(`(?<=[ | ])\\${data.comma}|\\${data.comma}(?=[a-zÀ
 const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-zÀ-ú0-9]| $| $)`, 'gmi');
 
 // Match closing parenthesis in different cases: typographic rules "space after" plus (s) (e) (es) (nt) (vent) (%x) cases.
-const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|(?<!\\%[a-z]|\\(s|\\(e|\\(es|\\(nt|\\(vent)\\${data.closeParenthesis}(?=[a-z]|[0-9]| )`, 'gmi');
+const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|\\${data.closeParenthesis}(?=[a-rt-zÀ-ú0-9]| )`, 'gmi');
 
 // Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
 const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-z]|[0-9]| $| $)`, 'gmi');
