@@ -34,7 +34,7 @@ const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<
 const rgxComma = new RegExp(`(?<=[ | ])\\${data.comma}|\\${data.comma}(?=[a-zÀ-ú]| $| $)`, 'gmi');
 
 // Match closing hook in different cases: typographic rules "space after" plus double closing hook case.
-const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-z]|[0-9]| $| $)`, 'gmi');
+const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-zÀ-ú0-9]| $| $)`, 'gmi');
 
 // Match closing parenthesis in different cases: typographic rules "space after" plus (s) (e) (es) (nt) (vent) (%x) cases.
 const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|(?<!\\%[a-z]|\\(s|\\(e|\\(es|\\(nt|\\(vent)\\${data.closeParenthesis}(?=[a-z]|[0-9]| )`, 'gmi');
