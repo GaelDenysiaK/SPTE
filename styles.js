@@ -65,7 +65,7 @@ const cases = {
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
-		regex: rgxSpaceAfter,
+		regex: rgxEllipsis,
 	},
 	period: {
 		title: charTitle,

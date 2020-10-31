@@ -48,7 +48,7 @@ const data = {
 	openBrace: [
 		'{',
 	],
-	spaceAfter: [
+	ellipsis: [
 		'…',
 	],
 	period: [

@@ -24,8 +24,8 @@ const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%
 // Match opening brace in different cases : typographic rules "space before" plus double opening brace case.
 const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ | ])`, 'gmi');
 
-// Match characters typographic rules "space after": preceded by space (breaking or non breaking) OR followed by letter or number or ending space (breaking or non breaking).
-const rgxSpaceAfter = new RegExp(`(?<=[ | ])[${data.spaceAfter}]|[${data.spaceAfter}](?=[a-z]|[0-9]| $| $)`, 'gmi');
+// Match ellipsis in different cases : preceded by space (breaking or non breaking) OR followed by letter or number or ending space (breaking or non breaking).
+const rgxEllipsis = new RegExp(`(?<=[ | ])\\${data.ellipsis}|\\${data.ellipsis}(?=[a-zÀ-ú0-9]| $| $)`, 'gmi');
 
 // Match period in different cases: typographic rules "spaceAfter" plus URL plus version numbers plus .htaccess and .maintenance.
 const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<![a-z0-9\\${data.period}]*?)\\${data.period}(?=[a-z])|\\${data.period}( $| $)`, 'gmi');
