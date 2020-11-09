@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.9.7] - 9 Nov 2020
+### Added
+- Ajout exception sur barre oblique (slash) lorsqu’il est suivi par 2 accolades ouvrantes ou 2 crochets fermants
+- Ajout lettres accentuées et espace insécable suivante mais non finale dans regxCloseBrace
+- Ajout lettres accentuées dans rgxCloseHook
+- Ajout lettres accentuées et chiffres à rgxPeriod
+- Ajout curseur loupe sur tooltip noire
+### Changed
+- Renommage spaceAfter en Ellipsis puisque seul caractère, retrait de crochets en trop pour même raison, et ajout des lettres accentuées et chiffres encadrants
+### Fixed
+- Correction rgxCloseParenthesis qui était bugguée sur la seconde partie (après parenthèse)
+
+
 ## [0.9.9.6] - 23 Oct 2020
 ### Added
 - Changement de l'ordre des locales pour faire passer la française en premier afin de la rendre plus facilement accessible. FrenchFlagPowaa :D
