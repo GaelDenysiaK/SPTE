@@ -12,7 +12,7 @@ const rgxBadWords = new RegExp(`(?<=[\\s,.:;"']|^)${data.badWord.map(escapeRegEx
 const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027(?!%)', 'gm');
 
 // Match slash with spaces (before and after, breaking or not) and not preceded or not followed by another slash and not followed by a greater-than.
-const rgxSlash = new RegExp(`(?<= | )\\${data.slash}(?!\\${data.slash}|\\&gt\\;|\\}{2}|\\]{2})|(?<!\\${data.slash})\\${data.slash}(?= | )`, 'gmi'); console.log(rgxSlash);
+const rgxSlash = new RegExp(`(?<= | )\\${data.slash}(?!\\${data.slash}|\\&gt\\;|\\}{2}|\\]{2})|(?<!\\${data.slash})\\${data.slash}(?= | )`, 'gmi');
 
 // Match typographic rules "space before": not preceded by space (breaking or non breaking) and not as first character OR not as first character and followed by space (breaking or non breaking)
 // plus double opening hook case.
