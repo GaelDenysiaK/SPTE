@@ -16,25 +16,27 @@ La chaine avec ses erreurs est également affichée dans la partie saisie/modifi
 
 Un bouton radio permet de n’afficher que les traductions ayant des avertissements.
 
+Les éditeurs de traduction ont une option supplémentaire pour cocher toutes les lignes avec avertissements en rouge (donc les erreurs dont on est sûr).
+
 ## GlotDict & SPTE
 
 Cette extension n’est pas destinée à remplacer GlotDict, mais à afficher des alertes spécifiques à la langue Française. Elle est donc complémentaire.
 Elle n’apporte pas d’aide lors de la saisie d’une traduction puisque GlotDict le fait très bien mais elle permet de contrôler ultérieurement si une traduction a respecté les règles mises en place par l’équipe française en charge de la traduction.
 Parce qu'elle travaille en profondeur sur la colonne ".translation.foreign-text", SPTE est obligé de forcer 2 paramètres de GlotDict par compatibilité.
-Il s'agit des valeurs localStorage suivantes : gd_curly_apostrophe_warning et gd_localized_quote_warning sont forcés à True.
+Il s'agit des valeurs localStorage suivantes : gd_curly_apostrophe_warning et gd_localized_quote_warning. Ces 2 valeurs sont forcées à True.
 
 ## Utilisation
 
 SPTE affiche en haut de page les statistiques des erreurs/éléments qu’il a trouvé sur la page en cours.
 Il peut donc être utile de définir dans les paramètres de traduction (menu en haut à droite) un nombre de lignes par page assez important si l’on veut juger rapidement si une traduction est acceptable ou non.
-Les erreurs avérées sont en rouge. En magenta sont notifiés les éléments à vérifier : il s’agit la plupart du temps d’erreurs relatives au non respect des règles typographiques, mais la couleur magenta indique qu’il peut aussi s’agir d’exception.
+Les erreurs avérées sont en rouge. En rose sont notifiés les éléments à vérifier : il s’agit la plupart du temps d’erreurs relatives au non respect des règles typographiques, mais la couleur rose peut aussi indiquer des faux positifs : beaucoup de spécificités liées à la programmation génèrent des exceptions. Certaines exceptions sont gérées par SPTE mais pas toutes. Il est donc indispensable de contrôler les caractères en rose.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-1.png "Statistiques")
 
 Sur les traductions, la même coloration syntaxique est utilisée :
 * les mots déconseillés (pour des raisons de cohérence) ou mal écrits sont sur fond rouge : l’erreur est certaine, si l’orthographe est correcte alors il faut se référer au glossaire pour trouver le mot à utiliser.
 * les caractères interdits comme les apostrophes droites sont encadrées de rouge sur fond blanc.
-* les caractères ne respectant probablement pas les règles typographiques sont encadrés de magenta sur fond blanc.
+* les caractères ne respectant probablement pas les règles typographiques sont encadrés de rose sur fond blanc.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-2.png "Coloration syntaxique")
 
@@ -52,24 +54,23 @@ Elle est sur fond gris pour permettre de voir les espaces insécables qui sont e
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-5.png "Correction de la traduction")
 
-Les espaces (normaux : sécables) sont affichées en bleu afin d’être différenciées des espaces insécables : il peut s’agir d’une erreur, mais il peut aussi s’agir d’une espace voulue. Bien réfléchir avant de les supprimer.
+Les espaces (sécables) sont affichées en bleu afin d’être différenciées des espaces insécables : il peut s’agir d’une erreur, mais il peut aussi s’agir d’une espace voulue. Bien réfléchir avant de les supprimer.
 
 ![Screenshot](https://github.com/webaxones/spte/blob/master/assets/screenshots/screenshot-6.png "Espaces sécables en début ou fin de ligne")
 
 ## Contribution
 
-Si vous souhaitez contribuer sur le code et tester vos modifications avant de les proposer, suivez ce processus :
-* Désactivez SPTE pour que cela ne rentre pas en conflit
-* Installez et activez l’extension Firefox « GreaseMonkey » ou l’extension Chrome TamperMonkey
-* Allez sur https://translate.wordpress.org et créez un script sur ce domaine
-* Collez tout le contenu du fichier spte.js présent sur ce dépôt dans le script
-* Modifiez le script et testez le.
+Si vous souhaitez contribuer à SPTE, <a href="https://github.com/webaxones/spte/wiki">lisez le wiki.</a>
 
 ## Installation
 
 Cette extension est utilisable avec le navigateur Firefox.
 
 https://addons.mozilla.org/fr/firefox/addon/spte/
+
+Ainsi qu’avec le navigateur Chrome.
+
+https://chrome.google.com/webstore/detail/spte/phoglaigilljgehnhjfomdhkgokelgnk
 
 Elle est compatible avec l’extension GlotDict.
 
