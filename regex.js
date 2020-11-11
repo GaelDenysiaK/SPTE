@@ -5,60 +5,59 @@ function escapeRegExp(data) {
 
 const fileExtensions = data.fileExtensions.join('|');
 
-// Match bad words.
+// Match bad words. https://github.com/webaxones/spte/wiki/rgxBadWords
 const rgxBadWords = new RegExp(`(?<=[\\s,.:;"']|^)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`, 'gmi');
 
-// Match single quotes.
+// Match single quotes. https://github.com/webaxones/spte/wiki/rgxSingleQuotes
 const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027(?!%)', 'gm');
 
-// Match slash with spaces (before and after, breaking or not) and not preceded or not followed by another slash and not followed by a greater-than.
+// Match slash. https://github.com/webaxones/spte/wiki/rgxSlash
 const rgxSlash = new RegExp(`(?<= | )\\${data.slash}(?!\\${data.slash}|\\&gt\\;|\\}{2}|\\]{2})|(?<!\\${data.slash})\\${data.slash}(?= | )`, 'gmi');
 
-// Match typographic rules "space before": not preceded by space (breaking or non breaking) and not as first character OR not as first character and followed by space (breaking or non breaking)
-// plus double opening hook case.
+// Match opening hook. https://github.com/webaxones/spte/wiki/rgxOpenHook
 const rgxOpenHook = new RegExp(`(?<! |\\${data.openHook}|^)\\${data.openHook}(?!\\${data.openHook})|\\${data.openHook}(?=[ | ])`, 'gmi');
 
-// Match opening parenthesis in different cases: typographic rules "space before" plus (s) (e) (es) (nt) (vent) (% () cases.
+// Match opening parenthesis. https://github.com/webaxones/spte/wiki/rgxOpenParenthesis
 const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|e\\)|es\\)|nt\\)|vent\\))|(?<!^)\\${data.openParenthesis}(?=[ | ])`, 'gmi');
 
-// Match opening brace in different cases : typographic rules "space before" plus double opening brace case.
+// Match opening brace. https://github.com/webaxones/spte/wiki/rgxOpenBrace
 const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ | ])`, 'gmi');
 
-// Match ellipsis in different cases : preceded by space (breaking or non breaking) OR followed by letter or number or ending space (breaking or non breaking).
+// Match ellipsis. https://github.com/webaxones/spte/wiki/rgxEllipsis
 const rgxEllipsis = new RegExp(`(?<=[ | ])\\${data.ellipsis}|\\${data.ellipsis}(?=[a-zÀ-ú0-9]| $| $)`, 'gmi');
 
-// Match period in different cases: typographic rules "spaceAfter" plus URL plus version numbers plus .htaccess and .maintenance.
+// Match period. https://github.com/webaxones/spte/wiki/rgxPeriod
 const rgxPeriod = new RegExp(`(?<= | )\\${data.period}(?!${fileExtensions})|(?<![a-zÀ-ú0-9\\${data.period}]*?)\\${data.period}(?=[a-zÀ-ú0-9])|\\${data.period}( $| $)`, 'gmi');
 
-// Match comma in different cases: typographic rules "spaceAfter" plus decimals.
+// Match comma. https://github.com/webaxones/spte/wiki/rgxComma
 const rgxComma = new RegExp(`(?<=[ | ])\\${data.comma}|\\${data.comma}(?=[a-zÀ-ú]| $| $)`, 'gmi');
 
-// Match closing hook in different cases: typographic rules "space after" plus double closing hook case.
+// Match closing hook. https://github.com/webaxones/spte/wiki/rgxCloseHook
 const rgxCloseHook = new RegExp(`(?<=[ | ])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-zÀ-ú0-9]| $| $)`, 'gmi');
 
-// Match closing parenthesis in different cases: typographic rules "space after" plus (s) (e) (es) (nt) (vent) (%x) cases.
+// Match closing parenthesis. https://github.com/webaxones/spte/wiki/rgxCloseParenthesis
 const rgxCloseParenthesis = new RegExp(`(?<= | |\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|\\${data.closeParenthesis}(?=[a-rt-zÀ-ú0-9]| )`, 'gmi');
 
-// Match closing brace in different cases: typographic rules "space after" plus double closing brace case.
+// Match closing brace. https://github.com/webaxones/spte/wiki/rgxCloseBrace
 const rgxCloseBrace = new RegExp(`(?<=[ | ])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-zÀ-ú0-9]| | $| $)`, 'gmi');
 
-// Match exclamation point not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
+// Match exclamation point. https://github.com/webaxones/spte/wiki/rgxExclamationPoint
 const rgxExclamationPoint = new RegExp(`(?<! |^)\\${data.exclamationPoint}|\\${data.exclamationPoint}(?! |$)`, 'gmi');
 
-// Match plus sign not preceded by non breaking space and not as first character OR followed by breaking space and not as last character.
+// Match plus sign. https://github.com/webaxones/spte/wiki/rgxPlusSign
 const rgxPlusSign = new RegExp(`(?<! |google|^)\\${data.plusSign}|\\${data.plusSign}(?! |$)`, 'gmi');
 
-// Match question mark in different cases: typographic rules "non-breaking space before" plus URL.
+// Match question mark. https://github.com/webaxones/spte/wiki/rgxQuestionMark
 const rgxQuestionMark = new RegExp(`(?<! |\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}|(?<!\\/|\\.php|\\/[a-z0-9\\-\\#\\.\\_]*?|^)\\${data.questionMark}(?! |$)`, 'gmi');
 
-// Match colon in different cases: typographic rules "nbkSpaceBefore" plus URL case plus style="rule:value plus hh mm ss aaaa jj 9: 99: (time) :999 (font-size in stack) plus smiling text smileys.
+// Match colon. https://github.com/webaxones/spte/wiki/rgxColon
 const rgxColon = new RegExp(`(?<! |&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$)|(?<!&lt;.*?|hh|mm|aaaa|\\d{1}|\\d{2})${data.colon}(?! |\\/{2}|\\d{3}|\\-\\) |\\-\\) |\\-\\)$|\\) |\\) |\\)$|$)`, 'gmi');
 
-// Match semicolon in different cases: typographic rules "nbkSpaceBefore" plus not preceded by every HTML code (hex, dec, mnemo) and by CSS rules.
+// Match semicolon. https://github.com/webaxones/spte/wiki/rgxSemiColon
 const rgxSemiColon = new RegExp(`(?<! |:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}|(?<!:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]*?)${data.semiColon}(?! )`, 'gmi');
 
-// Match closing french quote in different cases: typographic rules "nbkSpaceBefore" plus followed by colon or comma.
+// Match closing french quote. https://github.com/webaxones/spte/wiki/rgxClosingFrQuote
 const rgxClosingFrQuote = new RegExp(`(?<! )${data.closingFrQuote}|${data.closingFrQuote}(?! |\\.|\\,| \\?| \\!| \\:| \\;|$)`, 'gmi');
 
-// Match characters open french quote not preceded by breaking space OR followed by non breaking space.
+// Match opening french quote. https://github.com/webaxones/spte/wiki/rgxOpenFrQuote
 const rgxOpenFrQuote = new RegExp(`(?<! |^)[${data.openFrQuote}]|[${data.openFrQuote}](?! |$)`, 'gmi');
