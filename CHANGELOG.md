@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.9.8] - 11 Nov 2020
+### Added
+- Ajout d’exceptions au contrôle de l’espace insécable du guillemet fermant lorsque ce dernier est suivi par un point, suivi par une virgule, suivi par un espace insécable et un point d’interrogation ou d’exclamation ou deux points ou d’un point virgule. Voir Wiki pour plus d’information.
+### Changed
+- Menues améliorations des commentaires dans le code
+
 ## [0.9.9.7] - 9 Nov 2020
 ### Added
 - Ajout exception sur barre oblique (slash) lorsqu’il est suivi par 2 accolades ouvrantes ou 2 crochets fermants
@@ -11,7 +17,6 @@
 - Renommage spaceAfter en Ellipsis puisque seul caractère, retrait de crochets en trop pour même raison, et ajout des lettres accentuées et chiffres encadrants
 ### Fixed
 - Correction rgxCloseParenthesis qui était bugguée sur la seconde partie (après parenthèse)
-
 
 ## [0.9.9.6] - 23 Oct 2020
 ### Added
