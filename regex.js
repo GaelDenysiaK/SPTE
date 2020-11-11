@@ -60,4 +60,4 @@ const rgxSemiColon = new RegExp(`(?<! |:[a-z0-9.]*?|&[${data.semiColon}a-z0-9#]
 const rgxClosingFrQuote = new RegExp(`(?<! )${data.closingFrQuote}|${data.closingFrQuote}(?! |\\.|\\,| \\?| \\!| \\:| \\;|$)`, 'gmi');
 
 // Match opening french quote. https://github.com/webaxones/spte/wiki/rgxOpenFrQuote
-const rgxOpenFrQuote = new RegExp(`(?<! |^)[${data.openFrQuote}]|[${data.openFrQuote}](?! |$)`, 'gmi');
+const rgxOpenFrQuote = new RegExp(`(?<! |^)${data.openFrQuote}|${data.openFrQuote}(?! |$)`, 'gmi');
