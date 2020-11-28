@@ -1,5 +1,5 @@
 const charTitle = 'Caractères à vérifier : ';
-const charClass = 'char--warning';
+const charClass = 'sp-char--warning';
 const colorError = 'red';
 const colorCheck = 'magenta';
 const styleWordError = `background-color:${colorError};color:white;font-weight:bold;padding:1px;margin:0 1px`;
@@ -14,7 +14,7 @@ const cases = {
 	badWords: {
 		title: 'Mots déconseillés ou mal orthographiés : ',
 		cssTitle: 'Mot déconseillé ou mal orthographié',
-		cssClass: 'word--warning',
+		cssClass: 'sp-word--warning',
 		style: styleWordError,
 		counter: 0,
 		regex: rgxBadWords,
@@ -22,7 +22,7 @@ const cases = {
 	quotes: {
 		title: 'Apostrophes droites : ',
 		cssTitle: 'Apostrophe droite au lieu d’une apostrophe courbe',
-		cssClass: 'quote--warning',
+		cssClass: 'sp-quote--warning',
 		style: styleCharError,
 		counter: 0,
 		regex: rgxSingleQuotes,
@@ -166,7 +166,7 @@ const cases = {
 	Space: {
 		title: '',
 		cssTitle: 'Espace en début ou en fin de chaîne',
-		cssClass: 'spaces--showing',
+		cssClass: 'sp-spaces--showing',
 		style: 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue',
 		counter: 0,
 		regex: /^ | $/gm,
@@ -174,7 +174,7 @@ const cases = {
 	nbkSpaces: {
 		title: '',
 		cssTitle: 'Espace insécable',
-		cssClass: 'nbkspaces--showing',
+		cssClass: 'sp-nbkspaces--showing',
 		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
 		counter: 0,
 		regex: /\u00A0/gm,

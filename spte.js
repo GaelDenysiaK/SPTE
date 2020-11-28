@@ -1,14 +1,15 @@
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
-const translations = document.querySelectorAll('tr.preview:not(.has-spte-error) .translation-text');
+const translations = document.querySelectorAll('tr.preview:not(.sp-has-spte-error) .translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
 const translateRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
 const translateFr = (/\/fr\//).test(window.location.href);
 const translateGP = document.querySelector('.gp-content');
 const frenchLocale = document.querySelector('#locales .english a[href="/locale/fr/"]');
-const frenchStatsGlobal = document.querySelector('#stats-table tr th a[href*="/locale/fr/"]');
+const frenchStatsGlobal = document.querySelector('#stats-table tr a[href*="/locale/fr/"]');
+const frenchStatsSpecific = document.querySelector('#translation-sets tr a[href*="/fr/"]');
 
 if (bulkActions) {
-	document.body.classList.add('pte-is-on-board');
+	document.body.classList.add('sp-pte-is-on-board');
 }
 
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes.
@@ -18,30 +19,23 @@ function preventGlotDictTags() {
 }
 
 // Displays the translated string without any markup.
-function addTextOriginalToolTip(translation) {
+function addForeignToolTip(translation) {
 	const preview = translation.closest('tr');
 	const translated = preview.querySelector('.translation-text');
 	const hook = preview.querySelector('td.actions');
 	hook.style.position = 'relative';
-	const toolTip = createElement('SPAN', { class: 'original__tooltip' });
+	const toolTip = createElement('SPAN', { class: 'sp-foreign-tooltip' });
 	toolTip.innerHTML = translated.innerHTML;
 	hook.append(toolTip);
 }
 
 // Clone Preview with highlights in editor panel.
-function addHelpTranslationWrapper(translation) {
+function addEditorHighlighter(translation) {
 	const preview = translation.closest('tr');
 	const brother = preview.nextElementSibling;
 	if (preview.classList.contains('has-translations')) {
-		const help = createElement('DIV', { class: 'help-copycat' });
+		const help = createElement('DIV', { class: 'sp-editor-highlighter' });
 		const trad = preview.querySelector('.translation-text');
-		const spteWarning = trad.querySelector('span[class$="--warning"]');
-		if (spteWarning) {
-			preview.classList.add('has-spte-warning');
-			if (spteWarning.classList.contains('word--warning') || spteWarning.classList.contains('quote--warning')) {
-				preview.classList.add('has-spte-error');
-			}
-		}
 		const hook = brother.querySelector('.source-details');
 		const copycat = trad.cloneNode(true);
 		help.append(copycat);
@@ -51,16 +45,33 @@ function addHelpTranslationWrapper(translation) {
 	}
 }
 
-// Check and treat translations, highlight elements (with status rejected just count down).
+// Add CSS classes to preview TR depending on warnings.
+function tagTRTranslations(preview) {
+	if (!preview.classList.contains('has-translations')) {
+		return;
+	}
+	const trad = preview.querySelector('.translation-text');
+	const spteWarning = trad.querySelector('span[class$="--warning"]');
+	if (spteWarning) {
+		preview.classList.add('sp-has-spte-warning');
+	}
+	if (trad.querySelector('.sp-word--warning') || trad.querySelector('.sp-quote--warning')) {
+		preview.classList.add('sp-has-spte-error');
+	}
+}
+
+// Check and treat translations, highlight elements (with status rejected we just count down).
 function checkTranslation(translation, status) {
+	const preview = translation.closest('tr.preview');
+
 	// We don't need to process old rejected translations except the one we just rejected.
-	if (translation.closest('tr.preview').classList.contains('status-rejected') && status !== 'rejected') {
+	if (!preview || (preview.classList.contains('status-rejected') && status !== 'rejected')) {
 		return;
 	}
 	let text = translation.innerHTML;
 
 	if (status !== 'rejected') {
-		addTextOriginalToolTip(translation);
+		addForeignToolTip(translation);
 	}
 
 	// For regex compatibility.
@@ -78,17 +89,18 @@ function checkTranslation(translation, status) {
 	}
 	translation.innerHTML = text;
 
-	addHelpTranslationWrapper(translation);
+	addEditorHighlighter(preview);
+	tagTRTranslations(preview);
 }
 
 // Display stats results on header.
 function showResults() {
 	const resultsPlace = document.querySelector('#upper-filters-toolbar');
-	let results = document.querySelector('#upper-filters-toolbar #results');
+	let results = document.querySelector('#upper-filters-toolbar #sp-results');
 	if (results) {
 		results.parentNode.removeChild(results);
 	}
-	results = createElement('DIV', { id: 'results' });
+	results = createElement('DIV', { id: 'sp-results' });
 	const resultsTitle = createElement('P');
 	results.append(resultsTitle);
 	let nbCharacter = 0;
@@ -103,7 +115,7 @@ function showResults() {
 
 		if (cases[item].title && cases[item].title !== charTitle) {
 			const title = createElement('SPAN', {}, cases[item].title);
-			const counter = createElement('SPAN', { class: `${cases[item].cssClass} warning-title` }, cases[item].counter);
+			const counter = createElement('SPAN', { class: `${cases[item].cssClass} sp-warning-title` }, cases[item].counter);
 			title.append(counter);
 			results.append(title);
 			nbTotal += cases[item].counter;
@@ -115,59 +127,40 @@ function showResults() {
 
 	if (nbCharacter) {
 		const title = createElement('SPAN', {}, charTitle);
-		const counter = createElement('SPAN', { class: `${charClass} warning-title` }, nbCharacter);
+		const counter = createElement('SPAN', { class: `${charClass} sp-warning-title` }, nbCharacter);
 		title.append(counter);
 		results.append(title);
 	}
 
-	addStyle('.actions:hover .original__tooltip', 'display:inline-block');
-	addStyle('.actions:hover', 'cursor:zoom-in');
-	addStyle('.original__tooltip', 'display:none;position:absolute;width:calc(-5em - 10px + 42.5vw);top:100%;right:5em;z-index:666;padding:20px 13px 20px 7px;background:#000;color:#fff;text-align:left;font-size:17px;line-height:1.66;box-shadow:0 10px 10px rgba(0,0,0,.3)');
-	addStyle('.pte-is-on-board .original__tooltip', 'width:calc(-5em - 22px + 42.5vw)');
-	addStyle('.original__tooltip::before', 'content:"";position:absolute;left:calc(50% - 6px);top:-6px;width:0;height:0;border-left:6px solid transparent; border-right:6px solid transparent;border-bottom:6px solid black');
-	addStyle('.help-copycat', 'margin:1em 0;padding:10px 3px;font-size:15px;background-color:#d9e1e8');
-	addStyle('[style*="background-color:yellow"]', 'display:inline-block!important;line-height:16px!important;background-color:white!important;border:2px solid white!important');
-
 	if (nbTotal) {
-		addStyle('#results', 'font-weight:bold');
-		addStyle('.results__title', 'margin:10px 0px 5px;color:red;text-transform:uppercase');
-		addStyle('.results__links', 'display:inline;font-weight:normal;margin:0 1em .3em 0;line-height:1');
-		addStyle('.warning-title', 'display:inline-block!important;line-height:23px!important;margin:0 25px 0 5px!important;padding:2px!important;box-sizing:border-box!important;text-align:center!important;min-width:22px!important;min-height:23px!important');
-		addStyle('.char-details', 'font-size:13px;font-weight:normal;margin:.2em 0');
-		addStyle('.warning-legend', 'font-weight:normal;margin:1em 0 0 0;line-height:1');
-		addStyle('#showEverything,#showOnlyWarning', 'margin:1em 0 0 .6em');
-		addStyle('#showEverything+label,#showOnlyWarning+label', 'margin:0 1.5em 0 .5em');
-		addStyle('#spteSelectErrors', 'margin:1em .58em');
-		addStyle('#spteSelectErrors+label', 'margin:0 1.5em 0 0;font-weight:bold');
-
-		const legend = createElement('P', { class: 'warning-legend' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
+		const legend = createElement('P', { class: 'sp-warning-legend' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
 		results.append(legend);
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
-		resultsTitle.classList.add('results__title');
+		resultsTitle.classList.add('sp-results__title');
 
-		const typographyLink = createElement('P', { class: 'results__links' });
+		const typographyLink = createElement('P', { class: 'sp-results__links' });
 		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
-		const glossaryLink = createElement('P', { class: 'results__links' });
+		const glossaryLink = createElement('P', { class: 'sp-results__links' });
 		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
 		results.append(typographyLink, glossaryLink);
 
-		const controls = createElement('DIV', { id: 'controls' });
-		const showEverything = createElement('INPUT', { type: 'radio', id: 'showEverything', name: 'showEverything', value: 'showEverything', checked: 'checked' });
+		const controls = createElement('DIV', { id: 'sp-controls' });
+		const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
 		controls.append(showEverything);
-		const showEverythingLabel = createElement('LABEL', { for: 'showEverything' }, 'Tout afficher');
+		const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout afficher');
 		controls.append(showEverythingLabel);
-		const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'showOnlyWarning', name: 'showOnlyWarning', value: 'showOnlyWarning' });
+		const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
 		controls.append(showOnlyWarning);
-		const showOnlyWarningLabel = createElement('LABEL', { for: 'showOnlyWarning' }, 'N’afficher que les avertissements');
+		const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'N’afficher que les avertissements');
 		controls.append(showOnlyWarningLabel);
 		results.append(controls);
 
 		resultsPlace.append(results);
 
 		if (bulkActions) {
-			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'spteSelectErrors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
+			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
 			bulkActions.append(spteSelectErrors);
-			const spteSelectErrorsLabel = createElement('LABEL', { for: 'spteSelectErrors' }, 'Cocher les avertissements en rouge');
+			const spteSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
 			bulkActions.append(spteSelectErrorsLabel);
 		}
 	}
@@ -175,8 +168,8 @@ function showResults() {
 
 // Add display controls.
 function manageControls() {
-	const showOnlyWarning = document.querySelector('#showOnlyWarning');
-	const showEverything = document.querySelector('#showEverything');
+	const showOnlyWarning = document.querySelector('#sp-show-only-warnings');
+	const showEverything = document.querySelector('#sp-show-all-translations');
 
 	if (!showOnlyWarning || !showEverything) {
 		return;
@@ -185,7 +178,7 @@ function manageControls() {
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
-		document.querySelectorAll('tr.preview:not(.has-spte-warning)').forEach((el) => {
+		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
 			el.style.display = 'none';
 			if (bulkActions) {
 				// We uncheck hidden items to prevent bulk processing of non-visible items.
@@ -196,12 +189,12 @@ function manageControls() {
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
 		showOnlyWarning.checked = '';
-		document.querySelectorAll('tr.preview:not(.has-spte-warning)').forEach((el) => {
+		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
 			el.style.display = 'table-row';
 		});
 	});
 
-	const spteSelectErrors = document.querySelector('#spteSelectErrors');
+	const spteSelectErrors = document.querySelector('#sp-select-errors');
 
 	if (!spteSelectErrors) {
 		return;
@@ -210,12 +203,12 @@ function manageControls() {
 	spteSelectErrors.addEventListener('change', () => {
 		let nbSelectedRows = 0;
 		if (spteSelectErrors.checked) {
-			document.querySelectorAll('tr.preview.has-spte-error').forEach((el) => {
+			document.querySelectorAll('tr.preview.sp-has-spte-error').forEach((el) => {
 				el.firstElementChild.firstElementChild.checked = 'checked';
 				nbSelectedRows++;
 			});
 		} else {
-			document.querySelectorAll('tr.preview.has-spte-error').forEach((el) => {
+			document.querySelectorAll('tr.preview.sp-has-spte-error').forEach((el) => {
 				el.firstElementChild.firstElementChild.checked = '';
 			});
 			nbSelectedRows = 0;
@@ -268,13 +261,14 @@ function frenchiesGoFirst() {
 
 // Add french flag on french locale in different tables to better identify it.
 function frenchFlag() {
-	addStyle('.frenchies:after', 'content:"";position:absolute;margin:4px 0 0 10px;width:23px;height:15px;box-shadow:rgba(0,0,0,.2) 0 0 3px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
-
 	if (frenchLocale) {
-		frenchLocale.classList.add('frenchies');
+		frenchLocale.classList.add('sp-frenchies');
+	}
+	if (frenchStatsSpecific) {
+		frenchStatsSpecific.classList.add('sp-frenchies');
 	}
 	if (frenchStatsGlobal) {
-		frenchStatsGlobal.classList.add('frenchies');
+		frenchStatsGlobal.classList.add('sp-frenchies');
 	}
 }
 

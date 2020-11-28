@@ -22,7 +22,8 @@
 		"interceptor.js"
 	],
 	"content_scripts": [{
-        "matches": ["https://translate.wordpress.org/*"],
+		"matches": ["https://translate.wordpress.org/*"],
+		"css": ["style.css"],
 		"js": ["data.js", "regex.js", "styles.js", "helpers.js", "spte.js"]
 	}]
 }
