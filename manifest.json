@@ -23,6 +23,6 @@
 	],
 	"content_scripts": [{
         "matches": ["https://translate.wordpress.org/*"],
-        "js": ["data.js", "regex.js", "styles.js", "helpers.js", "spte.js"]
+		"js": ["data.js", "regex.js", "styles.js", "helpers.js", "spte.js"]
 	}]
 }

@@ -4,12 +4,14 @@ const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
 const translateRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
 const translateFr = (/\/fr\//).test(window.location.href);
 const translateGP = document.querySelector('.gp-content');
+const frenchLocale = document.querySelector('#locales .english a[href="/locale/fr/"]');
+const frenchStatsGlobal = document.querySelector('#stats-table tr th a[href*="/locale/fr/"]');
 
 if (bulkActions) {
 	document.body.classList.add('pte-is-on-board');
 }
 
-// Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes its regex.
+// Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes.
 function preventGlotDictTags() {
 	localStorage.setItem('gd_curly_apostrophe_warning', 'true');
 	localStorage.setItem('gd_no_non_breaking_space', 'true');
@@ -257,21 +259,23 @@ function checkTranslationOnSave() {
 
 // Specific to translate.wordpress.org page, brings the FR locale up first to make it easier to access.
 function frenchiesGoFirst() {
-	const frenchLocaleLnk = document.querySelector('#locales .native a[href="/locale/fr/"]');
-	if (!frenchLocaleLnk) {
-		return;
+	const frenchLocaleDiv = frenchLocale.closest('div.locale');
+	const firstLocaleDiv = document.querySelector('div.locale:first-child');
+	if (firstLocaleDiv && frenchLocaleDiv) {
+		firstLocaleDiv.before(frenchLocaleDiv);
 	}
+}
 
-	const frenchLocale = frenchLocaleLnk.closest('div.locale');
-	if (!frenchLocale) {
-		return;
+// Add french flag on french locale in different tables to better identify it.
+function frenchFlag() {
+	addStyle('.frenchies:after', 'content:"";position:absolute;margin:4px 0 0 10px;width:23px;height:15px;box-shadow:rgba(0,0,0,.2) 0 0 3px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
+
+	if (frenchLocale) {
+		frenchLocale.classList.add('frenchies');
 	}
-
-	addStyle('.frenchies', 'position:relative');
-	addStyle('.frenchies:before', 'content:"";position:absolute;width:23px;height:15px;top:23px;left:132px;background:linear-gradient( 90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667% )');
-	frenchLocale.classList.add('frenchies');
-	const firstLocale = document.querySelector('div.locale:first-child');
-	firstLocale.before(frenchLocale);
+	if (frenchStatsGlobal) {
+		frenchStatsGlobal.classList.add('frenchies');
+	}
 }
 
 if (translateFr && translateGP) {
@@ -281,7 +285,7 @@ if (translateFr && translateGP) {
 	manageControls();
 	checkTranslationOnSave();
 }
-
-if (translateRoot) {
+if (translateRoot && frenchLocale) {
 	frenchiesGoFirst();
 }
+frenchFlag();
