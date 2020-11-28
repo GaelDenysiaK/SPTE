@@ -7,12 +7,13 @@ const translateGP = document.querySelector('.gp-content');
 const frenchLocale = document.querySelector('#locales .english a[href="/locale/fr/"]');
 const frenchStatsGlobal = document.querySelector('#stats-table tr a[href*="/locale/fr/"]');
 const frenchStatsSpecific = document.querySelector('#translation-sets tr a[href*="/fr/"]');
+let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
 
 if (bulkActions) {
 	document.body.classList.add('sp-pte-is-on-board');
 }
 
-// Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it crashes.
+// Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it can crashes.
 function preventGlotDictTags() {
 	localStorage.setItem('gd_curly_apostrophe_warning', 'true');
 	localStorage.setItem('gd_no_non_breaking_space', 'true');
@@ -93,6 +94,22 @@ function checkTranslation(translation, status) {
 	tagTRTranslations(preview);
 }
 
+// Display/Hide caption.
+function toggleCaption(e) {
+	if (lsHideCaption) {
+		e.target.closest('.sp-results__captions').classList.remove('sp-results__captions--closed');
+		localStorage.setItem('spteHideCaption', 'false');
+		lsHideCaption = false;
+		e.target.textContent = 'Masquer la légende';
+	} else {
+		e.target.closest('.sp-results__captions').classList.add('sp-results__captions--closed');
+		localStorage.setItem('spteHideCaption', 'true');
+		lsHideCaption = true;
+		e.target.textContent = 'Afficher la légende';
+	}
+	e.preventDefault();
+}
+
 // Display stats results on header.
 function showResults() {
 	const resultsPlace = document.querySelector('#upper-filters-toolbar');
@@ -100,9 +117,13 @@ function showResults() {
 	if (results) {
 		results.parentNode.removeChild(results);
 	}
-	results = createElement('DIV', { id: 'sp-results' });
+	results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
+	const resultsData = createElement('DIV', { class: 'sp-results__data' });
+	const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
+	results.append(resultsData, resultsCaption);
+
 	const resultsTitle = createElement('P');
-	results.append(resultsTitle);
+	resultsData.append(resultsTitle);
 	let nbCharacter = 0;
 	let nbTotal = 0;
 
@@ -117,34 +138,39 @@ function showResults() {
 			const title = createElement('SPAN', {}, cases[item].title);
 			const counter = createElement('SPAN', { class: `${cases[item].cssClass} sp-warning-title` }, cases[item].counter);
 			title.append(counter);
-			results.append(title);
+			resultsData.append(title);
 			nbTotal += cases[item].counter;
 		} else if (cases[item].title === charTitle) {
 			nbCharacter += cases[item].counter;
 			nbTotal += cases[item].counter;
 		}
 	}
-
 	if (nbCharacter) {
 		const title = createElement('SPAN', {}, charTitle);
 		const counter = createElement('SPAN', { class: `${charClass} sp-warning-title` }, nbCharacter);
 		title.append(counter);
-		results.append(title);
+		resultsData.append(title);
 	}
 
 	if (nbTotal) {
-		const legend = createElement('P', { class: 'sp-warning-legend' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
-		results.append(legend);
+		const caption = createElement('P', { class: 'sp-results__caption' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('sp-results__title');
-
-		const typographyLink = createElement('P', { class: 'sp-results__links' });
+		const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
-		const glossaryLink = createElement('P', { class: 'sp-results__links' });
+		const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
-		results.append(typographyLink, glossaryLink);
+		const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', class: 'sp-results__toggle-caption', href: '#' });
+		if (lsHideCaption) {
+			hideCaption.textContent = 'Afficher la légende';
+			resultsCaption.classList.add('sp-results__captions--closed');
+		} else {
+			hideCaption.textContent = 'Masquer la légende';
+		}
+		hideCaption.onclick = toggleCaption;
+		resultsCaption.append(hideCaption, caption, typographyLink, glossaryLink);
 
-		const controls = createElement('DIV', { id: 'sp-controls' });
+		const controls = createElement('DIV', { class: 'sp-results__controls' });
 		const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
 		controls.append(showEverything);
 		const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout afficher');
