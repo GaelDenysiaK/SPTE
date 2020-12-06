@@ -215,18 +215,6 @@ function treatTranslationOnSave(resp) {
 	checkTranslation(translation, resp.trStatus);
 }
 
-// Check a translation on save.
-function checkTranslationOnSave() {
-	const interceptorScript = document.createElement('script');
-	interceptorScript.src = chrome.runtime.getURL('interceptor.js');
-	document.head.appendChild(interceptorScript);
-	// Receive response from interceptor.js.
-	document.addEventListener('spTranslationSaved', (e) => {
-		treatTranslationOnSave(e.detail);
-		displayResults();
-	});
-}
-
 // Add display controls.
 function manageControls() {
 	const showOnlyWarning = document.querySelector('#sp-show-only-warnings');
@@ -280,6 +268,19 @@ function manageControls() {
 		const gdCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
 		const tableTranslations = document.querySelector('#translations');
 		tableTranslations.parentNode.insertBefore(gdCountNotice, tableTranslations);
+	});
+}
+
+// Check a translation on save.
+function checkTranslationOnSave() {
+	const interceptorScript = document.createElement('script');
+	interceptorScript.src = chrome.runtime.getURL('interceptor.js');
+	document.head.appendChild(interceptorScript);
+	// Receive response from interceptor.js.
+	document.addEventListener('spTranslationSaved', (e) => {
+		treatTranslationOnSave(e.detail);
+		displayResults();
+		manageControls();
 	});
 }
 
