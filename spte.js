@@ -200,8 +200,8 @@ function displayResults() {
 	}
 }
 
-// Treat a translation on save.
-function treatTranslationOnSave(resp) {
+// Process a translation on save.
+function processTranslationOnSave(resp) {
 	let translation = null;
 	if (resp.trStatus === 'rejected' || resp.trStatus === 'current' || resp.trStatus === 'fuzzy') {
 		// A translation is rejected or approved.
@@ -278,7 +278,7 @@ function checkTranslationOnSave() {
 	document.head.appendChild(interceptorScript);
 	// Receive response from interceptor.js.
 	document.addEventListener('spTranslationSaved', (e) => {
-		treatTranslationOnSave(e.detail);
+		processTranslationOnSave(e.detail);
 		displayResults();
 		manageControls();
 	});
