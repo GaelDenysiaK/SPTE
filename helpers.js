@@ -12,3 +12,7 @@ function createElement(tagName = 'DIV', attributes = {}, textContent = '') {
 	element.textContent = textContent;
 	return element;
 }
+
+function insertAfter(newNode, existingNode) {
+	existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}

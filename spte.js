@@ -114,8 +114,8 @@ function toggleCaption(e) {
 
 // Display stats results on header.
 function displayResults() {
-	const resultsPlace = document.querySelector('#upper-filters-toolbar');
-	let results = document.querySelector('#upper-filters-toolbar #sp-results');
+	const resultsPlace = document.querySelector('.filter-toolbar');
+	let results = document.querySelector('.filter-toolbar #sp-results');
 	if (results) {
 		results.parentNode.removeChild(results);
 	}
@@ -190,12 +190,12 @@ function displayResults() {
 			if (document.querySelector('.sp-pte-controls')) {
 				return;
 			}
-			const pteControls = createElement('FIELDSET', { class: 'sp-pte-controls' });
+			const pteControls = createElement('DIV', { class: 'sp-pte-controls' });
 			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
 			pteControls.append(spteSelectErrors);
 			const spteSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
 			pteControls.append(spteSelectErrorsLabel);
-			bulkActions.append(pteControls);
+			insertAfter(pteControls, bulkActions);
 		}
 	}
 }
@@ -237,7 +237,6 @@ function manageControls() {
 	}
 
 	showOnlyWarning.addEventListener('click', () => {
-		console.log('oui');
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
 		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {

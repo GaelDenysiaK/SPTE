@@ -64,7 +64,7 @@
 
 .sp-results__captions {
     position: relative;
-    padding: .3rem .9rem .8rem;
+    padding: .3rem 9rem .8rem .9rem;
     margin: 1rem 0 0;
     background: #f1eff5;
 }
@@ -151,6 +151,14 @@
     height: 15px;
     box-shadow: rgba(0, 0, 0, .2) 0 0 3px;
     background: linear-gradient(90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667%);
+}
+
+.bulk-actions {
+    float: none !important;
+}
+
+.sp-pte-controls {
+    float: left;
 }
 
 .sp-info {
