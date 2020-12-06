@@ -152,3 +152,7 @@
     box-shadow: rgba(0, 0, 0, .2) 0 0 3px;
     background: linear-gradient(90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667%);
 }
+
+.sp-info {
+    cursor: help;
+}

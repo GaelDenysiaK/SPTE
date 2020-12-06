@@ -34,6 +34,10 @@ function addForeignToolTip(translation) {
 function addEditorHighlighter(translation) {
 	const preview = translation.closest('tr');
 	const brother = preview.nextElementSibling;
+	const brotherHighlighter = brother.querySelector('.sp-editor-highlighter') || null;
+	if (brotherHighlighter) {
+		brother.querySelector('.sp-editor-highlighter').parentNode.removeChild(brother.querySelector('.sp-editor-highlighter'));
+	}
 	if (preview.classList.contains('has-translations')) {
 		const help = createElement('DIV', { class: 'sp-editor-highlighter' });
 		const trad = preview.querySelector('.translation-text');
@@ -48,15 +52,14 @@ function addEditorHighlighter(translation) {
 
 // Add CSS classes to preview TR depending on warnings.
 function tagTRTranslations(preview) {
-	if (!preview.classList.contains('has-translations')) {
-		return;
-	}
+	const hasTranslation = preview.classList.contains('has-translations');
+
 	const trad = preview.querySelector('.translation-text');
 	const spteWarning = trad.querySelector('span[class$="--warning"]');
-	if (spteWarning) {
+	if (hasTranslation && spteWarning) {
 		preview.classList.add('sp-has-spte-warning');
 	}
-	if (trad.querySelector('.sp-word--warning') || trad.querySelector('.sp-quote--warning')) {
+	if (hasTranslation && (trad.querySelector('.sp-word--warning') || trad.querySelector('.sp-quote--warning'))) {
 		preview.classList.add('sp-has-spte-error');
 	}
 }
@@ -64,11 +67,11 @@ function tagTRTranslations(preview) {
 // Check and treat translations, highlight elements (with status rejected we just count down).
 function checkTranslation(translation, status) {
 	const preview = translation.closest('tr.preview');
-
 	// We don't need to process old rejected translations except the one we just rejected.
 	if (!preview || (preview.classList.contains('status-rejected') && status !== 'rejected')) {
 		return;
 	}
+
 	let text = translation.innerHTML;
 
 	if (status !== 'rejected') {
@@ -82,14 +85,13 @@ function checkTranslation(translation, status) {
 		text = text.replace(cases[type].regex, (string) => {
 			if (status === 'rejected') {
 				cases[type].counter--;
-				return string;
+			} else {
+				cases[type].counter++;
 			}
-			cases[type].counter++;
 			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
 		});
 	}
 	translation.innerHTML = text;
-
 	addEditorHighlighter(preview);
 	tagTRTranslations(preview);
 }
@@ -111,7 +113,7 @@ function toggleCaption(e) {
 }
 
 // Display stats results on header.
-function showResults() {
+function displayResults() {
 	const resultsPlace = document.querySelector('#upper-filters-toolbar');
 	let results = document.querySelector('#upper-filters-toolbar #sp-results');
 	if (results) {
@@ -153,7 +155,8 @@ function showResults() {
 	}
 
 	if (nbTotal) {
-		const caption = createElement('P', { class: 'sp-results__caption' }, 'Les avertissements en rouge sont avérés. Ceux en rose sont à vérifier mais peuvent compter des faux positifs.');
+		const caption = createElement('P', { class: 'sp-results__caption' });
+		caption.innerHTML = 'Les avertissements en rouge sont à <strong class="sp-info" title="Quelques rares exceptions subsistent, par exemple lorsque le mot fait partie du nom de l’extension">très forte probabilité</strong>. Ceux en rose sont à <strong class="sp-info" title="Les exceptions sont fréquentes lorsque du code est intégré aux traductions (fonctions, paramètres…)">forte probabilité</strong> mais à vérifier car ils peuvent compter des faux positifs.';
 		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('sp-results__title');
 		const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
@@ -184,12 +187,44 @@ function showResults() {
 		resultsPlace.append(results);
 
 		if (bulkActions) {
+			if (document.querySelector('.sp-pte-controls')) {
+				return;
+			}
+			const pteControls = createElement('FIELDSET', { class: 'sp-pte-controls' });
 			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
-			bulkActions.append(spteSelectErrors);
+			pteControls.append(spteSelectErrors);
 			const spteSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
-			bulkActions.append(spteSelectErrorsLabel);
+			pteControls.append(spteSelectErrorsLabel);
+			bulkActions.append(pteControls);
 		}
 	}
+}
+
+// Treat a translation on save.
+function treatTranslationOnSave(resp) {
+	let translation = null;
+	if (resp.trStatus === 'rejected' || resp.trStatus === 'current' || resp.trStatus === 'fuzzy') {
+		// A translation is rejected or approved.
+		const actualID = resp.data.match('(?<=translation_id=)\\d+') ? resp.data.match('(?<=translation_id=)\\d+')[0] : 0;
+		translation = document.querySelector(`[id$="-${actualID}"].preview .translation-text`);
+	} else {
+		// A new translation is saved or a translation is approved by an editor.
+		const originalID = resp.data.match('(?<=original_id=)\\d+') ? resp.data.match('(?<=original_id=)\\d+')[0] : 0;
+		translation = document.querySelector(`[id^="preview-${originalID}"] .translation-text`);
+	}
+	checkTranslation(translation, resp.trStatus);
+}
+
+// Check a translation on save.
+function checkTranslationOnSave() {
+	const interceptorScript = document.createElement('script');
+	interceptorScript.src = chrome.runtime.getURL('interceptor.js');
+	document.head.appendChild(interceptorScript);
+	// Receive response from interceptor.js.
+	document.addEventListener('spTranslationSaved', (e) => {
+		treatTranslationOnSave(e.detail);
+		displayResults();
+	});
 }
 
 // Add display controls.
@@ -202,6 +237,7 @@ function manageControls() {
 	}
 
 	showOnlyWarning.addEventListener('click', () => {
+		console.log('oui');
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
 		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
@@ -248,34 +284,6 @@ function manageControls() {
 	});
 }
 
-function treatTranslationOnSave(resp) {
-	let translation = null;
-	if (resp.trStatus === 'rejected' || resp.trStatus === 'current' || resp.trStatus === 'fuzzy') {
-		// A translation is rejected or approved.
-		const actualID = resp.data.match('(?<=translation_id=)\\d+') ? resp.data.match('(?<=translation_id=)\\d+')[0] : 0;
-		translation = document.querySelector(`[id$="-${actualID}"] .translation-text`);
-	} else {
-		// A new translation is saved or a translation is approved by an editor.
-		const originalID = resp.data.match('(?<=original_id=)\\d+') ? resp.data.match('(?<=original_id=)\\d+')[0] : 0;
-		translation = document.querySelector(`[id^="preview-${originalID}"] .translation-text`);
-	}
-	if (translation && (resp.gpNotice === 'Status set!' || 'Saved!')) {
-		checkTranslation(translation, resp.trStatus);
-	}
-}
-
-// Check and treat a translation on save.
-function checkTranslationOnSave() {
-	const interceptorScript = document.createElement('script');
-	interceptorScript.src = chrome.runtime.getURL('interceptor.js');
-	document.head.appendChild(interceptorScript);
-	// Receive response from interceptor.js.
-	document.addEventListener('translationSaved', (e) => {
-		treatTranslationOnSave(e.detail);
-		showResults();
-	});
-}
-
 // Specific to translate.wordpress.org page, brings the FR locale up first to make it easier to access.
 function frenchiesGoFirst() {
 	const frenchLocaleDiv = frenchLocale.closest('div.locale');
@@ -301,7 +309,7 @@ function frenchFlag() {
 if (translateFr && translateGP) {
 	preventGlotDictTags();
 	translations.forEach(checkTranslation);
-	showResults();
+	displayResults();
 	manageControls();
 	checkTranslationOnSave();
 }

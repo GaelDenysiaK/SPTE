@@ -20,7 +20,7 @@ XHR.send = function (postData) {
 				gpNotice: $gp.notices.element[0].innerText,
 				trStatus: status,
 			};
-			document.dispatchEvent(new CustomEvent('translationSaved', { detail: response }));
+			document.dispatchEvent(new CustomEvent('spTranslationSaved', { detail: response }));
 		}
 	});
 	return send.apply(this, arguments);
