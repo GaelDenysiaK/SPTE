@@ -1,5 +1,17 @@
 # Changelog
 
+
+## [0.9.9.9] - 7 Déc 2020
+### Added
+- Analyse d’une ligne et recalcul des compteurs à chaque : Saisie, Suggest, Fuzzy, et Reject
+- Ajout du drapeau français pour mieux identifier la locale fr sur différentes tables de translate mais sans en changer le tri car ces tables sont triées par ordre logique
+### Changed
+- Remplacement des espaces insécables dans les regex par leur unicode pour les rendre visibles sur github (essentiellement dans le wiki)
+- Déplacement des styles dans une feuille de style externe
+- Ajout d’un paramètre enregistré (en LocalStorage) pour masquer/afficher la légende qui prend de la place
+### Fixed
+- Retrait des checkbox que j'avais bêtement intégré aux formulaires existants, ce qui les intégrait aux requêtes
+
 ## [0.9.9.8] - 11 Nov 2020
 ### Added
 - Ajout d’exceptions au contrôle de l’espace insécable du guillemet fermant lorsque ce dernier est suivi par un point, suivi par une virgule, suivi par un espace insécable et un point d’interrogation ou d’exclamation ou deux points ou d’un point virgule. Voir Wiki pour plus d’information.

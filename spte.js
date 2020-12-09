@@ -83,11 +83,20 @@ function checkTranslation(translation, status) {
 
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
-			if (status === 'rejected') {
+			switch (status) {
+			case 'rejected':
 				cases[type].counter--;
-			} else {
+				break;
+			case 'fuzzy':
+				break;
+			case 'current':
 				cases[type].counter++;
+				break;
+			default:
+				cases[type].counter++;
+				break;
 			}
+
 			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
 		});
 	}

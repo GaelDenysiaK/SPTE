@@ -1,16 +1,16 @@
 // Reference the XMLHttpRequest original methods.
-const XHR = XMLHttpRequest.prototype;
-const { open } = XHR;
-const { send } = XHR;
+const spteXHR = XMLHttpRequest.prototype;
+const { open } = spteXHR;
+const { send } = spteXHR;
 
 // Override XMLHttpRequest open.
-XHR.open = function (method, url) {
+spteXHR.open = function (method, url) {
 	this._method = method;
 	this._url = url;
 	return open.apply(this, arguments);
 };
 // Override XMLHttpRequest send, and share data to content script.
-XHR.send = function (postData) {
+spteXHR.send = function (postData) {
 	this.addEventListener('load', function () {
 		if (this._method === 'POST' && this._url.substring(0, window.location.pathname.length) === window.location.pathname) {
 			const status = postData.match('(?<=status=).*(?=&)') ? postData.match('(?<=status=).*(?=&)')[0] : '';
