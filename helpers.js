@@ -13,6 +13,16 @@ function createElement(tagName = 'DIV', attributes = {}, textContent = '') {
 	return element;
 }
 
-function insertAfter(newNode, existingNode) {
-	existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+// If sourceElement invisible, add classElement to targetElement.
+function ifSourceHiddenTagTarget(sourceElement, targetElement, classElement) {
+	const target = document.querySelector(targetElement);
+	if (!target) { return; }
+	const observer = new IntersectionObserver(((entries) => {
+		if (entries[0].isIntersecting === true) {
+			target.classList.remove(classElement);
+		} else {
+			target.classList.add(classElement);
+		}
+	}), { threshold: [1], rootMargin: '80px' });
+	observer.observe(document.querySelector(sourceElement));
 }

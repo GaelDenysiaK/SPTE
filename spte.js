@@ -1,17 +1,80 @@
+// Styles.
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
+
+// Check locations.
+const onTranslateWordPressRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
+const onTranslateFr = (/\/fr\//).test(window.location.href);
+
+// Settings (localStorage don't have booleans).
+let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
+let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
+
+// Main existing elements.
+const gpContent = document.querySelector('.gp-content');
+const bigTitle = document.querySelector('.gp-content .breadcrumb+h2');
+const topPaging = document.querySelector('.gp-content .paging');
 const translations = document.querySelectorAll('tr.preview:not(.sp-has-spte-error) .translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
-const translateRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
-const translateFr = (/\/fr\//).test(window.location.href);
-const translateGP = document.querySelector('.gp-content');
-const frenchLocale = document.querySelector('#locales .english a[href="/locale/fr/"]');
-const frenchStatsGlobal = document.querySelector('#stats-table tr a[href*="/locale/fr/"]');
-const frenchStatsSpecific = document.querySelector('#translation-sets tr a[href*="/fr/"]');
-let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
-
 if (bulkActions) {
 	document.body.classList.add('sp-pte-is-on-board');
 }
+const tableTranslations = document.querySelector('#translations');
+const filterToolbar = document.querySelector('.filter-toolbar');
+const isConnected = document.querySelector('body.logged-in') !== null;
+const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
+
+// Main elements created.
+const spHeader = createElement('DIV', { id: 'sp-main-header' });
+const spControls = createElement('DIV', { id: 'sp-controls' });
+const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' });
+
+const results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
+const resultsData = createElement('DIV', { class: 'sp-results__data' });
+const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
+const resultsTitle = createElement('P');
+results.append(resultsData, resultsCaption);
+resultsData.append(resultsTitle);
+const title = createElement('SPAN', {}, charTitle);
+const caption = createElement('P', { class: 'sp-results__caption' });
+const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
+const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
+const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
+const controlStickyHeader = createElement('A', { id: 'sp-results__toggle-header', class: 'sp-results__buttons', href: '#', title: 'En-tête fixe' }, '📌');
+const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: 'https://translate.wordpress.org/locale/fr/default/glossary/', target: '_blank', title: 'Glossaire officiel' }, '📕');
+const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/', target: '_blank', title: 'Règles typographiques' }, '📕');
+
+if (!lsStickyHeader) {
+	controlStickyHeader.classList.add('sp-toggle-header--off');
+	spHeader.classList.add('sticky--off');
+}
+if (filterToolbar) {
+	filterToolbar.append(linkGlossary);
+	filterToolbar.append(linkTypography);
+	filterToolbar.append(controlStickyHeader);
+}
+const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
+const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
+spFilters.append(showEverything);
+const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout');
+spFilters.append(showEverythingLabel);
+const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
+spFilters.append(showOnlyWarning);
+const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'Les avertissements');
+spFilters.append(showOnlyWarningLabel);
+const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
+const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
+const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
+
+if (bulkActions) {
+	pteControls.append(spSelectErrors);
+	pteControls.append(spSelectErrorsLabel);
+	bulkActions.after(pteControls);
+}
+
+// French elements.
+const frenchLocale = document.querySelector('#locales .english a[href="/locale/fr/"]');
+const frenchStatsGlobal = document.querySelector('#stats-table tr a[href*="/locale/fr/"]');
+const frenchStatsSpecific = document.querySelector('#translation-sets tr a[href*="/fr/"]');
 
 // Prevent the GlotDict tags in preview by forcing its settings, because when GlotDict goes after SPTE, it doesn't expect to find any tags and it can crashes.
 function preventGlotDictTags() {
@@ -55,8 +118,8 @@ function tagTRTranslations(preview) {
 	const hasTranslation = preview.classList.contains('has-translations');
 
 	const trad = preview.querySelector('.translation-text');
-	const spteWarning = trad.querySelector('span[class$="--warning"]');
-	if (hasTranslation && spteWarning) {
+	const spWarning = trad.querySelector('span[class$="--warning"]');
+	if (hasTranslation && spWarning) {
 		preview.classList.add('sp-has-spte-warning');
 	}
 	if (hasTranslation && (trad.querySelector('.sp-word--warning') || trad.querySelector('.sp-quote--warning'))) {
@@ -65,39 +128,53 @@ function tagTRTranslations(preview) {
 }
 
 // Check and treat translations, highlight elements (with status rejected we just count down).
-function checkTranslation(translation, status) {
+function checkTranslation(translation, oldStatus, newStatus) {
 	const preview = translation.closest('tr.preview');
-	// We don't need to process old rejected translations except the one we just rejected.
-	if (!preview || (preview.classList.contains('status-rejected') && status !== 'rejected')) {
+
+	addForeignToolTip(translation);
+
+	// We don't need to process old rejected translations except the one we just rejected but only for counters.
+	if (!preview || (preview.classList.contains('status-rejected') && newStatus !== 'rejected')) {
 		return;
 	}
 
 	let text = translation.innerHTML;
-
-	if (status !== 'rejected') {
-		addForeignToolTip(translation);
-	}
 
 	// For regex compatibility.
 	text = text.replaceAll(/&nbsp;/gmi, ' ');
 
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
-			switch (status) {
+			// GlotPress has 6 status : untranslated, current, fuzzy, waiting, old, rejected. Old and rejected musn't be counted.
+			switch (newStatus) {
 			case 'rejected':
-				cases[type].counter--;
+				if (oldStatus !== 'old') {
+					cases[type].counter--;
+				}
 				break;
 			case 'fuzzy':
+				if (oldStatus === 'rejected') {
+					cases[type].counter++;
+				}
 				break;
 			case 'current':
-				cases[type].counter++;
+				if (oldStatus !== 'waiting') {
+					cases[type].counter++;
+				}
+				break;
+			case 'waiting':
+				if (oldStatus !== 'current') {
+					cases[type].counter++;
+				}
 				break;
 			default:
 				cases[type].counter++;
 				break;
 			}
-
-			return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
+			if (newStatus !== 'rejected') {
+				return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
+			}
+			return string;
 		});
 	}
 	translation.innerHTML = text;
@@ -107,34 +184,25 @@ function checkTranslation(translation, status) {
 
 // Display/Hide caption.
 function toggleCaption(e) {
-	if (lsHideCaption) {
-		e.target.closest('.sp-results__captions').classList.remove('sp-results__captions--closed');
-		localStorage.setItem('spteHideCaption', 'false');
-		lsHideCaption = false;
-		e.target.textContent = 'Masquer la légende';
-	} else {
-		e.target.closest('.sp-results__captions').classList.add('sp-results__captions--closed');
-		localStorage.setItem('spteHideCaption', 'true');
-		lsHideCaption = true;
-		e.target.textContent = 'Afficher la légende';
-	}
+	lsHideCaption = lsHideCaption !== true;
+	resultsCaption.classList.toggle('sp-results__captions--closed');
+	e.target.textContent = (e.target.textContent === 'Masquer la légende') ? '' : 'Masquer la légende';
+	localStorage.setItem('spteHideCaption', ((lsHideCaption === true) ? 'true' : 'false'));
+	e.preventDefault();
+}
+
+// Activate/Deactivate sticky header.
+function toggleStickyHeader(e) {
+	lsStickyHeader = lsStickyHeader !== true;
+	e.target.classList.toggle('sp-toggle-header--off');
+	spHeader.classList.toggle('sticky--off');
+	localStorage.setItem('spteStickyHeader', ((lsStickyHeader === true) ? 'true' : 'false'));
 	e.preventDefault();
 }
 
 // Display stats results on header.
 function displayResults() {
-	const resultsPlace = document.querySelector('.filter-toolbar');
-	let results = document.querySelector('.filter-toolbar #sp-results');
-	if (results) {
-		results.parentNode.removeChild(results);
-	}
-	results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
-	const resultsData = createElement('DIV', { class: 'sp-results__data' });
-	const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
-	results.append(resultsData, resultsCaption);
-
-	const resultsTitle = createElement('P');
-	resultsData.append(resultsTitle);
+	const nbQuotes = 0;
 	let nbCharacter = 0;
 	let nbTotal = 0;
 
@@ -146,89 +214,60 @@ function displayResults() {
 		addStyle(`.${cases[item].cssClass}`, `${cases[item].style}`);
 
 		if (cases[item].title && cases[item].title !== charTitle) {
-			const title = createElement('SPAN', {}, cases[item].title);
-			const counter = createElement('SPAN', { class: `${cases[item].cssClass} sp-warning-title` }, cases[item].counter);
-			title.append(counter);
-			resultsData.append(title);
+			let counter = document.querySelector(`.${cases[item].cssClass}.sp-warning-title`);
+			if (counter) {
+				counter.textContent = cases[item].counter;
+			} else {
+				const title = createElement('SPAN', {}, cases[item].title);
+				counter = createElement('SPAN', { class: `${cases[item].cssClass} sp-warning-title` }, cases[item].counter);
+				title.append(counter);
+				resultsData.append(title);
+			}
 			nbTotal += cases[item].counter;
 		} else if (cases[item].title === charTitle) {
 			nbCharacter += cases[item].counter;
 			nbTotal += cases[item].counter;
 		}
 	}
-	if (nbCharacter) {
-		const title = createElement('SPAN', {}, charTitle);
-		const counter = createElement('SPAN', { class: `${charClass} sp-warning-title` }, nbCharacter);
+
+	let counter = document.querySelector(`.${charClass}.sp-warning-title`);
+	if (counter) {
+		counter.textContent = nbCharacter;
+	} else if (nbCharacter) {
+		counter = createElement('SPAN', { class: `${charClass} sp-warning-title` }, nbCharacter);
 		title.append(counter);
 		resultsData.append(title);
 	}
 
-	if (nbTotal) {
-		const caption = createElement('P', { class: 'sp-results__caption' });
+	resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
+
+	if (nbTotal && !resultsTitle.classList.contains('sp-results__title')) {
 		caption.innerHTML = 'Les avertissements en rouge sont à <strong class="sp-info" title="Quelques rares exceptions subsistent, par exemple lorsque le mot fait partie du nom de l’extension">très forte probabilité</strong>. Ceux en rose sont à <strong class="sp-info" title="Les exceptions sont fréquentes lorsque du code est intégré aux traductions (fonctions, paramètres…)">forte probabilité</strong> mais à vérifier car ils peuvent compter des faux positifs.';
-		resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 		resultsTitle.classList.add('sp-results__title');
-		const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
-		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
-		const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
-		const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', class: 'sp-results__toggle-caption', href: '#' });
+		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
 		if (lsHideCaption) {
-			hideCaption.textContent = 'Afficher la légende';
+			hideCaption.textContent = '';
 			resultsCaption.classList.add('sp-results__captions--closed');
 		} else {
 			hideCaption.textContent = 'Masquer la légende';
 		}
 		hideCaption.onclick = toggleCaption;
-		resultsCaption.append(hideCaption, caption, typographyLink, glossaryLink);
-
-		const controls = createElement('DIV', { class: 'sp-results__controls' });
-		const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
-		controls.append(showEverything);
-		const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout afficher');
-		controls.append(showEverythingLabel);
-		const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
-		controls.append(showOnlyWarning);
-		const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'N’afficher que les avertissements');
-		controls.append(showOnlyWarningLabel);
-		results.append(controls);
-
-		resultsPlace.append(results);
-
-		if (bulkActions) {
-			if (document.querySelector('.sp-pte-controls')) {
-				return;
-			}
-			const pteControls = createElement('DIV', { class: 'sp-pte-controls' });
-			const spteSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
-			pteControls.append(spteSelectErrors);
-			const spteSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
-			pteControls.append(spteSelectErrorsLabel);
-			insertAfter(pteControls, bulkActions);
-		}
+		resultsCaption.append(hideCaption, caption, glossaryLink, typographyLink);
+		filterToolbar.append(results);
+	}
+	const characters = document.querySelector('.sp-warning-title.sp-char--warning');
+	if (nbCharacter === 0 && characters) {
+		characters.parentNode.remove();
+	}
+	const quotes = document.querySelector('.sp-warning-title.sp-quote--warning');
+	if (cases.quotes.counter === 0 && quotes) {
+		quotes.parentNode.remove();
 	}
 }
 
-// Process a translation on save.
-function processTranslationOnSave(resp) {
-	let translation = null;
-	if (resp.trStatus === 'rejected' || resp.trStatus === 'current' || resp.trStatus === 'fuzzy') {
-		// A translation is rejected or approved.
-		const actualID = resp.data.match('(?<=translation_id=)\\d+') ? resp.data.match('(?<=translation_id=)\\d+')[0] : 0;
-		translation = document.querySelector(`[id$="-${actualID}"].preview .translation-text`);
-	} else {
-		// A new translation is saved or a translation is approved by an editor.
-		const originalID = resp.data.match('(?<=original_id=)\\d+') ? resp.data.match('(?<=original_id=)\\d+')[0] : 0;
-		translation = document.querySelector(`[id^="preview-${originalID}"] .translation-text`);
-	}
-	checkTranslation(translation, resp.trStatus);
-}
-
-// Add display controls.
+// Manage controls.
 function manageControls() {
-	const showOnlyWarning = document.querySelector('#sp-show-only-warnings');
-	const showEverything = document.querySelector('#sp-show-all-translations');
-
 	if (!showOnlyWarning || !showEverything) {
 		return;
 	}
@@ -252,15 +291,13 @@ function manageControls() {
 		});
 	});
 
-	const spteSelectErrors = document.querySelector('#sp-select-errors');
-
-	if (!spteSelectErrors) {
+	if (!spSelectErrors) {
 		return;
 	}
 
-	spteSelectErrors.addEventListener('change', () => {
+	spSelectErrors.addEventListener('change', () => {
 		let nbSelectedRows = 0;
-		if (spteSelectErrors.checked) {
+		if (spSelectErrors.checked) {
 			document.querySelectorAll('tr.preview.sp-has-spte-error').forEach((el) => {
 				el.firstElementChild.firstElementChild.checked = 'checked';
 				nbSelectedRows++;
@@ -275,21 +312,7 @@ function manageControls() {
 			document.querySelector('#gd-checked-count').remove();
 		}
 		const gdCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
-		const tableTranslations = document.querySelector('#translations');
 		tableTranslations.parentNode.insertBefore(gdCountNotice, tableTranslations);
-	});
-}
-
-// Check a translation on save.
-function checkTranslationOnSave() {
-	const interceptorScript = document.createElement('script');
-	interceptorScript.src = chrome.runtime.getURL('interceptor.js');
-	document.head.appendChild(interceptorScript);
-	// Receive response from interceptor.js.
-	document.addEventListener('spTranslationSaved', (e) => {
-		processTranslationOnSave(e.detail);
-		displayResults();
-		manageControls();
 	});
 }
 
@@ -315,14 +338,102 @@ function frenchFlag() {
 	}
 }
 
-if (translateFr && translateGP) {
+// Observe mutations.
+function observeMutations() {
+	const observerMutations = new MutationObserver((mutations) => {
+		let removedRowID;
+		let addedRowID;
+		let oldStatus;
+		let newStatus;
+		let translation;
+		mutations.forEach((mutation) => {
+			mutation.removedNodes.forEach((removedNode) => {
+				if (!removedRowID && !oldStatus && removedNode.nodeName === 'TR' && removedNode.classList.contains('preview')) {
+					removedRowID = removedNode.id;
+					if (removedNode.classList.contains('untranslated')) {
+						oldStatus = 'untranslated';
+					} else {
+						oldStatus = removedNode.classList.value.match('(?<=status-)(\\w*)(?= )')[0];
+					}
+				}
+			});
+
+			mutation.addedNodes.forEach((addedNode) => {
+				if (addedNode.nodeType !== 1) {
+					return;
+				}
+				// Rows for status changes.
+				if (!addedRowID && !newStatus && addedNode.nodeName === 'TR' && addedNode.classList.contains('preview')) {
+					addedRowID = addedNode.id;
+					newStatus = addedNode.classList.value.match('(?<=status-)(\\w*)(?= )')[0];
+				}
+
+				// GlotDict Notices.
+				if (GDmayBeOnBoard && addedNode.parentNode !== spHeader && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
+					spHeader.appendChild(addedNode);
+				}
+			});
+		});
+
+		if (removedRowID && addedRowID && oldStatus && newStatus) {
+			if (oldStatus === 'untranslated' && !addedRowID.toString().startsWith(removedRowID.replace('old', ''))) {
+				return;
+			}
+			if (oldStatus !== 'untranslated' && !removedRowID.toString().startsWith(addedRowID)) {
+				return;
+			}
+			translation = document.querySelector(`#${addedRowID} .translation-text`);
+			checkTranslation(translation, oldStatus, newStatus);
+			displayResults();
+			manageControls();
+		}
+	});
+
+	observerMutations.observe(gpContent, {
+		subtree: true,
+		childList: true,
+	});
+}
+
+// Put all elements in a stickable header.
+function reorderHeader() {
+	spHeader.append(spToTop);
+	spToTop.addEventListener('click', (e) => {
+		e.preventDefault();
+		document.querySelector('#wporg-header').scrollIntoView({
+			block: 'start',
+			behavior: 'smooth',
+		});
+	});
+	spToTop.textContent = '↑';
+	spHeader.append(filterToolbar);
+	controlStickyHeader.onclick = toggleStickyHeader;
+	if (isConnected && bulkActions) {
+		spHeader.append(bulkActions);
+	}
+	if (bulkActions) {
+		spControls.append(pteControls);
+	}
+	spControls.append(spFilters);
+	if (topPaging) {
+		spControls.append(topPaging);
+	}
+	spHeader.append(spControls);
+	bigTitle.after(spHeader);
+}
+
+if (onTranslateFr && gpContent && tableTranslations) {
 	preventGlotDictTags();
 	translations.forEach(checkTranslation);
 	displayResults();
 	manageControls();
-	checkTranslationOnSave();
+	reorderHeader();
+	ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
+	if (isConnected) {
+		observeMutations();
+	}
 }
-if (translateRoot && frenchLocale) {
+if (onTranslateWordPressRoot && frenchLocale) {
 	frenchiesGoFirst();
 }
 frenchFlag();

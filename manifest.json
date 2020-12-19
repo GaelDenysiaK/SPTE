@@ -1,7 +1,7 @@
 {
     "name": "SPTE",
     "description": "Affiche quelques erreurs sur les traductions françaises WordPress",
-    "version": "0.9.9.9",
+    "version": "1.0.0.0",
     "manifest_version": 2,
     "icons": {
         "16": "icons/icon16.png",
@@ -18,9 +18,6 @@
 		"show_matches": ["https://translate.wordpress.org/*"],
 		"default_title": "SPTE"
 	},
-	"web_accessible_resources": [
-		"interceptor.js"
-	],
 	"content_scripts": [{
 		"matches": ["https://translate.wordpress.org/*"],
 		"css": ["style.css"],
