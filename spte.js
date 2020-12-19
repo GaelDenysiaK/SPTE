@@ -28,10 +28,10 @@ const spHeader = createElement('DIV', { id: 'sp-main-header' });
 const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
 const spGdNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
-const spConsistLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Vérifier la cohérence d’une chaîne');
-const spConsistText = createElement('INPUT', { type: 'text', id: 'sp-consist__text', name: 'spConsistText', value: '' });
-const spConsistBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistBtn', value: 'Vérifier' });
-spConsistency.append(spConsistLabel, spConsistText, spConsistBtn);
+const spConsistencyLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Vérifier la cohérence d’une chaîne');
+const spConsistencyInputText = createElement('INPUT', { type: 'text', id: 'sp-consist__text', name: 'spConsistencyInputText', value: '' });
+const spConsistencyBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistencyBtn', value: 'Vérifier' });
+spConsistency.append(spConsistencyLabel, spConsistencyInputText, spConsistencyBtn);
 const spControls = createElement('DIV', { id: 'sp-controls' });
 const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' });
 const results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
@@ -323,30 +323,6 @@ function manageControls() {
 	});
 }
 
-function getConsistency() {
-	spConsistBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		spPopup.classList.remove('sp-the-popup--hidden');
-		const inputValue = spConsistText.value;
-		const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=fr%2Fdefault&`;
-		const fetchPromise = fetch(URL);
-		fetchPromise.then((response) => response.text()).then((data) => {
-			const table = data.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=consistency\-table\"\>)(.*?)(?=<\/table>)/gmi);
-			if (table) {
-				spPopup.innerHTML = `<table class="consistency">${table[0]}</table>}`;
-			} else {
-				spPopup.innerHTML = '<h1 style="text-align:center;margin:2em auto;">Aucun résultat</h1>';
-			}
-		});
-	});
-
-	document.addEventListener('click', (e) => {
-		if (!spPopup.contains(e.target) && e.target !== spConsistBtn) {
-			spPopup.classList.add('sp-the-popup--hidden');
-		}
-	});
-}
-
 // Specific to translate.wordpress.org page, brings the FR locale up first to make it easier to access.
 function frenchiesGoFirst() {
 	const frenchLocaleDiv = frenchLocale.closest('div.locale');
@@ -429,13 +405,6 @@ function observeMutations() {
 // Put all elements in a stickable header.
 function reorderHeader() {
 	spHeader.append(spToTop);
-	spToTop.addEventListener('click', (e) => {
-		e.preventDefault();
-		document.querySelector('#wporg-header').scrollIntoView({
-			block: 'start',
-			behavior: 'smooth',
-		});
-	});
 	spToTop.textContent = '↑';
 	spHeader.append(filterToolbar);
 	spHeader.append(spConsistency);
@@ -456,17 +425,86 @@ function reorderHeader() {
 	spHeader.before(spPopup);
 }
 
+function checkConsistency() {
+	const inputValue = spConsistencyInputText.value;
+	if (inputValue === '') {
+		return;
+	}
+	spPopup.classList.remove('sp-the-popup--hidden');
+	const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=fr%2Fdefault&`;
+	fetch(URL).then((response) => response.text()).then((data) => {
+		const table = data.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=consistency-table">)(.*?)(?=<\/table>)/gmi);
+		if (table && table[0]) {
+			spPopup.innerHTML = `<table class="consistency">${table[0]}</table>}`;
+		} else {
+			spPopup.innerHTML = '<h1 style="text-align:center;margin:2em auto;">Aucun résultat</h1>';
+		}
+	});
+}
+
+function closePopup(e) {
+	if (!spPopup.contains(e.target) && e.target !== spConsistencyBtn) {
+		spPopup.classList.add('sp-the-popup--hidden');
+	}
+}
+
+function scrollToTop() {
+	document.querySelector('#wporg-header').scrollIntoView({
+		block: 'start',
+		behavior: 'smooth',
+	});
+}
+
+function declareEvents() {
+	document.addEventListener('click', (e) => {
+		closePopup(e);
+	});
+
+	document.addEventListener('keyup', (e) => {
+		switch (e.key) {
+		case 'Escape':
+			closePopup(e);
+			break;
+
+		default:
+			break;
+		}
+	});
+
+	spConsistencyInputText.addEventListener('keyup', (e) => {
+		e.preventDefault();
+		switch (e.key) {
+		case 'Enter':
+			checkConsistency();
+			break;
+
+		default:
+			break;
+		}
+	});
+
+	spConsistencyBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		checkConsistency();
+	});
+
+	spToTop.addEventListener('click', (e) => {
+		e.preventDefault();
+		scrollToTop();
+	});
+}
+
 if (onTranslateFr && gpContent && tableTranslations) {
 	preventGlotDictTags();
 	translations.forEach(checkTranslation);
 	displayResults();
 	manageControls();
 	reorderHeader();
-	getConsistency();
 	ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
 	if (isConnected) {
 		observeMutations();
 	}
+	declareEvents();
 }
 if (onTranslateWordPressRoot && frenchLocale) {
 	frenchiesGoFirst();

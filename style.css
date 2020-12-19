@@ -282,6 +282,7 @@
 }
 
 #sp-controls {
+    width: 100%;
     overflow: hidden;
 }
 
