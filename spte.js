@@ -25,10 +25,15 @@ const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
 
 // Main elements created.
 const spHeader = createElement('DIV', { id: 'sp-main-header' });
+const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
 const spGdNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
+const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
+const spConsistLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Vérifier la cohérence d’une chaîne');
+const spConsistText = createElement('INPUT', { type: 'text', id: 'sp-consist__text', name: 'spConsistText', value: '' });
+const spConsistBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistBtn', value: 'Vérifier' });
+spConsistency.append(spConsistLabel, spConsistText, spConsistBtn);
 const spControls = createElement('DIV', { id: 'sp-controls' });
 const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' });
-
 const results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
 const resultsData = createElement('DIV', { class: 'sp-results__data' });
 const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
@@ -43,6 +48,7 @@ const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href:
 const controlStickyHeader = createElement('A', { id: 'sp-results__toggle-header', class: 'sp-results__buttons', href: '#', title: 'En-tête fixe' }, '📌');
 const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: 'https://translate.wordpress.org/locale/fr/default/glossary/', target: '_blank', title: 'Glossaire officiel' }, '📕');
 const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/', target: '_blank', title: 'Règles typographiques' }, '📕');
+const linkConsistency = createElement('A', { id: 'sp-results__link-consist', class: 'sp-results__buttons', href: 'https://translate.wordpress.org/consistency/?search=&set=fr%2Fdefault&project=', target: '_blank', title: 'Cohérence des traductions' }, '📘');
 
 if (!lsStickyHeader) {
 	controlStickyHeader.classList.add('sp-toggle-header--off');
@@ -51,6 +57,7 @@ if (!lsStickyHeader) {
 if (filterToolbar) {
 	filterToolbar.append(linkGlossary);
 	filterToolbar.append(linkTypography);
+	filterToolbar.append(linkConsistency);
 	filterToolbar.append(controlStickyHeader);
 }
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
@@ -203,7 +210,6 @@ function toggleStickyHeader(e) {
 
 // Display stats results on header.
 function displayResults() {
-	const nbQuotes = 0;
 	let nbCharacter = 0;
 	let nbTotal = 0;
 
@@ -317,6 +323,30 @@ function manageControls() {
 	});
 }
 
+function getConsistency() {
+	spConsistBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		spPopup.classList.remove('sp-the-popup--hidden');
+		const inputValue = spConsistText.value;
+		const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=fr%2Fdefault&`;
+		const fetchPromise = fetch(URL);
+		fetchPromise.then((response) => response.text()).then((data) => {
+			const table = data.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=consistency\-table\"\>)(.*?)(?=<\/table>)/gmi);
+			if (table) {
+				spPopup.innerHTML = `<table class="consistency">${table[0]}</table>}`;
+			} else {
+				spPopup.innerHTML = '<h1 style="text-align:center;margin:2em auto;">Aucun résultat</h1>';
+			}
+		});
+	});
+
+	document.addEventListener('click', (e) => {
+		if (!spPopup.contains(e.target) && e.target !== spConsistBtn) {
+			spPopup.classList.add('sp-the-popup--hidden');
+		}
+	});
+}
+
 // Specific to translate.wordpress.org page, brings the FR locale up first to make it easier to access.
 function frenchiesGoFirst() {
 	const frenchLocaleDiv = frenchLocale.closest('div.locale');
@@ -408,6 +438,7 @@ function reorderHeader() {
 	});
 	spToTop.textContent = '↑';
 	spHeader.append(filterToolbar);
+	spHeader.append(spConsistency);
 	controlStickyHeader.onclick = toggleStickyHeader;
 	if (isConnected && bulkActions) {
 		spHeader.append(bulkActions);
@@ -422,6 +453,7 @@ function reorderHeader() {
 	spHeader.append(spControls);
 	spHeader.append(spGdNoticesContainer);
 	bigTitle.after(spHeader);
+	spHeader.before(spPopup);
 }
 
 if (onTranslateFr && gpContent && tableTranslations) {
@@ -430,6 +462,7 @@ if (onTranslateFr && gpContent && tableTranslations) {
 	displayResults();
 	manageControls();
 	reorderHeader();
+	getConsistency();
 	ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
 	if (isConnected) {
 		observeMutations();
