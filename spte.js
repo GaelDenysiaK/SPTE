@@ -25,6 +25,7 @@ const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
 
 // Main elements created.
 const spHeader = createElement('DIV', { id: 'sp-main-header' });
+const spGdNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spControls = createElement('DIV', { id: 'sp-controls' });
 const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' });
 
@@ -368,9 +369,9 @@ function observeMutations() {
 					newStatus = addedNode.classList.value.match('(?<=status-)(\\w*)(?= )')[0];
 				}
 
-				// GlotDict Notices.
-				if (GDmayBeOnBoard && addedNode.parentNode !== spHeader && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
-					spHeader.appendChild(addedNode);
+				// GlotDict Notices. Beware, if parent needs to change, to test if addedNode hasn't already been added to parent.
+				if (GDmayBeOnBoard && addedNode.parentNode !== spGdNoticesContainer && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
+					spGdNoticesContainer.appendChild(addedNode);
 				}
 			});
 		});
@@ -419,6 +420,7 @@ function reorderHeader() {
 		spControls.append(topPaging);
 	}
 	spHeader.append(spControls);
+	spHeader.append(spGdNoticesContainer);
 	bigTitle.after(spHeader);
 }
 
