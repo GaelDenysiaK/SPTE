@@ -5,6 +5,11 @@ const styleSheet = document.head.appendChild(document.createElement('style')).sh
 const onTranslateWordPressRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
 const onTranslateFr = (/\/fr\//).test(window.location.href);
 
+// URLs.
+const typographyURL = 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/';
+const glossaryURL = 'https://translate.wordpress.org/locale/fr/default/glossary/';
+const consistencyURL = 'https://translate.wordpress.org/consistency/?search=&set=fr%2Fdefault&project=';
+
 // Settings (localStorage don't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
 let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
@@ -42,13 +47,16 @@ results.append(resultsData, resultsCaption);
 resultsData.append(resultsTitle);
 const title = createElement('SPAN', {}, charTitle);
 const caption = createElement('P', { class: 'sp-results__caption' });
+caption.innerHTML = 'Les avertissements en rouge sont à <strong class="sp-info" title="Quelques rares exceptions subsistent, par exemple lorsque le mot fait partie du nom de l’extension">très forte probabilité</strong>. Ceux en rose sont à <strong class="sp-info" title="Les exceptions sont fréquentes lorsque du code est intégré aux traductions (fonctions, paramètres…)">forte probabilité</strong> mais à vérifier car ils peuvent compter des faux positifs.';
 const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
+typographyLink.innerHTML = `Consultez <a target="_blank" href="${typographyURL}">les règles typographiques</a> à respecter pour les caractères.`;
 const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
+glossaryLink.innerHTML = `Consultez <a target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
 const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
 const controlStickyHeader = createElement('A', { id: 'sp-results__toggle-header', class: 'sp-results__buttons', href: '#', title: 'En-tête fixe' }, '📌');
-const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: 'https://translate.wordpress.org/locale/fr/default/glossary/', target: '_blank', title: 'Glossaire officiel' }, '📕');
-const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/', target: '_blank', title: 'Règles typographiques' }, '📕');
-const linkConsistency = createElement('A', { id: 'sp-results__link-consist', class: 'sp-results__buttons', href: 'https://translate.wordpress.org/consistency/?search=&set=fr%2Fdefault&project=', target: '_blank', title: 'Cohérence des traductions' }, '📘');
+const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel' }, '📕');
+const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: typographyURL, target: '_blank', title: 'Règles typographiques' }, '📕');
+const linkConsistency = createElement('A', { id: 'sp-results__link-consist', class: 'sp-results__buttons', href: consistencyURL, target: '_blank', title: 'Cohérence des traductions' }, '📘');
 
 if (!lsStickyHeader) {
 	controlStickyHeader.classList.add('sp-toggle-header--off');
@@ -249,10 +257,7 @@ function displayResults() {
 	resultsTitle.textContent = `éléments à vérifier : ${nbTotal}`;
 
 	if (nbTotal && !resultsTitle.classList.contains('sp-results__title')) {
-		caption.innerHTML = 'Les avertissements en rouge sont à <strong class="sp-info" title="Quelques rares exceptions subsistent, par exemple lorsque le mot fait partie du nom de l’extension">très forte probabilité</strong>. Ceux en rose sont à <strong class="sp-info" title="Les exceptions sont fréquentes lorsque du code est intégré aux traductions (fonctions, paramètres…)">forte probabilité</strong> mais à vérifier car ils peuvent compter des faux positifs.';
 		resultsTitle.classList.add('sp-results__title');
-		glossaryLink.innerHTML = 'Consultez <a target="_blank" href="https://translate.wordpress.org/locale/fr/default/glossary/">le glossaire officiel</a> à respecter pour les mots.';
-		typographyLink.innerHTML = 'Consultez <a target="_blank" href="https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/">les règles typographiques</a> à respecter pour les caractères.';
 		if (lsHideCaption) {
 			hideCaption.textContent = '';
 			resultsCaption.classList.add('sp-results__captions--closed');
@@ -403,7 +408,7 @@ function observeMutations() {
 }
 
 // Put all elements in a stickable header.
-function reorderHeader() {
+function buildHeader() {
 	spHeader.append(spToTop);
 	spToTop.textContent = '↑';
 	spHeader.append(filterToolbar);
@@ -499,7 +504,7 @@ if (onTranslateFr && gpContent && tableTranslations) {
 	translations.forEach(checkTranslation);
 	displayResults();
 	manageControls();
-	reorderHeader();
+	buildHeader();
 	ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
 	if (isConnected) {
 		observeMutations();

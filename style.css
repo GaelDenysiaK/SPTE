@@ -64,7 +64,9 @@
     z-index: 999999;
     overflow-y: scroll;
     width: 60vw;
+    max-width: 1024px;
     height: 35vw;
+    max-height: 606px;
     padding: .8em;
     background: white;
     box-shadow: 0 0 3px 3px rgba(0, 0, 0, .2);
