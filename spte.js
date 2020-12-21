@@ -49,9 +49,9 @@ const title = createElement('SPAN', {}, charTitle);
 const caption = createElement('P', { class: 'sp-results__caption' });
 caption.innerHTML = 'Les avertissements en rouge sont à <strong class="sp-info" title="Quelques rares exceptions subsistent, par exemple lorsque le mot fait partie du nom de l’extension">très forte probabilité</strong>. Ceux en rose sont à <strong class="sp-info" title="Les exceptions sont fréquentes lorsque du code est intégré aux traductions (fonctions, paramètres…)">forte probabilité</strong> mais à vérifier car ils peuvent compter des faux positifs.';
 const typographyLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
-typographyLink.innerHTML = `Consultez <a target="_blank" href="${typographyURL}">les règles typographiques</a> à respecter pour les caractères.`;
+typographyLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link--typography" target="_blank" href="${typographyURL}">les règles typographiques</a> à respecter pour les caractères.`;
 const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
-glossaryLink.innerHTML = `Consultez <a target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
+glossaryLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link--glossary" target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
 const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
 const controlStickyHeader = createElement('A', { id: 'sp-results__toggle-header', class: 'sp-results__buttons', href: '#', title: 'En-tête fixe' }, '📌');
 const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel' }, '📕');
@@ -150,9 +150,7 @@ function checkTranslation(translation, oldStatus, newStatus) {
 	addForeignToolTip(translation);
 
 	// We don't need to process old rejected translations except the one we just rejected but only for counters.
-	if (!preview || (preview.classList.contains('status-rejected') && newStatus !== 'rejected')) {
-		return;
-	}
+	if (!preview || (preview.classList.contains('status-rejected') && newStatus !== 'rejected')) { return; }
 
 	let text = translation.innerHTML;
 
@@ -280,9 +278,7 @@ function displayResults() {
 
 // Manage controls.
 function manageControls() {
-	if (!showOnlyWarning || !showEverything) {
-		return;
-	}
+	if (!showOnlyWarning || !showEverything) { return; }
 
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
@@ -303,9 +299,7 @@ function manageControls() {
 		});
 	});
 
-	if (!spSelectErrors) {
-		return;
-	}
+	if (!spSelectErrors) { return; }
 
 	spSelectErrors.addEventListener('change', () => {
 		let nbSelectedRows = 0;
@@ -371,9 +365,8 @@ function observeMutations() {
 			});
 
 			mutation.addedNodes.forEach((addedNode) => {
-				if (addedNode.nodeType !== 1) {
-					return;
-				}
+				if (addedNode.nodeType !== 1) {	return;	}
+
 				// Rows for status changes.
 				if (!addedRowID && !newStatus && addedNode.nodeName === 'TR' && addedNode.classList.contains('preview')) {
 					addedRowID = addedNode.id;
@@ -388,12 +381,9 @@ function observeMutations() {
 		});
 
 		if (removedRowID && addedRowID && oldStatus && newStatus) {
-			if (oldStatus === 'untranslated' && !addedRowID.toString().startsWith(removedRowID.replace('old', ''))) {
-				return;
-			}
-			if (oldStatus !== 'untranslated' && !removedRowID.toString().startsWith(addedRowID)) {
-				return;
-			}
+			if (oldStatus === 'untranslated' && !addedRowID.toString().startsWith(removedRowID.replace('old', ''))) { return; }
+			if (oldStatus !== 'untranslated' && !removedRowID.toString().startsWith(addedRowID)) { return; }
+
 			translation = document.querySelector(`#${addedRowID} .translation-text`);
 			checkTranslation(translation, oldStatus, newStatus);
 			displayResults();
@@ -432,9 +422,7 @@ function buildHeader() {
 
 function checkConsistency() {
 	const inputValue = spConsistencyInputText.value;
-	if (inputValue === '') {
-		return;
-	}
+	if (inputValue === '') { return; }
 	spPopup.classList.remove('sp-the-popup--hidden');
 	const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=fr%2Fdefault&`;
 	fetch(URL).then((response) => response.text()).then((data) => {
