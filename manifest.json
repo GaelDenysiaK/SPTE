@@ -7,16 +7,20 @@
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
-    },
+	},
+	"permissions": ["storage", "tabs"],
+	"background": {
+		"scripts": ["background.js"]
+	},
 	"page_action": {
-		"browser_style": true,
+		"default_title": "SPTE",
+		"default_popup": "pageAction/index.html",
 		"default_icon": {
 			"16": "icons/icon16.png",
 			"48": "icons/icon48.png",
 			"128": "icons/icon128.png"
 		},
-		"show_matches": ["https://translate.wordpress.org/*"],
-		"default_title": "SPTE"
+		"show_matches": ["https://translate.wordpress.org/*"]
 	},
 	"content_scripts": [{
 		"matches": ["https://translate.wordpress.org/*"],

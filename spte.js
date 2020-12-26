@@ -3,12 +3,19 @@ const styleSheet = document.head.appendChild(document.createElement('style')).sh
 
 // Check locations.
 const onTranslateWordPressRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
-const onTranslateFr = (/\/fr\//).test(window.location.href);
+let currentProjectLocaleSlug = '';
+const breadcrumb = document.querySelector('.breadcrumb li:last-child a');
+if (breadcrumb) {
+	const subs = breadcrumb.href.split('/');
+	currentProjectLocaleSlug = subs[subs.length - 3];
+}
 
 // URLs.
+currentProjectLocaleSlug = (currentProjectLocaleSlug === '') ? 'fr' : currentProjectLocaleSlug;
+
 const typographyURL = 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/';
-const glossaryURL = 'https://translate.wordpress.org/locale/fr/default/glossary/';
-const consistencyURL = 'https://translate.wordpress.org/consistency/?search=&set=fr%2Fdefault&project=';
+const glossaryURL = `https://translate.wordpress.org/locale/${currentProjectLocaleSlug}/default/glossary/`;
+const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set=${currentProjectLocaleSlug}%2Fdefault&project=`;
 
 // Settings (localStorage don't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
@@ -31,7 +38,7 @@ const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
 // Main elements created.
 const spHeader = createElement('DIV', { id: 'sp-main-header' });
 const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
-const spGdNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
+const spGDNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
 const spConsistencyLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Vérifier la cohérence d’une chaîne');
 const spConsistencyInputText = createElement('INPUT', { type: 'text', id: 'sp-consist__text', name: 'spConsistencyInputText', value: '' });
@@ -317,8 +324,8 @@ function manageControls() {
 		if (document.querySelector('#gd-checked-count')) {
 			document.querySelector('#gd-checked-count').remove();
 		}
-		const gdCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
-		tableTranslations.parentNode.insertBefore(gdCountNotice, tableTranslations);
+		const GDCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
+		tableTranslations.parentNode.insertBefore(GDCountNotice, tableTranslations);
 	});
 }
 
@@ -332,7 +339,8 @@ function frenchiesGoFirst() {
 }
 
 // Add french flag on french locale in different tables to better identify it.
-function frenchFlag() {
+function frenchFlag(spteFrenchFlag) {
+	if (spteFrenchFlag && spteFrenchFlag === 'false') { return; }
 	if (frenchLocale) {
 		frenchLocale.classList.add('sp-frenchies');
 	}
@@ -374,8 +382,8 @@ function observeMutations() {
 				}
 
 				// GlotDict Notices. Beware, if parent needs to change, to test if addedNode hasn't already been added to parent.
-				if (GDmayBeOnBoard && addedNode.parentNode !== spGdNoticesContainer && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
-					spGdNoticesContainer.appendChild(addedNode);
+				if (GDmayBeOnBoard && addedNode.parentNode !== spGDNoticesContainer && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
+					spGDNoticesContainer.appendChild(addedNode);
 				}
 			});
 		});
@@ -415,7 +423,7 @@ function buildHeader() {
 		spControls.append(topPaging);
 	}
 	spHeader.append(spControls);
-	spHeader.append(spGdNoticesContainer);
+	spHeader.append(spGDNoticesContainer);
 	bigTitle.after(spHeader);
 	spHeader.before(spPopup);
 }
@@ -424,7 +432,7 @@ function checkConsistency() {
 	const inputValue = spConsistencyInputText.value;
 	if (inputValue === '') { return; }
 	spPopup.classList.remove('sp-the-popup--hidden');
-	const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=fr%2Fdefault&`;
+	const URL = `https://translate.wordpress.org/consistency/?search=${inputValue}&set=${currentProjectLocaleSlug}%2Fdefault&`;
 	fetch(URL).then((response) => response.text()).then((data) => {
 		const table = data.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=consistency-table">)(.*?)(?=<\/table>)/gmi);
 		if (table && table[0]) {
@@ -487,19 +495,70 @@ function declareEvents() {
 	});
 }
 
-if (onTranslateFr && gpContent && tableTranslations) {
-	preventGlotDictTags();
-	translations.forEach(checkTranslation);
-	displayResults();
-	manageControls();
-	buildHeader();
-	ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
-	if (isConnected) {
-		observeMutations();
+function blackToolTip(spteBlackToolTip) {
+	if (spteBlackToolTip && spteBlackToolTip === 'false') {
+		addStyle('.actions:hover .sp-foreign-tooltip', 'display:none!important');
+		addStyle('.actions:hover', 'cursor:pointer!important');
 	}
-	declareEvents();
 }
-if (onTranslateWordPressRoot && frenchLocale) {
-	frenchiesGoFirst();
+
+function gpContentMaxWidth(spteGpcontentBig, spteGpcontentMaxWitdh) {
+	spteGpcontentMaxWitdh = spteGpcontentMaxWitdh === '' ? 0 : spteGpcontentMaxWitdh;
+
+	if (tableTranslations || (spteGpcontentBig && spteGpcontentBig === 'true' && parseInt(spteGpcontentMaxWitdh, 10) === 0)) {
+		addStyle('.gp-content', 'max-width: 85% !important');
+	} else if (!tableTranslations && spteGpcontentBig && spteGpcontentBig === 'true' && parseInt(spteGpcontentMaxWitdh, 10) !== 0) {
+		addStyle('.gp-content', `max-width: ${parseInt(spteGpcontentMaxWitdh, 10)}% !important`);
+	}
 }
-frenchFlag();
+
+function isOnAcceptableLocale(slugs) {
+	let onAcceptableLocale = false;
+	slugs = slugs.replace(/;\s*$/, '');
+	if (slugs.includes(';')) {
+		slugs.split(';').forEach((otherLocale) => {
+			if (onAcceptableLocale) { return; }
+			onAcceptableLocale = (new RegExp(`/${otherLocale}/`, 'gi')).test(window.location.href);
+		});
+	} else {
+		onAcceptableLocale = (new RegExp(`/${slugs}/`, 'gi')).test(window.location.href);
+	}
+	return onAcceptableLocale;
+}
+
+function launchProcess(spteSettings = '') {
+	const onFrenchLocale = (/\/fr\//).test(window.location.href);
+	let onOtherLocale = false;
+	if (!onFrenchLocale && spteSettings.spteOtherSlugs) {
+		onOtherLocale = isOnAcceptableLocale(spteSettings.spteOtherSlugs);
+	}
+
+	if ((onFrenchLocale || onOtherLocale) && gpContent && tableTranslations) {
+		preventGlotDictTags();
+		translations.forEach(checkTranslation);
+		blackToolTip(spteSettings.spteBlackToolTip);
+		displayResults();
+		manageControls();
+		buildHeader();
+		ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
+		if (isConnected) {
+			observeMutations();
+		}
+		declareEvents();
+	}
+	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
+
+	if (onTranslateWordPressRoot && frenchLocale) {
+		frenchiesGoFirst();
+	}
+	frenchFlag(spteSettings.spteFrenchFlag);
+}
+
+chrome.storage.sync.get('spteSettings', (data) => {
+	if (chrome.runtime.error) { return; }
+	if (data.spteSettings) {
+		launchProcess(data.spteSettings);
+	} else {
+		launchProcess();
+	}
+});
