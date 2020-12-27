@@ -120,34 +120,6 @@
     opacity: .8;
 }
 
-.sp-better-readability .sp-results__buttons {
-    font-size: 1.1rem;
-}
-
-.sp-better-readability .sp-results__buttons::after {
-    position: absolute;
-    left: 6px;
-    font-size: 10px;
-    text-align: center;
-    color: white;
-    bottom: 1px;
-    font-weight: bold;
-}
-
-.sp-better-readability #sp-results__link-glossary::after {
-    content: "G";
-}
-
-.sp-better-readability #sp-results__link-typo::after {
-    content: "T";
-    left: 6px;
-}
-
-.sp-better-readability #sp-results__link-consist::after {
-    content: "C";
-}
-
-
 .sp-results__buttons:hover,
 .sp-results__buttons:focus,
 .sp-results__buttons:active {
@@ -174,10 +146,6 @@
 #sp-results__toggle-header {
     top: 3px;
     right: 9px;
-}
-
-.sp-better-readability #sp-results__toggle-header {
-    font-size: 1rem;
 }
 
 #sp-results__toggle-header.sp-toggle-header--off {
@@ -344,7 +312,7 @@
 .sp-controls__filters {
     display: inline-block;
     margin: 0 auto;
-    width: calc(100% - 555px);
+    width: calc(100% - 700px);
 }
 
 .sp-controls__pte+.sp-controls__filters {
@@ -403,4 +371,88 @@
     .sp-results__data {
         padding: .1em 1em .5em;
     }
+}
+
+/* 
+	Better readability
+*/
+
+.sp-better-readability .sp-results__buttons {
+    font-size: 1.1rem;
+}
+
+.sp-better-readability .sp-results__buttons::after {
+    position: absolute;
+    left: 6px;
+    font-size: 10px;
+    text-align: center;
+    color: white;
+    bottom: 1px;
+    font-weight: bold;
+}
+
+.sp-better-readability #sp-results__link-glossary::after {
+    content: "G";
+}
+
+.sp-better-readability #sp-results__link-typo::after {
+    content: "T";
+    left: 6px;
+}
+
+.sp-better-readability #sp-results__link-consist::after {
+    content: "C";
+}
+
+.sp-better-readability #sp-results__toggle-header {
+    font-size: 1rem;
+}
+
+.sp-better-readability .gp-content,
+.sp-better-readability .gp-content textarea,
+.sp-better-readability .gp-content input {
+    color: black;
+}
+
+.sp-better-readability .actionlist a,
+.sp-better-readability .actionlist a:link,
+.sp-better-readability .actionlist a:visited,
+.sp-better-readability .gp-content a {
+    color: #014BA0;
+}
+
+.sp-better-readability .actionlist a:hover,
+.sp-better-readability .actionlist a:focus,
+.sp-better-readability .actionlist a:active,
+.sp-better-readability .actionlist a:link:hover,
+.sp-better-readability .actionlist a:link:focus,
+.sp-better-readability .actionlist a:link:active,
+.sp-better-readability .gp-content a:hover,
+.sp-better-readability .gp-content a:focus,
+.sp-better-readability .gp-content a:active {
+    color: #066fe7;
+}
+
+.sp-better-readability .sp-results__title {
+    color: #DF0D0C;
+}
+
+.sp-better-readability .sp-word--warning {
+    background-color: #EC130E;
+}
+
+.sp-better-readability .sp-quote--warning {
+    box-shadow: #EC130E 0px 0px 0px 2px inset;
+}
+
+.sp-better-readability .gp-content input,
+.sp-better-readability .gp-content textarea,
+.sp-better-readability .gp-content select,
+.sp-better-readability .paging a,
+.sp-better-readability .paging span {
+    border-color: #afafaf !important;
+}
+
+.sp-better-readability .paging .current {
+    border-color: coral !important;
 }

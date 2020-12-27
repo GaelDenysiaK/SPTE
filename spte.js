@@ -1,6 +1,5 @@
 // Styles.
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
-
 // Check locations.
 const onTranslateWordPressRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
 let currentProjectLocaleSlug = '';
@@ -23,6 +22,7 @@ let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
 
 // Main existing elements.
 const gpContent = document.querySelector('.gp-content');
+if (gpContent) { gpContent.style.maxWidth = '85% !important'; }
 const bigTitle = document.querySelector('.gp-content .breadcrumb+h2');
 const topPaging = document.querySelector('.gp-content .paging');
 const translations = document.querySelectorAll('tr.preview:not(.sp-has-spte-error) .translation-text');
@@ -527,6 +527,8 @@ function isOnAcceptableLocale(slugs) {
 }
 
 function launchProcess(spteSettings = '') {
+	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
+	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true' && tableTranslations) { document.body.classList.add('sp-better-readability'); }
 	const onFrenchLocale = (/\/fr\//).test(window.location.href);
 	let onOtherLocale = false;
 	if (!onFrenchLocale && spteSettings.spteOtherSlugs) {
@@ -546,7 +548,6 @@ function launchProcess(spteSettings = '') {
 		}
 		declareEvents();
 	}
-	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
 
 	if (onTranslateWordPressRoot && frenchLocale) {
 		frenchiesGoFirst();
