@@ -421,7 +421,8 @@
 .sp-better-readability .actionlist a,
 .sp-better-readability .actionlist a:link,
 .sp-better-readability .actionlist a:visited,
-.sp-better-readability .gp-content a {
+.sp-better-readability .gp-content a,
+.sp-better-readability #wporg-footer ul li a {
     color: #014BA0;
 }
 
@@ -433,7 +434,10 @@
 .sp-better-readability .actionlist a:link:active,
 .sp-better-readability .gp-content a:hover,
 .sp-better-readability .gp-content a:focus,
-.sp-better-readability .gp-content a:active {
+.sp-better-readability .gp-content a:active,
+.sp-better-readability #wporg-footer ul li a:hover,
+.sp-better-readability #wporg-footer ul li a:focus,
+.sp-better-readability #wporg-footer ul li a:active {
     color: #066fe7;
 }
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0.0] - 29 Déc 2020
+### Added
+- Ajout d’un haut de page collant (sticky header) permettant d’avoir toujours accès aux compteurs et contrôles
+- Ajout de boutons d’accès au Glossaire, aux règles Typographiques, à la Consistency (cohérence)
+- Ajout d’une option (épingle rouge) pour utiliser ou non le haut de page sticky
+- Ajout d’un champ de saisie permettant de faire une recherche de cohérence sur la locale française et affichage des résultats en fenêtre surgissante (popup)
+- Ajout de paramètres via une page d’action (popup) accessible en cliquant sur l’icône SPTE présente dans la barre d’adresse du navigateur
+- Ajout d’une option permettant d’activer/désactiver l’info-bulle noire
+- Ajout d’une option permettant d’améliorer les contrastes des textes sur Translate en leur affectant un rapport minimal de 4.5:1 (voir WCAG)
+- Ajout d’une option permettant de rajouter des locales sur lesquelles activer SPTE (locales dérivées du français puisque les règles typographiques ne peuvent s’appliquer à d’autres langues)
+- Ajout d’une option permettant d’activer/désactiver l’affichage des drapeaux français destinés à mieux repérer la locale française dans les tables
+- Ajout d’une option permettant d’agrandir le corps de la page sur le reste du site (les tables de traduction sont déjà agrandies à 85% cette option permet d’appliquer la même chose aux autres pages de Translate)
+- Ajout d’une option permettant de choisir la largeur maximale du corps de page à appliquer aux autres pages de Translate
 
 ## [0.9.9.9] - 7 Déc 2020
 ### Added

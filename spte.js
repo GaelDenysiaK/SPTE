@@ -528,7 +528,7 @@ function isOnAcceptableLocale(slugs) {
 
 function launchProcess(spteSettings = '') {
 	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
-	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true' && tableTranslations) { document.body.classList.add('sp-better-readability'); }
+	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true') { document.body.classList.add('sp-better-readability'); }
 	const onFrenchLocale = (/\/fr\//).test(window.location.href);
 	let onOtherLocale = false;
 	if (!onFrenchLocale && spteSettings.spteOtherSlugs) {
