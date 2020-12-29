@@ -422,7 +422,8 @@
 .sp-better-readability .actionlist a:link,
 .sp-better-readability .actionlist a:visited,
 .sp-better-readability .gp-content a,
-.sp-better-readability #wporg-footer ul li a {
+.sp-better-readability #wporg-footer ul li a,
+.sp-better-readability .gp-content .meta a {
     color: #014BA0;
 }
 
@@ -437,7 +438,10 @@
 .sp-better-readability .gp-content a:active,
 .sp-better-readability #wporg-footer ul li a:hover,
 .sp-better-readability #wporg-footer ul li a:focus,
-.sp-better-readability #wporg-footer ul li a:active {
+.sp-better-readability #wporg-footer ul li a:active,
+.sp-better-readability .gp-content .meta a:hover,
+.sp-better-readability .gp-content .meta a:focus,
+.sp-better-readability .gp-content .meta a:active {
     color: #066fe7;
 }
 
@@ -463,4 +467,9 @@
 
 .sp-better-readability .paging .current {
     border-color: coral !important;
+}
+
+.sp-better-readability .panel-header__bubble {
+    text-transform: uppercase;
+    background: white;
 }
