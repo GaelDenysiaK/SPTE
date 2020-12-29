@@ -345,7 +345,7 @@ function frenchFlag(spteFrenchFlag) {
 		frenchLocale.classList.add('sp-frenchies');
 	}
 	if (frenchStatsSpecific) {
-		frenchStatsSpecific.classList.add('sp-frenchies');
+		frenchStatsSpecific.classList.add('sp-frenchies', 'sp-frenchies--long');
 	}
 	if (frenchStatsGlobal) {
 		frenchStatsGlobal.classList.add('sp-frenchies');

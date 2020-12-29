@@ -350,6 +350,10 @@
     background: linear-gradient(90deg, #002395 33.33333%, #fff 33.33333%, #fff 66.66667%, #ed2939 66.66667%);
 }
 
+.sp-frenchies.sp-frenchies--long:after {
+    margin: 3px 0 0 40px;
+}
+
 .bulk-actions {
     float: none !important;
 }
