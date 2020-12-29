@@ -336,9 +336,13 @@ function frenchiesGoFirst() {
 // Add french flag on french locale in different tables to better identify it.
 function frenchFlag(spteFrenchFlag) {
 	if (spteFrenchFlag && spteFrenchFlag === 'false') { return; }
-	if (frenchLocale) {
+	const frenchLocaleClone = document.querySelector('#locales .gd-locale-moved .english a[href="/locale/fr/"]');
+	if (frenchLocaleClone) {
+		frenchLocaleClone.classList.add('sp-frenchies');
+	} else if (frenchLocale) {
 		frenchLocale.classList.add('sp-frenchies');
 	}
+
 	if (frenchStatsSpecific) {
 		frenchStatsSpecific.classList.add('sp-frenchies', 'sp-frenchies--long');
 	}
