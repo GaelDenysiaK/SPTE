@@ -333,7 +333,7 @@ function manageControls() {
 function frenchiesGoFirst() {
 	const frenchLocaleDiv = frenchLocale.closest('div.locale');
 	const firstLocaleDiv = document.querySelector('div.locale:first-child');
-	if (firstLocaleDiv && frenchLocaleDiv) {
+	if (firstLocaleDiv && frenchLocaleDiv && !GDmayBeOnBoard) {
 		firstLocaleDiv.before(frenchLocaleDiv);
 	}
 }

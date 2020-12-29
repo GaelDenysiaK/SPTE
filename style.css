@@ -377,6 +377,10 @@
 	Better readability
 */
 
+.sp-better-readability .navigation-main a {
+    color: rgba(255, 255, 255, .9);
+}
+
 .sp-better-readability .sp-results__buttons {
     font-size: 1.1rem;
 }

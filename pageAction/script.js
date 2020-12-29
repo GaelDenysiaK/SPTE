@@ -37,6 +37,7 @@ function saveSettings() {
 
 function restoreSettings() {
 	chrome.storage.sync.get('spteSettings', (data) => {
+		console.log(chrome.runtime.error);
 		if (chrome.runtime.error) {	return;	}
 		const blackToolTip = document.querySelector('#settings-blacktooltip');
 		const betterReadability = document.querySelector('#settings-betterreadability');
