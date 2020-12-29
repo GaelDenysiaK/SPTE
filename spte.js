@@ -69,12 +69,7 @@ if (!lsStickyHeader) {
 	controlStickyHeader.classList.add('sp-toggle-header--off');
 	spHeader.classList.add('sticky--off');
 }
-if (filterToolbar) {
-	filterToolbar.append(linkGlossary);
-	filterToolbar.append(linkTypography);
-	filterToolbar.append(linkConsistency);
-	filterToolbar.append(controlStickyHeader);
-}
+
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
 const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
 spFilters.append(showEverything);
@@ -529,6 +524,7 @@ function isOnAcceptableLocale(slugs) {
 function launchProcess(spteSettings = '') {
 	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
 	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true') { document.body.classList.add('sp-better-readability'); }
+
 	const onFrenchLocale = (/\/fr\//).test(window.location.href);
 	let onOtherLocale = false;
 	if (!onFrenchLocale && spteSettings.spteOtherSlugs) {
@@ -536,6 +532,12 @@ function launchProcess(spteSettings = '') {
 	}
 
 	if ((onFrenchLocale || onOtherLocale) && gpContent && tableTranslations) {
+		if (filterToolbar && onFrenchLocale) {
+			filterToolbar.append(linkGlossary, linkTypography, linkConsistency, controlStickyHeader);
+		} else if (filterToolbar && onOtherLocale) {
+			filterToolbar.append(linkGlossary, linkConsistency, controlStickyHeader);
+			linkGlossary.style.right = '70px';
+		}
 		preventGlotDictTags();
 		translations.forEach(checkTranslation);
 		blackToolTip(spteSettings.spteBlackToolTip);
