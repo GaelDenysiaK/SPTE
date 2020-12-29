@@ -7,7 +7,7 @@ function saveSettings() {
 	const frenchFlag = document.querySelector('#settings-frenchflag');
 	const gpcontentBig = document.querySelector('#settings-gpcontent-big');
 	const gpcontentMaxWitdh = document.querySelector('#settings-gpcontent-maxwidth');
-	chrome.storage.sync.get('spteSettings', (data) => {
+	chrome.storage.local.get('spteSettings', (data) => {
 		if (chrome.runtime.error || !locales) {	return;	}
 		let settings = {};
 		if (data.spteSettings) {
@@ -28,7 +28,7 @@ function saveSettings() {
 		settings.spteFrenchFlag = frenchFlag.checked ? 'true' : 'false';
 		settings.spteGpcontentBig = gpcontentBig.checked ? 'true' : 'false';
 		settings.spteGpcontentMaxWitdh = gpcontentMaxWitdh.value;
-		chrome.storage.sync.set({ spteSettings: settings }, () => {
+		chrome.storage.local.set({ spteSettings: settings }, () => {
 			if (chrome.runtime.error) {	console.log('Impossible d’enregistrer les paramètres'); }
 			chrome.tabs.reload({ bypassCache: true });
 		});
@@ -36,7 +36,7 @@ function saveSettings() {
 }
 
 function restoreSettings() {
-	chrome.storage.sync.get('spteSettings', (data) => {
+	chrome.storage.local.get('spteSettings', (data) => {
 		console.log(chrome.runtime.error);
 		if (chrome.runtime.error) {	return;	}
 		const blackToolTip = document.querySelector('#settings-blacktooltip');
@@ -49,7 +49,7 @@ function restoreSettings() {
 		if (data.spteSettings === undefined) {
 			blackToolTip.checked = 'checked';
 			frenchFlag.checked = 'checked';
-			chrome.storage.sync.set({ spteSettings: initSettings }, () => {
+			chrome.storage.local.set({ spteSettings: initSettings }, () => {
 				if (chrome.runtime.error) {	console.log('Impossible d’initialiser les paramètres'); }
 			});
 		}
@@ -71,7 +71,7 @@ function restoreSettings() {
 			frenchFlag.checked = (data.spteSettings.spteFrenchFlag === 'false') ? '' : 'checked';
 		} else {
 			frenchFlag.checked = 'checked';
-			chrome.storage.sync.set({ spteSettings: initSettings }, () => {
+			chrome.storage.local.set({ spteSettings: initSettings }, () => {
 				if (chrome.runtime.error) {	console.log('Impossible d’enregistrer les paramètres'); }
 			});
 		}

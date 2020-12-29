@@ -1,6 +1,6 @@
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	let onGoodUrl = false;
-	chrome.storage.sync.get('spteSettings', (data) => {
+	chrome.storage.local.get('spteSettings', (data) => {
 		if (chrome.runtime.error) { return; }
 		if ((/https:\/\/translate\.wordpress\.org\//).test(tab.url)) {
 			onGoodUrl = true;

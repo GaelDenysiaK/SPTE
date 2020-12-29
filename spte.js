@@ -555,7 +555,7 @@ function launchProcess(spteSettings = '') {
 	frenchFlag(spteSettings.spteFrenchFlag);
 }
 
-chrome.storage.sync.get('spteSettings', (data) => {
+chrome.storage.local.get('spteSettings', (data) => {
 	if (chrome.runtime.error) { return; }
 	if (data.spteSettings) {
 		launchProcess(data.spteSettings);
