@@ -450,15 +450,15 @@
 }
 
 .sp-better-readability .sp-results__title {
-    color: #DF0D0C;
+    color: #df0d0c;
 }
 
 .sp-better-readability .sp-word--warning {
-    background-color: #EC130E;
+    background-color: #ec130e;
 }
 
 .sp-better-readability .sp-quote--warning {
-    box-shadow: #EC130E 0px 0px 0px 2px inset;
+    box-shadow: #ec130e 0px 0px 0px 2px inset;
 }
 
 .sp-better-readability .gp-content input,

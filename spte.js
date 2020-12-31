@@ -45,7 +45,7 @@ const spConsistencyInputText = createElement('INPUT', { type: 'text', id: 'sp-co
 const spConsistencyBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistencyBtn', value: 'Vérifier' });
 spConsistency.append(spConsistencyLabel, spConsistencyInputText, spConsistencyBtn);
 const spControls = createElement('DIV', { id: 'sp-controls' });
-const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' });
+const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' }, '↑');
 const results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
 const resultsData = createElement('DIV', { class: 'sp-results__data' });
 const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
@@ -72,20 +72,16 @@ if (!lsStickyHeader) {
 
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
 const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
-spFilters.append(showEverything);
 const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout');
-spFilters.append(showEverythingLabel);
 const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
-spFilters.append(showOnlyWarning);
 const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'Les avertissements');
-spFilters.append(showOnlyWarningLabel);
+spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyWarningLabel);
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
 const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
 const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
 
 if (bulkActions) {
-	pteControls.append(spSelectErrors);
-	pteControls.append(spSelectErrorsLabel);
+	pteControls.append(spSelectErrors, spSelectErrorsLabel);
 	bulkActions.after(pteControls);
 }
 
@@ -406,10 +402,7 @@ function observeMutations() {
 
 // Put all elements in a stickable header.
 function buildHeader() {
-	spHeader.append(spToTop);
-	spToTop.textContent = '↑';
-	spHeader.append(filterToolbar);
-	spHeader.append(spConsistency);
+	spHeader.append(spToTop, filterToolbar, spConsistency);
 	controlStickyHeader.onclick = toggleStickyHeader;
 	if (isConnected && bulkActions) {
 		spHeader.append(bulkActions);
@@ -421,8 +414,7 @@ function buildHeader() {
 	if (topPaging) {
 		spControls.append(topPaging);
 	}
-	spHeader.append(spControls);
-	spHeader.append(spGDNoticesContainer);
+	spHeader.append(spControls, spGDNoticesContainer);
 	bigTitle.after(spHeader);
 	spHeader.before(spPopup);
 }
@@ -444,6 +436,7 @@ function checkConsistency() {
 
 function closePopup(e) {
 	if (!spPopup.contains(e.target) && e.target !== spConsistencyBtn) {
+		spPopup.innerHTML = '';
 		spPopup.classList.add('sp-the-popup--hidden');
 	}
 }
