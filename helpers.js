@@ -20,7 +20,7 @@ function ifSourceHiddenTagTarget(sourceElement, targetElement, classElement) {
 	const observer = new IntersectionObserver(((entries) => {
 		if (entries[0].isIntersecting === true) {
 			target.classList.remove(classElement);
-		} else {
+		} else {
 			target.classList.add(classElement);
 		}
 	}), { threshold: [1], rootMargin: '80px' });

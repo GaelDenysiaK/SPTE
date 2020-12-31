@@ -28,6 +28,7 @@ function saveSettings() {
 		settings.spteFrenchFlag = frenchFlag.checked ? 'true' : 'false';
 		settings.spteGpcontentBig = gpcontentBig.checked ? 'true' : 'false';
 		settings.spteGpcontentMaxWitdh = gpcontentMaxWitdh.value;
+
 		chrome.storage.local.set({ spteSettings: settings }, () => {
 			if (chrome.runtime.error) {	console.log('Impossible d’enregistrer les paramètres'); }
 			chrome.tabs.reload({ bypassCache: true });
@@ -37,7 +38,6 @@ function saveSettings() {
 
 function restoreSettings() {
 	chrome.storage.local.get('spteSettings', (data) => {
-		console.log(chrome.runtime.error);
 		if (chrome.runtime.error) {	return;	}
 		const blackToolTip = document.querySelector('#settings-blacktooltip');
 		const betterReadability = document.querySelector('#settings-betterreadability');
@@ -45,7 +45,7 @@ function restoreSettings() {
 		const frenchFlag = document.querySelector('#settings-frenchflag');
 		const gpcontentBig = document.querySelector('#settings-gpcontent-big');
 		const gpcontentMaxWitdh = document.querySelector('#settings-gpcontent-maxwidth');
-		let initSettings = { spteBlackToolTip: 'true', spteFrenchFlag: 'true' };
+		const initSettings = { spteBlackToolTip: 'true', spteFrenchFlag: 'true' };
 		if (data.spteSettings === undefined) {
 			blackToolTip.checked = 'checked';
 			frenchFlag.checked = 'checked';
