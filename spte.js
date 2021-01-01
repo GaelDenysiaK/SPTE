@@ -132,11 +132,11 @@ function tagTRTranslations(preview) {
 	const hasTranslation = preview.classList.contains('has-translations');
 
 	const trad = preview.querySelector('.translation-text');
-	const spWarning = trad.querySelector('span[class$="--warning"]');
+	const spWarning = trad.querySelector('[class*="sp-warning--"]');
 	if (hasTranslation && spWarning) {
 		preview.classList.add('sp-has-spte-warning');
 	}
-	if (hasTranslation && (trad.querySelector('.sp-word--warning') || trad.querySelector('.sp-quote--warning'))) {
+	if (hasTranslation && (trad.querySelector('.sp-warning--word') || trad.querySelector('.sp-warning--quote'))) {
 		preview.classList.add('sp-has-spte-error');
 	}
 }
@@ -184,7 +184,8 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				break;
 			}
 			if (newStatus !== 'rejected') {
-				return `<span title="${cases[type].cssTitle}" class="${cases[type].cssClass}">${string}</span>`;
+				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187; ${cases[type].message}`;
+				return `<a href="#" aria-label="${ariaLabel}" class="${cases[type].cssClass}">${string}</a>`;
 			}
 			return string;
 		});
@@ -264,11 +265,11 @@ function displayResults() {
 		resultsCaption.append(hideCaption, caption, glossaryLink, typographyLink);
 		filterToolbar.append(results);
 	}
-	const characters = document.querySelector('.sp-warning-title.sp-char--warning');
+	const characters = document.querySelector('.sp-warning-title.sp-warning--char');
 	if (nbCharacter === 0 && characters) {
 		characters.parentNode.remove();
 	}
-	const quotes = document.querySelector('.sp-warning-title.sp-quote--warning');
+	const quotes = document.querySelector('.sp-warning-title.sp-warning--quote');
 	if (cases.quotes.counter === 0 && quotes) {
 		quotes.parentNode.remove();
 	}
@@ -451,6 +452,12 @@ function scrollToTop() {
 function declareEvents() {
 	document.addEventListener('click', (e) => {
 		closePopup(e);
+	});
+
+	document.querySelectorAll('a[class*="sp-warning--"],.sp-nbkspaces--showing,.sp-spaces--showing').forEach((warning) => {
+		warning.addEventListener('click', (e) => {
+			e.preventDefault();
+		});
 	});
 
 	document.addEventListener('keyup', (e) => {

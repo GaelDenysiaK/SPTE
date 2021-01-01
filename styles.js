@@ -1,5 +1,5 @@
 const charTitle = 'Caractères à vérifier : ';
-const charClass = 'sp-char--warning';
+const charClass = 'sp-warning--char';
 const colorError = 'red';
 const colorCheck = 'magenta';
 const styleWordError = `background-color:${colorError};color:white;font-weight:bold;padding:1px;margin:0 1px`;
@@ -13,23 +13,23 @@ const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une e
 const cases = {
 	badWords: {
 		title: 'Mots déconseillés ou mal orthographiés : ',
-		cssTitle: 'Mot déconseillé ou mal orthographié',
-		cssClass: 'sp-word--warning',
+		message: 'Mot déconseillé ou mal orthographié',
+		cssClass: 'sp-warning--word',
 		style: styleWordError,
 		counter: 0,
 		regex: rgxBadWords,
 	},
 	quotes: {
 		title: 'Apostrophes droites : ',
-		cssTitle: 'Apostrophe droite au lieu d’une apostrophe courbe',
-		cssClass: 'sp-quote--warning',
+		message: 'Apostrophe droite au lieu d’une apostrophe courbe',
+		cssClass: 'sp-warning--quote',
 		style: styleCharError,
 		counter: 0,
 		regex: rgxSingleQuotes,
 	},
 	slash: {
 		title: charTitle,
-		cssTitle: 'Espace précédente en trop ou espace suivante en trop',
+		message: 'Espace précédente en trop ou espace suivante en trop',
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -37,7 +37,7 @@ const cases = {
 	},
 	openHook: {
 		title: charTitle,
-		cssTitle: spaceBeforeTitle,
+		message: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -45,7 +45,7 @@ const cases = {
 	},
 	openParenthesis: {
 		title: charTitle,
-		cssTitle: spaceBeforeTitle,
+		message: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -53,7 +53,7 @@ const cases = {
 	},
 	openBrace: {
 		title: charTitle,
-		cssTitle: spaceBeforeTitle,
+		message: spaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -61,7 +61,7 @@ const cases = {
 	},
 	spaceAfter: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -69,7 +69,7 @@ const cases = {
 	},
 	period: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -77,7 +77,7 @@ const cases = {
 	},
 	comma: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -85,7 +85,7 @@ const cases = {
 	},
 	closeHook: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -93,7 +93,7 @@ const cases = {
 	},
 	closeParenthesis: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -101,7 +101,7 @@ const cases = {
 	},
 	closeBrace: {
 		title: charTitle,
-		cssTitle: spaceAfterTitle,
+		message: spaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -109,7 +109,7 @@ const cases = {
 	},
 	exclamationPoint: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -117,7 +117,7 @@ const cases = {
 	},
 	plusSign: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -125,7 +125,7 @@ const cases = {
 	},
 	questionMark: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -133,7 +133,7 @@ const cases = {
 	},
 	colon: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -141,7 +141,7 @@ const cases = {
 	},
 	semiColon: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -149,7 +149,7 @@ const cases = {
 	},
 	closingFrQuote: {
 		title: charTitle,
-		cssTitle: nbkSpaceBeforeTitle,
+		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -157,7 +157,7 @@ const cases = {
 	},
 	openFrQuote: {
 		title: charTitle,
-		cssTitle: nbkSpaceAfterTitle,
+		message: nbkSpaceAfterTitle,
 		cssClass: charClass,
 		style: styleCharCheck,
 		counter: 0,
@@ -165,7 +165,7 @@ const cases = {
 	},
 	Space: {
 		title: '',
-		cssTitle: 'Espace en début ou en fin de chaîne',
+		message: 'Espace en début ou en fin de chaîne',
 		cssClass: 'sp-spaces--showing',
 		style: 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue',
 		counter: 0,
@@ -173,7 +173,7 @@ const cases = {
 	},
 	nbkSpaces: {
 		title: '',
-		cssTitle: 'Espace insécable',
+		message: 'Espace insécable',
 		cssClass: 'sp-nbkspaces--showing',
 		style: 'display:inline-block;line-height:16px;background-color:white;border:2px solid white',
 		counter: 0,
