@@ -184,7 +184,7 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				break;
 			}
 			if (newStatus !== 'rejected') {
-				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187; ${cases[type].message}`;
+				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
 				return `<a href="#" aria-label="${ariaLabel}" class="${cases[type].cssClass}">${string}</a>`;
 			}
 			return string;
@@ -316,6 +316,7 @@ function manageControls() {
 		if (document.querySelector('#gd-checked-count')) {
 			document.querySelector('#gd-checked-count').remove();
 		}
+		if (nbSelectedRows === 0) { return; }
 		const GDCountNotice = createElement('DIV', { id: 'gd-checked-count', class: 'notice' }, `${nbSelectedRows} ligne(s) sélectionnée(s)`);
 		tableTranslations.parentNode.insertBefore(GDCountNotice, tableTranslations);
 	});
