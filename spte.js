@@ -440,6 +440,7 @@ function closePopup(e) {
 	if (!spPopup.contains(e.target) && e.target !== spConsistencyBtn) {
 		spPopup.innerHTML = '';
 		spPopup.classList.add('sp-the-popup--hidden');
+		spConsistencyInputText.value = '';
 	}
 }
 
