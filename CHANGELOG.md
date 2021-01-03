@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0.1] - 3 Janv 2021
+### Changed
+- Remplacement des info-bulles des avertissements par des aria-label couplés à des pseudo-éléments. Les info-bulles deviennent accessibles
+- Remplacement des span des avertissements par des liens a pour les rendre accessibles au clavier
+- Changement de la police utilisée pour le caractère i d’information pour de l'arial sans-serif afin de le rendre compatible Linux
+- remise à vide du champs de saisie Cohérence lorsqu’on ferme la popup
+- au clic sur Cocher Tous/Les avertissements en rouge : si 0 lignes alors on masque la notice
+- amélioration visibilité des liens Livres (menu secondaire) par défaut
+
 ## [1.0.0.0] - 29 Déc 2020
 ### Added
 - Ajout d’un haut de page collant (sticky header) permettant d’avoir toujours accès aux compteurs et contrôles
