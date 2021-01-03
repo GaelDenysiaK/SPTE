@@ -257,6 +257,7 @@
 
 #sp-results__toggle-caption::before {
     content: "🛈 ";
+    font-family: arial, Arial, Helvetica, sans-serif;
     font-size: 17px;
     vertical-align: -1px;
     color: darkslateblue;

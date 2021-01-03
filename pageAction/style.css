@@ -273,6 +273,7 @@ input[type=submit] {
 }
 
 .whatisthat {
+    font-family: arial, Arial, Helvetica, sans-serif;
     position: absolute;
     margin: -2px 0 0 -15px;
     opacity: .5;
