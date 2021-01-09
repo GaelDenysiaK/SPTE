@@ -12,6 +12,7 @@ const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une e
 
 const cases = {
 	badWords: {
+		name: 'mot',
 		title: 'Mots déconseillés ou mal orthographiés : ',
 		message: 'Mot déconseillé ou mal orthographié',
 		cssClass: 'sp-warning--word',
@@ -20,6 +21,7 @@ const cases = {
 		regex: rgxBadWords,
 	},
 	quotes: {
+		name: 'apostrophe droite',
 		title: 'Apostrophes droites : ',
 		message: 'Apostrophe droite au lieu d’une apostrophe courbe',
 		cssClass: 'sp-warning--quote',
@@ -28,6 +30,7 @@ const cases = {
 		regex: rgxSingleQuotes,
 	},
 	slash: {
+		name: 'barre oblique',
 		title: charTitle,
 		message: 'Espace précédente en trop ou espace suivante en trop',
 		cssClass: charClass,
@@ -36,6 +39,7 @@ const cases = {
 		regex: rgxSlash,
 	},
 	openHook: {
+		name: 'crochet ouvrant',
 		title: charTitle,
 		message: spaceBeforeTitle,
 		cssClass: charClass,
@@ -44,6 +48,7 @@ const cases = {
 		regex: rgxOpenHook,
 	},
 	openParenthesis: {
+		name: 'parenthèse ouvrante',
 		title: charTitle,
 		message: spaceBeforeTitle,
 		cssClass: charClass,
@@ -52,6 +57,7 @@ const cases = {
 		regex: rgxOpenParenthesis,
 	},
 	openBrace: {
+		name: 'accolade ouvrante',
 		title: charTitle,
 		message: spaceBeforeTitle,
 		cssClass: charClass,
@@ -59,7 +65,8 @@ const cases = {
 		counter: 0,
 		regex: rgxOpenBrace,
 	},
-	spaceAfter: {
+	ellipsis: {
+		name: 'points de suspension',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -68,6 +75,7 @@ const cases = {
 		regex: rgxEllipsis,
 	},
 	period: {
+		name: 'point',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -76,6 +84,7 @@ const cases = {
 		regex: rgxPeriod,
 	},
 	comma: {
+		name: 'virgule',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -84,6 +93,7 @@ const cases = {
 		regex: rgxComma,
 	},
 	closeHook: {
+		name: 'crochet fermant',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -92,6 +102,7 @@ const cases = {
 		regex: rgxCloseHook,
 	},
 	closeParenthesis: {
+		name: 'parenthèse fermante',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -100,6 +111,7 @@ const cases = {
 		regex: rgxCloseParenthesis,
 	},
 	closeBrace: {
+		name: 'accolade fermante',
 		title: charTitle,
 		message: spaceAfterTitle,
 		cssClass: charClass,
@@ -108,6 +120,7 @@ const cases = {
 		regex: rgxCloseBrace,
 	},
 	exclamationPoint: {
+		name: 'point d’exclamation',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -116,6 +129,7 @@ const cases = {
 		regex: rgxExclamationPoint,
 	},
 	plusSign: {
+		name: 'signe plus',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -124,6 +138,7 @@ const cases = {
 		regex: rgxPlusSign,
 	},
 	questionMark: {
+		name: 'point d’interrogation',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -132,6 +147,7 @@ const cases = {
 		regex: rgxQuestionMark,
 	},
 	colon: {
+		name: 'deux points',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -140,6 +156,7 @@ const cases = {
 		regex: rgxColon,
 	},
 	semiColon: {
+		name: 'point-virgule',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -148,6 +165,7 @@ const cases = {
 		regex: rgxSemiColon,
 	},
 	closingFrQuote: {
+		name: 'guillemet français fermant',
 		title: charTitle,
 		message: nbkSpaceBeforeTitle,
 		cssClass: charClass,
@@ -156,6 +174,7 @@ const cases = {
 		regex: rgxClosingFrQuote,
 	},
 	openFrQuote: {
+		name: 'guillemet français ouvrant',
 		title: charTitle,
 		message: nbkSpaceAfterTitle,
 		cssClass: charClass,
@@ -164,6 +183,7 @@ const cases = {
 		regex: rgxOpenFrQuote,
 	},
 	Space: {
+		name: 'espace sécable',
 		title: '',
 		message: 'Espace en début ou en fin de chaîne',
 		cssClass: 'sp-spaces--showing',
@@ -172,6 +192,7 @@ const cases = {
 		regex: /^ | $/gm,
 	},
 	nbkSpaces: {
+		name: 'espace insécable',
 		title: '',
 		message: 'Espace insécable',
 		cssClass: 'sp-nbkspaces--showing',
