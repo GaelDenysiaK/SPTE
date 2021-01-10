@@ -184,8 +184,11 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				break;
 			}
 			if (newStatus !== 'rejected') {
-				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
-				return `<a href="#" aria-label="${ariaLabel}" class="${cases[type].cssClass}">${string}</a>`;
+				const ariaName = (type === 'badWords') ? `${string} :` : `${cases[type].name} :`;
+				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `${ariaName} ${cases[type].message}`;
+				const tooltip = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
+
+				return `<a href="#" aria-label="${ariaLabel}" data-message="${tooltip}" class="${cases[type].cssClass}">${string}</a>`;
 			}
 			return string;
 		});

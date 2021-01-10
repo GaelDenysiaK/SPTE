@@ -12,7 +12,7 @@ const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une e
 
 const cases = {
 	badWords: {
-		name: 'mot',
+		name: '',
 		title: 'Mots déconseillés ou mal orthographiés : ',
 		message: 'Mot déconseillé ou mal orthographié',
 		cssClass: 'sp-warning--word',

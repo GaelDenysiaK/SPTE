@@ -266,12 +266,13 @@
     width: 15px;
     height: 15px;
     vertical-align: -3px;
+    opacity: .8;
 }
 
 .sp-results__captions--closed #sp-results__toggle-caption::before {
     -webkit-filter: grayscale(1);
     filter: grayscale(1);
-    opacity: .5;
+    opacity: .3;
 }
 
 .sp-results__captions--closed {
@@ -359,7 +360,7 @@
     background-color: black;
     border-radius: 0.188rem;
     color: white;
-    content: attr(aria-label);
+    content: attr(data-message);
     font-size: 0.9rem;
     opacity: 0;
     padding: 0.5rem;
