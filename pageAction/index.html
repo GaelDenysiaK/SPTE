@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div id="settings-popup">
+		<header>
+			<img id="icon" src="../icons/icon128.png" />
+			<img id="logo" src="../icons/spte.png" />
+		</header>
+		<form action="#" method="post" id="settings-form">
+
+			<div id="extension-settings">
+				<input class="radio" id="one" name="group" type="radio" checked>
+				<input class="radio" id="two" name="group" type="radio">
+				<div class="tabs">
+					<label class="tab" id="one-tab" for="one">Traductions</label>
+					<label class="tab" id="two-tab" for="two">Global</label>
+				</div>
+				<div class="panels">
+					<div class="panel" id="one-panel">
+						<fieldset class="input-fields settings-color">
+							<legend><span class="whatisthat" title="Par défaut, les erreurs relatives aux mots sont sur fond rouge RGB(255,0,0),  &#013;celles des apostrophes encadrées de rouge RGB(255,0,0),  &#013;et celles des paragraphes encadrées de rose RGB(255,0,255).">🛈 </span>Couleurs des avertissements<button id="reset-color" class="fieldset-btn-lnk">Réinitialiser</button></legend>
+							<label for="settings-color__word" class="settings-color-field">Mots<input id="settings-color__word" class="settings entry" type="color" value="#ff0000" /></label>
+							<label for="settings-color__quote" class="settings-color-field">Apostrophes<input id="settings-color__quote" class="settings entry" type="color" value="#ff0000" /></label>
+							<label for="settings-color__char" class="settings-color-field">Caractères<input id="settings-color__char" class="settings entry" type="color" value="#ff00ff" /></label>
+						</fieldset>
+						<fieldset class="toggle-fields">
+							<div class="toggle-container">
+								<label class="toggle-text"><span href="#" class="whatisthat" title="Activer ou désactiver l’info-bulle noire &#013;apparaissant au survol de la colonne Details, &#013;qui affiche la chaîne traduite sans correction">🛈 </span>Info-bulle sans avertissement</label>
+								<input id="settings-blacktooltip" type="checkbox" class="toggle toggle-light">
+								<label for="settings-blacktooltip" class="toggle-btn"></label>
+							</div>
+							<span class="hint short">Info-bulle noire au survol de la colonne <strong>Details</strong></span>
+						</fieldset>
+						<fieldset class="toggle-fields">
+							<div class="toggle-container">
+								<label class="toggle-text"><span href="#" class="whatisthat" title="Affecter aux textes un rapport de contraste &#013;minimum de 4.5:1 dans la mesure du possible &#013;sur les pages de traduction">🛈 </span>Contraste des textes</label>
+								<input id="settings-betterreadability" type="checkbox" class="toggle toggle-light">
+								<label for="settings-betterreadability" class="toggle-btn"></label>
+							</div>
+							<span class="hint short">Améliore la lisibilité des textes sur Translate avec un rapport minimal de contraste de 4.5:1</span>
+						</fieldset>
+						<fieldset class="input-fields">
+							<label for="settings-locales" class="toggle-text"><span class="whatisthat" title="Inscrire chaque slug de locale séparé par un point virgule. &#013;Le slug étant la partie unique de l’URL désignant la locale. &#013;Exemples : fr-be;fr-ca">🛈 </span>Locales supplémentaires</label>
+							<input id="settings-locales" class="settings entry" type="text" placeholder="" />
+							<span class="hint">Locales sur lesquelles utiliser SPTE</span>
+						</fieldset>
+					</div>
+					<div class="panel" id="two-panel">
+						<fieldset class="toggle-fields">
+							<div class="toggle-container">
+								<label class="toggle-text"><span href="#" class="whatisthat" title="Activer ou désactiver les drapeaux français &#013;utilisés sur le site pour repérer la locale française">🛈 </span>Drapeaux français</label>
+								<input id="settings-frenchflag" type="checkbox" class="toggle toggle-light">
+								<label for="settings-frenchflag" class="toggle-btn"></label>
+							</div>
+							<span class="hint short">Activer ou désactiver les drapeaux français</span>
+						</fieldset>
+						<fieldset class="toggle-fields">
+							<div class="toggle-container">
+								<label class="toggle-text"><span href="#" class="whatisthat" title="Appliquer l’agrandissement &#013;du contenu de la page à tout le site">🛈 </span>Agrandir la page</label>
+								<input id="settings-gpcontent-big" type="checkbox" class="toggle toggle-light">
+								<label for="settings-gpcontent-big" class="toggle-btn"></label>
+							</div>
+							<span class="hint short">Agrandir la page <strong>sur tout le site</strong></span>
+						</fieldset>
+						<fieldset class="input-fields">
+							<label for="settings-gpcontent-maxwidth" class="toggle-text"><span class="whatisthat" title="Largeur maximale à appliquer sur le reste du site &#013;(par défaut = 85%). &#013;Les tables de traduction resteront à 85%.">🛈 </span>Largeur maximale</label>
+							<input id="settings-gpcontent-maxwidth" class="settings entry onsameline" type="number" min="10" max="100" step="1" placeholder="" /><span class="percent"> %</span>
+							<span class="hint newline">Largeur max du contenu <strong>sur le reste</strong> du site</span>
+						</fieldset>
+					</div>
+				</div>
+				<button type="submit" id="settings-save-btn">Enregistrer</button>
+			</div>
+		</form>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+
+</html>

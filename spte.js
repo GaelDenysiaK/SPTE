@@ -16,7 +16,7 @@ const typographyURL = 'https://fr.wordpress.org/team/handbook/guide-du-traducteu
 const glossaryURL = `https://translate.wordpress.org/locale/${currentProjectLocaleSlug}/default/glossary/`;
 const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set=${currentProjectLocaleSlug}%2Fdefault&project=`;
 
-// Settings (localStorage don't have booleans).
+// Settings (localStorage doesn't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
 let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
 
@@ -78,7 +78,7 @@ const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warning
 spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyWarningLabel);
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
 const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
-const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les avertissements en rouge');
+const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les Mots et Apostrophes');
 
 if (bulkActions) {
 	pteControls.append(spSelectErrors, spSelectErrorsLabel);
@@ -499,6 +499,14 @@ function declareEvents() {
 	});
 }
 
+function setColors(spteColorWord = '#ff0000', spteColorQuote = '#ff0000', spteColorChar = '#ff00ff') {
+	addStyle('.sp-warning--word', `background-color:${spteColorWord};color:white;font-weight:bold;padding:1px;margin:0 1px`);
+	addStyle('.sp-warning--quote', `display:inline-block;line-height:16px;box-shadow:${spteColorQuote} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`);
+	addStyle('.sp-warning--char', `display:inline-block;line-height:16px;box-shadow:${spteColorChar} 0px 0px 0px 2px inset;background-color:white;padding:3px 4px`);
+	addStyle('.sp-spaces--showing', 'display:inline-block;line-height:16px;background-color:deepskyblue;border:2px solid deepskyblue');
+	addStyle('.sp-nbkspaces--showing', 'display:inline-block;line-height:16px;background-color:white;border:2px solid white');
+}
+
 function blackToolTip(spteBlackToolTip) {
 	if (spteBlackToolTip && spteBlackToolTip === 'false') {
 		addStyle('.actions:hover .sp-foreign-tooltip', 'display:none!important');
@@ -547,6 +555,7 @@ function launchProcess(spteSettings = '') {
 			filterToolbar.append(linkGlossary, linkConsistency, controlStickyHeader);
 			linkGlossary.style.right = '70px';
 		}
+		setColors(spteSettings.spteColorWord, spteSettings.spteColorQuote, spteSettings.spteColorChar);
 		preventGlotDictTags();
 		translations.forEach(checkTranslation);
 		blackToolTip(spteSettings.spteBlackToolTip);

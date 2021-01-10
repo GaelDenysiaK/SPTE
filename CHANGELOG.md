@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0.2] - 10 Janv 2021
+
+### Added
+- Ajout de paramètres permettant de sélectionner les couleurs des 3 types d’avertissements.
+
+### Changed
+- Amélioration de l’accessibilité des messages d’erreur en séparant les label aria des textes des infobulles
+- Remplacement des span des avertissements par des liens a pour les rendre accessibles au clavier
+
+### Fixed
+- Remplacement du pictogramme unicode Information par un SVG par compatibilité
+
 ## [1.0.0.1] - 3 Janv 2021
 ### Changed
 - Remplacement des info-bulles des avertissements par des aria-label couplés à des pseudo-éléments. Les info-bulles deviennent accessibles

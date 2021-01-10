@@ -1,5 +1,7 @@
 # SPTE
 
+Lire le Wiki pour de plus amples (et actualisées) informations : https://github.com/webaxones/spte/wiki
+
 Cette extension est utilisable sur https://translate.wordpress.org/ et permet de visualiser sur les traductions en français les éléments suivants :
 * les espaces insécables en blanc
 * les espaces sécables en début et en fin de chaîne en bleu

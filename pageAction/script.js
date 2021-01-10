@@ -1,6 +1,20 @@
 const settingsForm = document.querySelector('#settings-form');
+const isFirefox = !chrome.app;
+
+if (isFirefox) {
+	document.querySelectorAll('#settings-color__word, #settings-color__quote, #settings-color__char').forEach((element) => {
+		element.type = 'text';
+		element.style.width = '55px';
+		element.style.margin = '0 10px';
+		element.closest('label').style.width = '33%';
+		element.closest('label').style.margin = '0 0 8px 0';
+	});
+}
 
 function saveSettings() {
+	const colorWord = document.querySelector('#settings-color__word');
+	const colorQuote = document.querySelector('#settings-color__quote');
+	const colorChar = document.querySelector('#settings-color__char');
 	const blackToolTip = document.querySelector('#settings-blacktooltip');
 	const betterReadability = document.querySelector('#settings-betterreadability');
 	const locales = document.querySelector('#settings-locales');
@@ -14,6 +28,9 @@ function saveSettings() {
 			settings = data.spteSettings;
 		} else {
 			settings = {
+				spteColorWord: '',
+				spteColorQuote: '',
+				spteColorChar: '',
 				spteBlackToolTip: '',
 				spteBetterReadability: '',
 				spteOtherSlugs: '',
@@ -22,6 +39,9 @@ function saveSettings() {
 				spteGpcontentMaxWitdh: '',
 			};
 		}
+		settings.spteColorWord = colorWord.value;
+		settings.spteColorQuote = colorQuote.value;
+		settings.spteColorChar = colorChar.value;
 		settings.spteBlackToolTip = blackToolTip.checked ? 'true' : 'false';
 		settings.spteBetterReadability = betterReadability.checked ? 'true' : 'false';
 		settings.spteOtherSlugs = locales.value;
@@ -39,6 +59,9 @@ function saveSettings() {
 function restoreSettings() {
 	chrome.storage.local.get('spteSettings', (data) => {
 		if (chrome.runtime.error) {	return;	}
+		const colorWord = document.querySelector('#settings-color__word');
+		const colorQuote = document.querySelector('#settings-color__quote');
+		const colorChar = document.querySelector('#settings-color__char');
 		const blackToolTip = document.querySelector('#settings-blacktooltip');
 		const betterReadability = document.querySelector('#settings-betterreadability');
 		const locales = document.querySelector('#settings-locales');
@@ -53,7 +76,19 @@ function restoreSettings() {
 				if (chrome.runtime.error) {	console.log('Impossible d’initialiser les paramètres'); }
 			});
 		}
-		if (!data.spteSettings || !blackToolTip || !betterReadability || !locales || !frenchFlag || !gpcontentBig || !gpcontentMaxWitdh) { return; }
+		if (!data.spteSettings || !colorWord || !colorQuote || !colorChar || !blackToolTip || !betterReadability || !locales || !frenchFlag || !gpcontentBig || !gpcontentMaxWitdh) { return; }
+
+		if (data.spteSettings.spteColorWord) {
+			colorWord.value = data.spteSettings.spteColorWord;
+		}
+
+		if (data.spteSettings.spteColorQuote) {
+			colorQuote.value = data.spteSettings.spteColorQuote;
+		}
+
+		if (data.spteSettings.spteColorChar) {
+			colorChar.value = data.spteSettings.spteColorChar;
+		}
 
 		if (data.spteSettings.spteBlackToolTip) {
 			blackToolTip.checked = (data.spteSettings.spteBlackToolTip === 'false') ? '' : 'checked';
@@ -89,6 +124,13 @@ function restoreSettings() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreSettings);
+
+document.getElementById('reset-color').addEventListener('click', (e) => {
+	document.querySelectorAll('#settings-color__word, #settings-color__quote').forEach((element) => {
+		element.value = '#ff0000';
+	});
+	document.querySelector('#settings-color__char').value = '#ff00ff';
+});
 
 settingsForm.addEventListener('submit', (e) => {
 	e.preventDefault();
