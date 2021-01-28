@@ -76,6 +76,7 @@ const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translati
 const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
 const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'Les avertissements');
 spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyWarningLabel);
+
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
 const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
 const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les Mots et Apostrophes');
@@ -99,8 +100,8 @@ function preventGlotDictTags() {
 // Displays the translated string without any markup.
 function addForeignToolTip(translation) {
 	const preview = translation.closest('tr');
-	const translated = preview.querySelector('.translation-text');
-	const hook = preview.querySelector('td.actions');
+	const translated = preview && preview.querySelector('.translation-text');
+	const hook = preview && preview.querySelector('td.actions');
 	hook.style.position = 'relative';
 	const toolTip = createElement('SPAN', { class: 'sp-foreign-tooltip' });
 	toolTip.innerHTML = translated.innerHTML;
