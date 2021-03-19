@@ -35,6 +35,7 @@ const data = {
 		'underscores',
 		'video',
 		'wysiwig',
+		'événement',
 	],
 	slash: [
 		'/',
