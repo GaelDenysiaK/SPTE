@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0.3] - 8 mai 2021
+### Fixed
+- Correction du problème de ligne de recherche qui disparait (thanks to [Aurélien Joahny](https://github.com/ajoah)).
+
 ## [1.0.0.2] - 10 Janv 2021
 
 ### Added
