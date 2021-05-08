@@ -23,7 +23,7 @@ let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
 // Main existing elements.
 const gpContent = document.querySelector('.gp-content');
 if (gpContent) { gpContent.style.maxWidth = '85% !important'; }
-const bigTitle = document.querySelector('.gp-content .breadcrumb+h2');
+const bigTitle = document.querySelector('.gp-content > h2');
 const topPaging = document.querySelector('.gp-content .paging');
 const translations = document.querySelectorAll('tr.preview:not(.sp-has-spte-error) .translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
@@ -562,7 +562,7 @@ function launchProcess(spteSettings = '') {
 		displayResults();
 		manageControls();
 		buildHeader();
-		ifSourceHiddenTagTarget('.breadcrumb+h2', '#sp-main-header', 'sp-sticky');
+		ifSourceHiddenTagTarget('.gp-content > h2', '#sp-main-header', 'sp-sticky');
 		if (isConnected) {
 			observeMutations();
 		}
