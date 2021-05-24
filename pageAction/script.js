@@ -21,6 +21,7 @@ function saveSettings() {
 	const frenchFlag = document.querySelector('#settings-frenchflag');
 	const gpcontentBig = document.querySelector('#settings-gpcontent-big');
 	const gpcontentMaxWitdh = document.querySelector('#settings-gpcontent-maxwidth');
+	const gpActiveGlossary = document.querySelector('#settings-importglossary');
 	chrome.storage.local.get('spteSettings', (data) => {
 		if (chrome.runtime.error || !locales) {	return;	}
 		let settings = {};
@@ -31,12 +32,15 @@ function saveSettings() {
 				spteColorWord: '',
 				spteColorQuote: '',
 				spteColorChar: '',
-				spteBlackToolTip: '',
+				spteBlackToolTip: 'checked',
 				spteBetterReadability: '',
 				spteOtherSlugs: '',
-				spteFrenchFlag: '',
+				spteFrenchFlag: 'checked',
 				spteGpcontentBig: '',
 				spteGpcontentMaxWitdh: '',
+				spteActiveGlossary: 'checked',
+				spteLastUpdateGlossary: '',
+				spteRegexGlossary: '',
 			};
 		}
 		settings.spteColorWord = colorWord.value;
@@ -48,6 +52,7 @@ function saveSettings() {
 		settings.spteFrenchFlag = frenchFlag.checked ? 'true' : 'false';
 		settings.spteGpcontentBig = gpcontentBig.checked ? 'true' : 'false';
 		settings.spteGpcontentMaxWitdh = gpcontentMaxWitdh.value;
+		settings.spteActiveGlossary = gpActiveGlossary.checked ? 'true' : 'false';
 
 		chrome.storage.local.set({ spteSettings: settings }, () => {
 			if (chrome.runtime.error) {	console.log('Impossible d’enregistrer les paramètres'); }
@@ -68,15 +73,17 @@ function restoreSettings() {
 		const frenchFlag = document.querySelector('#settings-frenchflag');
 		const gpcontentBig = document.querySelector('#settings-gpcontent-big');
 		const gpcontentMaxWitdh = document.querySelector('#settings-gpcontent-maxwidth');
+		const gpActiveGlossary = document.querySelector('#settings-importglossary');
 		const initSettings = { spteBlackToolTip: 'true', spteFrenchFlag: 'true' };
 		if (data.spteSettings === undefined) {
 			blackToolTip.checked = 'checked';
 			frenchFlag.checked = 'checked';
+			gpActiveGlossary.checked = 'checked';
 			chrome.storage.local.set({ spteSettings: initSettings }, () => {
 				if (chrome.runtime.error) {	console.log('Impossible d’initialiser les paramètres'); }
 			});
 		}
-		if (!data.spteSettings || !colorWord || !colorQuote || !colorChar || !blackToolTip || !betterReadability || !locales || !frenchFlag || !gpcontentBig || !gpcontentMaxWitdh) { return; }
+		if (!data.spteSettings || !colorWord || !colorQuote || !colorChar || !blackToolTip || !betterReadability || !locales || !frenchFlag || !gpcontentBig || !gpcontentMaxWitdh || !gpcontentMaxWitdh) { return; }
 
 		if (data.spteSettings.spteColorWord) {
 			colorWord.value = data.spteSettings.spteColorWord;
@@ -119,6 +126,10 @@ function restoreSettings() {
 
 		if (data.spteSettings.spteGpcontentMaxWitdh) {
 			gpcontentMaxWitdh.value = data.spteSettings.spteGpcontentMaxWitdh;
+		}
+
+		if (data.spteSettings.spteActiveGlossary) {
+			gpActiveGlossary.checked = (data.spteSettings.spteActiveGlossary === 'false') ? '' : 'checked';
 		}
 	});
 }

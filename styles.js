@@ -5,7 +5,7 @@ const spaceAfterTitle = 'Précédé par une espace ou caractère suivant collé 
 const nbkSpaceBeforeTitle = 'Non précédé par une espace insécable ou non suivi par une espace';
 const nbkSpaceAfterTitle = 'Non précédé par une espace ou non suivi par une espace insécable';
 
-const cases = {
+let cases = {
 	badWords: {
 		name: '',
 		title: 'Mots déconseillés ou mal orthographiés : ',

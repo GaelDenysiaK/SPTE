@@ -2,16 +2,17 @@
 const styleSheet = document.head.appendChild(document.createElement('style')).sheet;
 // Check locations.
 const onTranslateWordPressRoot = (/https:\/\/translate\.wordpress\.org\//).test(window.location.href);
+
+// SLUG.
 let currentProjectLocaleSlug = '';
 const breadcrumb = document.querySelector('.breadcrumb li:last-child a');
 if (breadcrumb) {
 	const subs = breadcrumb.href.split('/');
 	currentProjectLocaleSlug = subs[subs.length - 3];
 }
-
-// URLs.
 currentProjectLocaleSlug = (currentProjectLocaleSlug === '') ? 'fr' : currentProjectLocaleSlug;
 
+// URLs.
 const typographyURL = 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/';
 const glossaryURL = `https://translate.wordpress.org/locale/${currentProjectLocaleSlug}/default/glossary/`;
 const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set=${currentProjectLocaleSlug}%2Fdefault&project=`;
@@ -539,7 +540,13 @@ function isOnAcceptableLocale(slugs) {
 	return onAcceptableLocale;
 }
 
-function launchProcess(spteSettings = '') {
+function getGlossaryRegex(glossaryRegexPattern) {
+	const badWordsRegexPattern = cases.badWords.regex.source;
+	const newRgxBadWords = new RegExp(badWordsRegexPattern + '|' + glossaryRegexPattern, 'gm');
+	cases.badWords.regex = newRgxBadWords;
+}
+
+function mainProcesses(spteSettings) {
 	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
 	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true') { document.body.classList.add('sp-better-readability'); }
 
@@ -576,11 +583,73 @@ function launchProcess(spteSettings = '') {
 	frenchFlag(spteSettings.spteFrenchFlag);
 }
 
+function launchProcess(spteSettings = {}) {
+	const todayDate = new Date();
+	if (spteSettings.spteActiveGlossary === 'false') {
+		mainProcesses(spteSettings);
+		return;
+	}
+	if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteRegexGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
+		getGlossaryRegex(spteSettings.spteRegexGlossary);
+		mainProcesses(spteSettings);
+	} else {
+		fetch(glossaryURL).then((response) => response.text()).then((dataGlossary) => {
+			let table = dataGlossary.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=glossary">)(.*?)(?=<\/table>)/gmi);
+			if (table && table[0]) {
+				table = `<table class="glossary">${table[0]}</table>}`;
+				const html = new DOMParser().parseFromString(table, 'text/html');
+
+				const headers = Array.from(
+					html.querySelectorAll('.glossary tr:first-child th'),
+					(th) => th.textContent.trim(),
+				);
+
+				const tabGlossary = Array.from(headers, () => []);
+				for (const tr of html.querySelectorAll('.glossary tr:nth-child(n + 2):not(.editor)')) {
+					[...tr.children].forEach((th, i) => {
+						tabGlossary[i].push(th.textContent.trim().toLowerCase());
+					});
+				}
+
+				const difference = tabGlossary[0].filter((x) => !tabGlossary[2].includes(x));
+				const newBadWordsRegexPattern = `${difference.join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`;
+
+				getGlossaryRegex(newBadWordsRegexPattern);
+
+				mainProcesses(spteSettings);
+
+				let settings = {};
+				if (spteSettings) {
+					settings = spteSettings;
+					settings.spteLastUpdateGlossary = todayDate.toISOString().substring(0, 10);
+					settings.spteRegexGlossary = newBadWordsRegexPattern;
+					settings.spteActiveGlossary = 'true';
+				} else {
+					settings = {
+						spteColorWord: '',
+						spteColorQuote: '',
+						spteColorChar: '',
+						spteBlackToolTip: 'checked',
+						spteBetterReadability: '',
+						spteOtherSlugs: '',
+						spteFrenchFlag: 'checked',
+						spteGpcontentBig: '',
+						spteGpcontentMaxWitdh: '',
+						spteActiveGlossary: 'checked',
+						spteLastUpdateGlossary: todayDate.toISOString().substring(0, 10),
+						spteRegexGlossary: newBadWordsRegexPattern,
+					};
+				}
+
+				chrome.storage.local.set({ spteSettings: settings }, () => {
+					if (chrome.runtime.error) {	console.log('Impossible d’initialiser les paramètres'); }
+				});
+			}
+		});
+	}
+}
+
 chrome.storage.local.get('spteSettings', (data) => {
 	if (chrome.runtime.error) { return; }
-	if (data.spteSettings) {
-		launchProcess(data.spteSettings);
-	} else {
-		launchProcess();
-	}
+	launchProcess(data.spteSettings);
 });
