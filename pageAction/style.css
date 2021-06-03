@@ -8,7 +8,7 @@ html {
 
 label.tab {
     cursor: pointer;
-    padding: 8px 20px;
+    padding: 6px 20px;
     background: #4f4f69;
     display: inline-block;
     color: #fff;
@@ -49,25 +49,25 @@ label.tab {
 }
 
 #settings-popup {
-    width: 355px;
+    width: 365px;
 }
 
 #settings-popup {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
-    padding: 20px 5px;
+    padding: 10px 5px 5px 5px;
 }
 
 fieldset {
     margin: 10px;
     border: 0;
-    padding: 10px 20px;
-    background: rgba(243, 242, 251, .6);
+    padding: 4px 10px 4px 20px;
+    background: rgba(243, 242, 251, .8);
 }
 
 header {
     text-align: center;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 15px 0;
 }
 
 header>img {
@@ -152,11 +152,11 @@ input {
 
 .settings-color-field input {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     padding: 0;
     margin: 0 0 0 5px;
-    vertical-align: -3px;
+    vertical-align: -5px;
 }
 
 .settings-color-field input[type="color"i]::-webkit-color-swatch-wrapper {

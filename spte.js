@@ -80,7 +80,7 @@ spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyW
 
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
 const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
-const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les Mots et Apostrophes');
+const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les mots et apostrophes');
 
 if (bulkActions) {
 	pteControls.append(spSelectErrors, spSelectErrorsLabel);
@@ -383,7 +383,7 @@ function observeMutations() {
 					newStatus = addedNode.classList.value.match('(?<=status-)(\\w*)(?= )')[0];
 				}
 
-				// GlotDict Notices. Beware, if parent needs to change, to test if addedNode hasn't already been added to parent.
+				// GlotDict Notices. Beware, if parent needs to change, test if addedNode hasn't already been added to parent.
 				if (GDmayBeOnBoard && addedNode.parentNode !== spGDNoticesContainer && addedNode.id.startsWith('gd-') && addedNode.classList.contains('notice')) {
 					spGDNoticesContainer.appendChild(addedNode);
 				}
@@ -542,7 +542,7 @@ function isOnAcceptableLocale(slugs) {
 
 function getGlossaryRegex(glossaryRegexPattern) {
 	const badWordsRegexPattern = cases.badWords.regex.source;
-	const newRgxBadWords = new RegExp(badWordsRegexPattern + '|' + glossaryRegexPattern, 'gm');
+	const newRgxBadWords = new RegExp(`${badWordsRegexPattern}|${glossaryRegexPattern}`, 'gm');
 	cases.badWords.regex = newRgxBadWords;
 }
 
@@ -606,9 +606,11 @@ function launchProcess(spteSettings = {}) {
 
 				const tabGlossary = Array.from(headers, () => []);
 				for (const tr of html.querySelectorAll('.glossary tr:nth-child(n + 2):not(.editor)')) {
-					[...tr.children].forEach((th, i) => {
-						tabGlossary[i].push(th.textContent.trim().toLowerCase());
-					});
+					if (!tr.textContent.toLowerCase().includes('spte')) {
+						[...tr.children].forEach((th, i) => {
+							tabGlossary[i].push(th.textContent.trim().toLowerCase());
+						});
+					}
 				}
 
 				const difference = tabGlossary[0].filter((x) => !tabGlossary[2].includes(x));
