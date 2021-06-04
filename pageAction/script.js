@@ -40,7 +40,7 @@ function saveSettings() {
 				spteGpcontentMaxWitdh: '',
 				spteActiveGlossary: 'checked',
 				spteLastUpdateGlossary: '',
-				spteRegexGlossary: '',
+				spteGlossary: '',
 			};
 		}
 		settings.spteColorWord = colorWord.value;

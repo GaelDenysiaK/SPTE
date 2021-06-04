@@ -540,8 +540,13 @@ function isOnAcceptableLocale(slugs) {
 	return onAcceptableLocale;
 }
 
-function getGlossaryRegex(glossaryRegexPattern) {
+function getGlossaryRegex(glossary) {
 	const badWordsRegexPattern = cases.badWords.regex.source;
+	// we duplicate each word with a trailing s to be able to treat plurals.
+	let glossaryWithPlurals = glossary.reduce((a, i) => a.concat(i, `${i}s`), []);
+	// and remove specific generated words that cause problem.
+	glossaryWithPlurals = glossaryWithPlurals.filter((x) => !x.includes('nos'));
+	const glossaryRegexPattern = `${glossaryWithPlurals.join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`;
 	const newRgxBadWords = new RegExp(`${badWordsRegexPattern}|${glossaryRegexPattern}`, 'gm');
 	cases.badWords.regex = newRgxBadWords;
 }
@@ -589,8 +594,8 @@ function launchProcess(spteSettings = {}) {
 		mainProcesses(spteSettings);
 		return;
 	}
-	if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteRegexGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
-		getGlossaryRegex(spteSettings.spteRegexGlossary);
+	if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
+		getGlossaryRegex(spteSettings.spteGlossary);
 		mainProcesses(spteSettings);
 	} else {
 		fetch(glossaryURL).then((response) => response.text()).then((dataGlossary) => {
@@ -614,9 +619,8 @@ function launchProcess(spteSettings = {}) {
 				}
 
 				const difference = tabGlossary[0].filter((x) => !tabGlossary[2].includes(x));
-				const newBadWordsRegexPattern = `${difference.join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`;
 
-				getGlossaryRegex(newBadWordsRegexPattern);
+				getGlossaryRegex(difference);
 
 				mainProcesses(spteSettings);
 
@@ -624,7 +628,7 @@ function launchProcess(spteSettings = {}) {
 				if (spteSettings) {
 					settings = spteSettings;
 					settings.spteLastUpdateGlossary = todayDate.toISOString().substring(0, 10);
-					settings.spteRegexGlossary = newBadWordsRegexPattern;
+					settings.spteGlossary = difference;
 					settings.spteActiveGlossary = 'true';
 				} else {
 					settings = {
@@ -639,7 +643,7 @@ function launchProcess(spteSettings = {}) {
 						spteGpcontentMaxWitdh: '',
 						spteActiveGlossary: 'checked',
 						spteLastUpdateGlossary: todayDate.toISOString().substring(0, 10),
-						spteRegexGlossary: newBadWordsRegexPattern,
+						spteGlossary: difference,
 					};
 				}
 
