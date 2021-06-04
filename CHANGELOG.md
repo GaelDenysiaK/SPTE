@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0.4] - 8 mai 2021
+### Added
+- Import des expressions du glossaire officiel : une requête est effectuée 1 fois par 24h et ajoute aux fautes de frappes surlignées par SPTE les mots du glossaire. Les mots importés sont ceux de la colonne 1 dont la valeur est différente de ceux de la colonne 3 pour éviter de surligner les mots qui sont identiques en français et en anglais. De plus, chaque mot importé est dupliqué avec ajout d'un s final pour tenter de trouver et surligner les pluriels.
+
 ## [1.0.0.3] - 8 mai 2021
 ### Fixed
 - Correction du problème de ligne de recherche qui disparait (thanks to [Aurélien Joahny](https://github.com/ajoah)).
