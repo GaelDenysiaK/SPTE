@@ -6,7 +6,7 @@ function escapeRegExp(data) {
 const fileExtensions = data.fileExtensions.join('|');
 
 // Match bad words. https://github.com/webaxones/spte/wiki/rgxBadWords
-const rgxBadWords = new RegExp(`(?<=[\\s,.:;"']|^)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`, 'gmi');
+const rgxBadWords = new RegExp(`(?<=[\\s,:;"']|^)(?<!«\\s)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,:;"\']|^)(?<!«\\s)')}(?=[\\s,.:;"']|$)`, 'gmi');
 
 // Match single quotes. https://github.com/webaxones/spte/wiki/rgxSingleQuotes
 const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027(?!%)', 'gm');

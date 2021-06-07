@@ -544,9 +544,7 @@ function getGlossaryRegex(glossary) {
 	const badWordsRegexPattern = cases.badWords.regex.source;
 	// we duplicate each word with a trailing s to be able to treat plurals.
 	let glossaryWithPlurals = glossary.reduce((a, i) => a.concat(i, `${i}s`), []);
-	// and remove specific generated words that cause problem.
-	glossaryWithPlurals = glossaryWithPlurals.filter((x) => !x.includes('nos'));
-	const glossaryRegexPattern = `${glossaryWithPlurals.join('(?=[\\s,.:;"\']|$)|(?<=[\\s,.:;"\']|^)')}(?=[\\s,.:;"']|$)`;
+	const glossaryRegexPattern = `${glossaryWithPlurals.join('(?=[\\s,:;"\']|$)|(?<=[\\s,:;"\']|^)(?<!«\\s)')}(?=[\\s,.:;"']|$)`;
 	const newRgxBadWords = new RegExp(`${badWordsRegexPattern}|${glossaryRegexPattern}`, 'gm');
 	cases.badWords.regex = newRgxBadWords;
 }
@@ -594,10 +592,10 @@ function launchProcess(spteSettings = {}) {
 		mainProcesses(spteSettings);
 		return;
 	}
-	if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
-		getGlossaryRegex(spteSettings.spteGlossary);
-		mainProcesses(spteSettings);
-	} else {
+	// if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
+	// 	getGlossaryRegex(spteSettings.spteGlossary);
+	// 	mainProcesses(spteSettings);
+	// } else {
 		fetch(glossaryURL).then((response) => response.text()).then((dataGlossary) => {
 			let table = dataGlossary.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=glossary">)(.*?)(?=<\/table>)/gmi);
 			if (table && table[0]) {
@@ -652,7 +650,7 @@ function launchProcess(spteSettings = {}) {
 				});
 			}
 		});
-	}
+	// }
 }
 
 chrome.storage.local.get('spteSettings', (data) => {
