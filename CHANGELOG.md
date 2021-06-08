@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.0.0.4] - 8 mai 2021
+## [1.0.0.5] - 8 juin 2021
+### Added
+- Ajout d’une exception sur la regex des mots interdits lorsqu’ils sont entre guillemets (avec espaces insécables)
+### Fixed
+- Suppression du point dans le LookAhead de la regex sur les mots interdits car il n’avait aucune utilité et surlignait les mots interdits lorsqu’ils étaient dans une URL
+
+## [1.0.0.4] - 4 juin 2021
 ### Added
 - Import des expressions du glossaire officiel : une requête est effectuée 1 fois par 24h et ajoute aux fautes de frappes surlignées par SPTE les mots du glossaire. Les mots importés sont ceux de la colonne 1 dont la valeur est différente de ceux de la colonne 3 pour éviter de surligner les mots qui sont identiques en français et en anglais. De plus, chaque mot importé est dupliqué avec ajout d'un s final pour tenter de trouver et surligner les pluriels.
 

@@ -592,10 +592,10 @@ function launchProcess(spteSettings = {}) {
 		mainProcesses(spteSettings);
 		return;
 	}
-	// if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
-	// 	getGlossaryRegex(spteSettings.spteGlossary);
-	// 	mainProcesses(spteSettings);
-	// } else {
+	if (spteSettings.spteLastUpdateGlossary !== '' && spteSettings.spteGlossary !== '' && todayDate.toISOString().substring(0, 10) === spteSettings.spteLastUpdateGlossary) {
+		getGlossaryRegex(spteSettings.spteGlossary);
+		mainProcesses(spteSettings);
+	} else {
 		fetch(glossaryURL).then((response) => response.text()).then((dataGlossary) => {
 			let table = dataGlossary.replace(/(\r\n|\n|\r)/gm, '').match(/(?<=glossary">)(.*?)(?=<\/table>)/gmi);
 			if (table && table[0]) {
@@ -650,7 +650,7 @@ function launchProcess(spteSettings = {}) {
 				});
 			}
 		});
-	// }
+	}
 }
 
 chrome.storage.local.get('spteSettings', (data) => {
