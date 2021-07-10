@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0.6] - 10 juillet 2021
+
+### Changed
+- Amélioration de la regex parenthèse fermante pour ne plus surligner celles suivies d’une espace insécable suivie d’un caractère unique (voir wiki pour plus d’information).
+### Fixed
+- Correction de la regex des deux points qui dysfonctionnait. Bug remonté par Clément Polito sur slack. La regex a été refaite et simplifiée, ce qui fera réapparaitre des faux positifs, mais qui la fera fonctionner dans les cas nécessaires. J'envisage de gérer autrement les exceptions mais cela demandera plus de travail. 
+Sous ce bug s’en cachait un autre à savoir l’utilisation des deux points dans le aria label de l’erreur qui provoquait un bug.
+
 ## [1.0.0.5] - 8 juin 2021
 ### Added
 - Ajout d’une exception sur la regex des mots interdits lorsqu’ils sont entre guillemets (avec espaces insécables)
