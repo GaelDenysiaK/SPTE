@@ -186,7 +186,7 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				break;
 			}
 			if (newStatus !== 'rejected') {
-				const ariaName = (type === 'badWords') ? `${string} :` : `${cases[type].name} :`;
+				const ariaName = (type === 'badWords') ? `${string}. ` : `${cases[type].name}. `;
 				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `${ariaName} ${cases[type].message}`;
 				const tooltip = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
 
