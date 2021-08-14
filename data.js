@@ -108,6 +108,7 @@ const data = {
 		'mp4',
 		'mpeg',
 		'pdf',
+		'pem',
 		'php',
 		'po',
 		'pot',
