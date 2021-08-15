@@ -2,7 +2,6 @@ const data = {
 	badWord: [
 		'emails',
 		'etes vous',
-		'etc...',
 		'ets',
 		'fdp',
 		'font-sise',
