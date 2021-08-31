@@ -3,7 +3,7 @@
 
 ## [1.0.1] - 31 août 2021
 ### Added
-- Les caractères et chaînes comprises entre < > (balises HTML) ne sont plus analysées et surlignées ce qui devrait réduire considérablement le nombre de faux positifs.
+- Les caractères compris entre < > (balises HTML) ne sont plus analysées et surlignées ce qui devrait réduire considérablement le nombre de faux positifs.
 
 ## [1.0.0.6] - 10 juillet 2021
 
