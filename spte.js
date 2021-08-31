@@ -156,9 +156,13 @@ function checkTranslation(translation, oldStatus, newStatus) {
 
 	// For regex compatibility.
 	text = text.replaceAll(/&nbsp;/gmi, ' ');
-
+	let checktags = text.replaceAll(/&lt;.*?(?<!\/)&gt;| /gmi, '');
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
+			if (!checktags.match(cases[type].regex)) {
+				return string;
+			}
+
 			// GlotPress has 6 status : untranslated, current, fuzzy, waiting, old, rejected. Old and rejected musn't be counted.
 			switch (newStatus) {
 			case 'rejected':
@@ -190,6 +194,7 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `${ariaName} ${cases[type].message}`;
 				const tooltip = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
 
+				checktags = checktags.replace(string, '');
 				return `<a href="#" aria-label="${ariaLabel}" data-message="${tooltip}" class="${cases[type].cssClass}">${string}</a>`;
 			}
 			return string;
@@ -543,7 +548,7 @@ function isOnAcceptableLocale(slugs) {
 function getGlossaryRegex(glossary) {
 	const badWordsRegexPattern = cases.badWords.regex.source;
 	// we duplicate each word with a trailing s to be able to treat plurals.
-	let glossaryWithPlurals = glossary.reduce((a, i) => a.concat(i, `${i}s`), []);
+	const glossaryWithPlurals = glossary.reduce((a, i) => a.concat(i, `${i}s`), []);
 	const glossaryRegexPattern = `${glossaryWithPlurals.join('(?=[\\s,:;"\']|$)|(?<=[\\s,:;"\']|^)(?<!«\\s)')}(?=[\\s,.:;"']|$)`;
 	const newRgxBadWords = new RegExp(`${badWordsRegexPattern}|${glossaryRegexPattern}`, 'gm');
 	cases.badWords.regex = newRgxBadWords;
