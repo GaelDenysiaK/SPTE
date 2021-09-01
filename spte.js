@@ -176,7 +176,7 @@ function checkTranslation(translation, oldStatus, newStatus) {
 
 	// For regex compatibility.
 	text = text.replaceAll(/&nbsp;/gmi, ' ');
-	let checktags = text.replaceAll(/&lt;.*?(?<!\/)&gt;| /gmi, '');
+	let checktags = text.replaceAll(/&lt;.*?(?<!\/)&gt;/gmi, '');
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
 			if (!checktags.match(cases[type].regex)) {
