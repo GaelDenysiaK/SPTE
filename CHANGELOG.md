@@ -1,6 +1,10 @@
 # Changelog
 
 
+## [1.0.3] - 1 septembre 2021
+### Fixed
+- Correction sur la persistance du choix de l'affichage qui ne fonctionnait pas avec les lignes sans traductions. (voir précédente version)
+
 ## [1.0.2] - 1 septembre 2021
 ### Added
 - Le choix de l’affichage des traductions (afficher tout / les avertissements) est enregistré ce qui permet de passer de page en page pour ne voir que les avertissements.

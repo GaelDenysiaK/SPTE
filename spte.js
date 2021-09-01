@@ -135,7 +135,6 @@ function addEditorHighlighter(translation) {
 // Add CSS classes to preview TR depending on warnings.
 function tagTRTranslations(preview) {
 	const hasTranslation = preview.classList.contains('has-translations');
-
 	const trad = preview.querySelector('.translation-text');
 	const spWarning = trad.querySelector('[class*="sp-warning--"]');
 	if (hasTranslation && spWarning) {
@@ -144,8 +143,23 @@ function tagTRTranslations(preview) {
 	if (hasTranslation && (trad.querySelector('.sp-warning--word') || trad.querySelector('.sp-warning--quote'))) {
 		preview.classList.add('sp-has-spte-error');
 	}
+}
+
+// Rows display.
+function rowsDisplay() {
 	if (lsShowOnlyWarning) {
-		preview.style.display = (hasTranslation && spWarning) ? 'table-row' : 'none';
+		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
+			el.style.display = 'none';
+			if (bulkActions) {
+				// We uncheck hidden items to prevent bulk processing of non-visible items.
+				el.firstElementChild.firstElementChild.checked = '';
+			}
+		});
+	}
+	if (!lsShowOnlyWarning) {
+		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
+			el.style.display = 'table-row';
+		});
 	}
 }
 
@@ -298,24 +312,16 @@ function manageControls() {
 	showOnlyWarning.addEventListener('click', () => {
 		showOnlyWarning.checked = 'checked';
 		showEverything.checked = '';
-		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
-			el.style.display = 'none';
-			if (bulkActions) {
-				// We uncheck hidden items to prevent bulk processing of non-visible items.
-				el.firstElementChild.firstElementChild.checked = '';
-			}
-		});
 		localStorage.setItem('spteShowOnlyWarning', 'true');
 		lsShowOnlyWarning = true;
+		rowsDisplay();
 	});
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
 		showOnlyWarning.checked = '';
-		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
-			el.style.display = 'table-row';
-		});
 		localStorage.setItem('spteShowOnlyWarning', 'false');
 		lsShowOnlyWarning = false;
+		rowsDisplay();
 	});
 
 	if (!spSelectErrors) { return; }
@@ -584,6 +590,8 @@ function mainProcesses(spteSettings) {
 		setColors(spteSettings.spteColorWord, spteSettings.spteColorQuote, spteSettings.spteColorChar);
 		preventGlotDictTags();
 		translations.forEach(checkTranslation);
+		rowsDisplay();
+
 		blackToolTip(spteSettings.spteBlackToolTip);
 		displayResults();
 		manageControls();
