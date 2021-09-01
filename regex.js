@@ -9,7 +9,7 @@ const fileExtensions = data.fileExtensions.join('|');
 const rgxBadWords = new RegExp(`(?<=[\\s,:;"']|^)(?<!«\\s)${data.badWord.map(escapeRegExp).join('(?=[\\s,.:;"\']|$)|(?<=[\\s,:;"\']|^)(?<!«\\s)')}(?=[\\s,.:;"']|$)`, 'gmi');
 
 // Match single quotes. https://github.com/webaxones/spte/wiki/rgxSingleQuotes
-const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?)\u0027', 'gm');
+const rgxSingleQuotes = new RegExp('(?<!href\\=|href\\=\'[a-z0-9.]*?|%[a-z])\u0027', 'gm');
 
 // Match slash. https://github.com/webaxones/spte/wiki/rgxSlash
 const rgxSlash = new RegExp(`(?<= |\u00a0)\\${data.slash}(?!\\${data.slash}|\\&gt\\;|\\}{2}|\\]{2})|(?<!\\${data.slash})\\${data.slash}(?= |\u00a0)`, 'gmi');
