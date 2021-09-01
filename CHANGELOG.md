@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [1.0.2] - 1 septembre 2021
+### Added
+- Le choix de l’affichage des traductions (afficher tout / les avertissements) est enregistré ce qui permet de passer de page en page pour ne voir que les avertissements.
+### Fixed
+- Suppression de l’exception % de la regex des apostrophes puisque désormais les seuls cas acceptables sont gérés par l’exception globale des attributs de balises HTML.
+
 ## [1.0.1] - 31 août 2021
 ### Added
 - Les caractères compris entre < > (balises HTML) ne sont plus analysées et surlignées ce qui devrait réduire considérablement le nombre de faux positifs.
