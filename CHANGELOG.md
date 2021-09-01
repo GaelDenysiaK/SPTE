@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4] - 1 septembre 2021
+### Fixed
+- Correction regex apostrophes qui n’étaient plus surlignées
+- Correction espaces insécables qui n’étaient plus surlignées
 
 ## [1.0.3] - 1 septembre 2021
 ### Fixed
