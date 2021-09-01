@@ -20,6 +20,7 @@ const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set
 // Settings (localStorage doesn't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
 let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
+let lsShowOnlyWarning = localStorage.getItem('spteShowOnlyWarning') === 'true';
 
 // Main existing elements.
 const gpContent = document.querySelector('.gp-content');
@@ -76,6 +77,8 @@ const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-
 const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout');
 const showOnlyWarning = createElement('INPUT', { type: 'radio', id: 'sp-show-only-warnings', name: 'showOnlyWarning', value: 'showOnlyWarning' });
 const showOnlyWarningLabel = createElement('LABEL', { for: 'sp-show-only-warnings' }, 'Les avertissements');
+showEverything.checked = lsShowOnlyWarning ? '' : 'checked';
+showOnlyWarning.checked = lsShowOnlyWarning ? 'checked' : '';
 spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyWarningLabel);
 
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
@@ -140,6 +143,9 @@ function tagTRTranslations(preview) {
 	}
 	if (hasTranslation && (trad.querySelector('.sp-warning--word') || trad.querySelector('.sp-warning--quote'))) {
 		preview.classList.add('sp-has-spte-error');
+	}
+	if (lsShowOnlyWarning) {
+		preview.style.display = (hasTranslation && spWarning) ? 'table-row' : 'none';
 	}
 }
 
@@ -299,6 +305,8 @@ function manageControls() {
 				el.firstElementChild.firstElementChild.checked = '';
 			}
 		});
+		localStorage.setItem('spteShowOnlyWarning', 'true');
+		lsShowOnlyWarning = true;
 	});
 	showEverything.addEventListener('click', () => {
 		showEverything.checked = 'checked';
@@ -306,6 +314,8 @@ function manageControls() {
 		document.querySelectorAll('tr.preview:not(.sp-has-spte-warning)').forEach((el) => {
 			el.style.display = 'table-row';
 		});
+		localStorage.setItem('spteShowOnlyWarning', 'false');
+		lsShowOnlyWarning = false;
 	});
 
 	if (!spSelectErrors) { return; }
