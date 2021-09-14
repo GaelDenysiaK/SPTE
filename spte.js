@@ -19,7 +19,6 @@ const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set
 
 // Settings (localStorage doesn't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
-let lsStickyHeader = localStorage.getItem('spteStickyHeader') === 'true';
 let lsShowOnlyWarning = localStorage.getItem('spteShowOnlyWarning') === 'true';
 
 // Main existing elements.
@@ -42,7 +41,7 @@ const spHeader = createElement('DIV', { id: 'sp-main-header' });
 const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
 const spGDNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
-const spConsistencyLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Vérifier la cohérence d’une chaîne');
+const spConsistencyLabel = createElement('LABEL', { for: 'sp-consist__text' }, 'Cohérence d’une chaîne');
 const spConsistencyInputText = createElement('INPUT', { type: 'text', id: 'sp-consist__text', name: 'spConsistencyInputText', value: '' });
 const spConsistencyBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistencyBtn', value: 'Vérifier' });
 spConsistency.append(spConsistencyLabel, spConsistencyInputText, spConsistencyBtn);
@@ -61,15 +60,9 @@ typographyLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link-
 const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 glossaryLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link--glossary" target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
 const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
-const controlStickyHeader = createElement('A', { id: 'sp-results__toggle-header', class: 'sp-results__buttons', href: '#', title: 'En-tête fixe' }, '📌');
 const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel' }, '📕');
 const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: typographyURL, target: '_blank', title: 'Règles typographiques' }, '📕');
 const linkConsistency = createElement('A', { id: 'sp-results__link-consist', class: 'sp-results__buttons', href: consistencyURL, target: '_blank', title: 'Cohérence des traductions' }, '📘');
-
-if (!lsStickyHeader) {
-	controlStickyHeader.classList.add('sp-toggle-header--off');
-	spHeader.classList.add('sticky--off');
-}
 
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
 const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
@@ -83,10 +76,8 @@ spFilters.append(showEverything, showEverythingLabel, showOnlyWarning, showOnlyW
 const pteControls = createElement('DIV', { class: 'sp-controls__pte' });
 const spSelectErrors = createElement('INPUT', { type: 'checkbox', id: 'sp-select-errors', name: 'spteSelectErrors', value: 'spteSelectErrors' });
 const spSelectErrorsLabel = createElement('LABEL', { for: 'sp-select-errors' }, 'Cocher les mots et apostrophes');
-
 if (bulkActions) {
 	pteControls.append(spSelectErrors, spSelectErrorsLabel);
-	bulkActions.after(pteControls);
 }
 
 // French elements.
@@ -230,15 +221,6 @@ function toggleCaption(e) {
 	resultsCaption.classList.toggle('sp-results__captions--closed');
 	e.target.textContent = (e.target.textContent === 'Masquer la légende') ? '' : 'Masquer la légende';
 	localStorage.setItem('spteHideCaption', ((lsHideCaption === true) ? 'true' : 'false'));
-	e.preventDefault();
-}
-
-// Activate/Deactivate sticky header.
-function toggleStickyHeader(e) {
-	lsStickyHeader = lsStickyHeader !== true;
-	e.target.classList.toggle('sp-toggle-header--off');
-	spHeader.classList.toggle('sticky--off');
-	localStorage.setItem('spteStickyHeader', ((lsStickyHeader === true) ? 'true' : 'false'));
 	e.preventDefault();
 }
 
@@ -429,21 +411,11 @@ function observeMutations() {
 
 // Put all elements in a stickable header.
 function buildHeader() {
-	spHeader.append(filterToolbar, spConsistency);
-	controlStickyHeader.onclick = toggleStickyHeader;
-	if (isConnected && bulkActions) {
-		spHeader.append(bulkActions);
-	}
 	if (bulkActions) {
 		spControls.append(pteControls);
 	}
-	spControls.append(spFilters);
-	if (topPaging) {
-		spControls.append(topPaging);
-	}
-	spHeader.append(spControls, spGDNoticesContainer);
-	bigTitle.after(spHeader);
-	spHeader.before(spPopup);
+	spControls.append(spFilters, spConsistency);
+	filterToolbar.append(spControls);
 }
 
 function checkConsistency() {
@@ -569,9 +541,9 @@ function mainProcesses(spteSettings) {
 
 	if ((onFrenchLocale || onOtherLocale) && gpContent && tableTranslations) {
 		if (filterToolbar && onFrenchLocale) {
-			filterToolbar.append(linkGlossary, linkTypography, linkConsistency, controlStickyHeader);
+			filterToolbar.append(linkGlossary, linkTypography, linkConsistency);
 		} else if (filterToolbar && onOtherLocale) {
-			filterToolbar.append(linkGlossary, linkConsistency, controlStickyHeader);
+			filterToolbar.append(linkGlossary, linkConsistency);
 			linkGlossary.style.right = '70px';
 		}
 		setColors(spteSettings.spteColorWord, spteSettings.spteColorQuote, spteSettings.spteColorChar);
@@ -583,7 +555,6 @@ function mainProcesses(spteSettings) {
 		displayResults();
 		manageControls();
 		buildHeader();
-		ifSourceHiddenTagTarget('.gp-content > h2', '#sp-main-header', 'sp-sticky');
 		if (isConnected) {
 			observeMutations();
 		}

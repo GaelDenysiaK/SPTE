@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.5] - 14 septembre 2021
+
+### Changed
+- Déplacement du sticky header et du bouton back to top sur GlotDict et donc suppression sur SPTE.
 ## [1.0.4] - 1 septembre 2021
 ### Fixed
 - Correction regex apostrophes qui n’étaient plus surlignées
