@@ -47,7 +47,6 @@ const spConsistencyInputText = createElement('INPUT', { type: 'text', id: 'sp-co
 const spConsistencyBtn = createElement('INPUT', { type: 'button', id: 'sp-consist__btn', name: 'spConsistencyBtn', value: 'Vérifier' });
 spConsistency.append(spConsistencyLabel, spConsistencyInputText, spConsistencyBtn);
 const spControls = createElement('DIV', { id: 'sp-controls' });
-const spToTop = createElement('A', { id: 'sp-to-top', title: 'Remonter 🚀' }, '↑');
 const results = createElement('DIV', { id: 'sp-results', class: 'sp-results' });
 const resultsData = createElement('DIV', { class: 'sp-results__data' });
 const resultsCaption = createElement('DIV', { class: 'sp-results__captions' });
@@ -430,7 +429,7 @@ function observeMutations() {
 
 // Put all elements in a stickable header.
 function buildHeader() {
-	spHeader.append(spToTop, filterToolbar, spConsistency);
+	spHeader.append(filterToolbar, spConsistency);
 	controlStickyHeader.onclick = toggleStickyHeader;
 	if (isConnected && bulkActions) {
 		spHeader.append(bulkActions);
@@ -470,13 +469,6 @@ function closePopup(e) {
 	}
 }
 
-function scrollToTop() {
-	document.querySelector('#wporg-header').scrollIntoView({
-		block: 'start',
-		behavior: 'smooth',
-	});
-}
-
 function declareEvents() {
 	document.addEventListener('click', (e) => {
 		closePopup(e);
@@ -514,11 +506,6 @@ function declareEvents() {
 	spConsistencyBtn.addEventListener('click', (e) => {
 		e.preventDefault();
 		checkConsistency();
-	});
-
-	spToTop.addEventListener('click', (e) => {
-		e.preventDefault();
-		scrollToTop();
 	});
 }
 
