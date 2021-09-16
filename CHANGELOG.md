@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] - 16 septembre 2021
+
+### Changed
+- Réduction de la hauteur de l’entête pour prendre en compte le sticky header de GlotDict.
+
 ## [1.0.5] - 14 septembre 2021
 
 ### Changed
