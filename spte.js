@@ -162,14 +162,22 @@ function checkTranslation(translation, oldStatus, newStatus) {
 	// We don't need to process old rejected translations except the one we just rejected but only for counters.
 	if (!preview || (preview.classList.contains('status-rejected') && newStatus !== 'rejected')) { return; }
 
+	// Get the text.
 	let text = translation.innerHTML;
 
-	// For regex compatibility.
+	// For regex compatibility we replace non breakable spaces html entities with real character.
 	text = text.replaceAll(/&nbsp;/gmi, ' ');
-	let checktags = text.replaceAll(/&lt;.*?(?<!\/)&gt;/gmi, '');
+
+	// we memorize text without tags.
+	let textWithoutTags = text.replaceAll(/&lt;.*?(?<!\/)&gt;/gmi, '');
+	// for each typographical case...
 	for (const type in cases) {
 		text = text.replace(cases[type].regex, (string) => {
-			if (!checktags.match(cases[type].regex)) {
+			// If the case is present in text but not in textWithoutTags it musn't be treated.
+			if (!textWithoutTags.match(cases[type].regex)) {
+				// What is IMPORTANT in the process to avoid checks inside tags
+				// is that "replace(cases[type].regex)" order is the same as further "textWithoutTags.replace(string, '')" order
+				// and that only the first element of "textWithoutTags.match(cases[type].regex)" is checked here.
 				return string;
 			}
 
@@ -204,13 +212,16 @@ function checkTranslation(translation, oldStatus, newStatus) {
 				const ariaLabel = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `${ariaName} ${cases[type].message}`;
 				const tooltip = (type === 'Space' || type === 'nbkSpaces') ? `${cases[type].message}` : `&#171; ${string} &#187;&#10; ${cases[type].message}`;
 
-				checktags = checktags.replace(string, '');
+				textWithoutTags = textWithoutTags.replace(string, '');
 				return `<a href="#" aria-label="${ariaLabel}" data-message="${tooltip}" class="${cases[type].cssClass}">${string}</a>`;
 			}
 			return string;
 		});
 	}
-	translation.innerHTML = text;
+	const node = document.createRange().createContextualFragment(text);
+	const newTranslation = translation.cloneNode(false);
+	newTranslation.append(node);
+	translation.replaceWith(newTranslation);
 	addEditorHighlighter(preview);
 	tagTRTranslations(preview);
 }
