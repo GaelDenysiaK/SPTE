@@ -18,7 +18,7 @@ const rgxSlash = new RegExp(`(?<= |\u00a0)\\${data.slash}(?!\\${data.slash}|\\&g
 const rgxOpenHook = new RegExp(`(?<! |\\${data.openHook}|^)\\${data.openHook}(?!\\${data.openHook})|\\${data.openHook}(?=[ |\u00a0])`, 'gmi');
 
 // Match opening parenthesis. https://github.com/webaxones/spte/wiki/rgxOpenParenthesis
-const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|e\\)|es\\)|nt\\)|vent\\))|(?<!^)\\${data.openParenthesis}(?=[ |\u00a0])`, 'gmi');
+const rgxOpenParenthesis = new RegExp(`(?<![ ]|^)\\${data.openParenthesis}(?!\\%|\\)|s\\)|x\\)|e\\)|es\\)|nt\\)|vent\\))|(?<!^)\\${data.openParenthesis}(?=[ |\u00a0])`, 'gmi');
 
 // Match opening brace. https://github.com/webaxones/spte/wiki/rgxOpenBrace
 const rgxOpenBrace = new RegExp(`(?<! |\\${data.openBrace}|^)\\${data.openBrace}(?!\\${data.openBrace})|\\${data.openBrace}(?=[ |\u00a0])`, 'gmi');
@@ -36,7 +36,7 @@ const rgxComma = new RegExp(`(?<=[ |\u00a0])\\${data.comma}|\\${data.comma}(?=[a
 const rgxCloseHook = new RegExp(`(?<=[ |\u00a0])\\${data.closeHook}|(?<!\\${data.closeHook})\\${data.closeHook}(?=[a-zÀ-ú0-9]| $|\u00a0$)`, 'gmi');
 
 // Match closing parenthesis. https://github.com/webaxones/spte/wiki/rgxCloseParenthesis
-const rgxCloseParenthesis = new RegExp(`(?<= |\u00a0|\\([a-d]|\\([f-r]|\\([t-z])\\${data.closeParenthesis}|\\${data.closeParenthesis}(?=[a-rt-zÀ-ú0-9]\u00a0$|\u00a0[a-zÀ-ú]{2,})`, 'gmi');
+const rgxCloseParenthesis = new RegExp(`(?<= |\u00a0|\\([a-d]|\\([f-r]|\\([t-w]|\\([y-z])\\${data.closeParenthesis}|\\${data.closeParenthesis}(?=[a-rt-zÀ-ú0-9]\u00a0$|\u00a0[a-zÀ-ú]{2,})`, 'gmi');
 
 // Match closing brace. https://github.com/webaxones/spte/wiki/rgxCloseBrace
 const rgxCloseBrace = new RegExp(`(?<=[ |\u00a0])\\${data.closeBrace}|(?<!\\${data.closeBrace})\\${data.closeBrace}(?=[a-zÀ-ú0-9]|\u00a0| $|\u00a0$)`, 'gmi');

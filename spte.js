@@ -24,8 +24,6 @@ let lsShowOnlyWarning = localStorage.getItem('spteShowOnlyWarning') === 'true';
 // Main existing elements.
 const gpContent = document.querySelector('.gp-content');
 if (gpContent) { gpContent.style.maxWidth = '85% !important'; }
-const bigTitle = document.querySelector('.gp-content > h2');
-const topPaging = document.querySelector('.gp-content .paging');
 const translations = document.querySelectorAll('tr.preview:not(.sp-has-spte-error) .translation-text');
 const bulkActions = document.querySelector('#bulk-actions-toolbar-top');
 if (bulkActions) {
@@ -37,7 +35,6 @@ const isConnected = document.querySelector('body.logged-in') !== null;
 const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
 
 // Main elements created.
-const spHeader = createElement('DIV', { id: 'sp-main-header' });
 const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
 const spGDNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
