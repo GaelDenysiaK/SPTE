@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.7] - 24 septembre 2021
+
+### Fixed
+- Correction bug Popup
+
 ## [1.0.6] - 16 septembre 2021
 
 ### Changed

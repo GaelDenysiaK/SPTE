@@ -541,6 +541,7 @@ function getGlossaryRegex(glossary) {
 }
 
 function mainProcesses(spteSettings) {
+	document.body.appendChild(spPopup);
 	gpContentMaxWidth(spteSettings.spteGpcontentBig, spteSettings.spteGpcontentMaxWitdh);
 	if (spteSettings.spteBetterReadability && spteSettings.spteBetterReadability === 'true') { document.body.classList.add('sp-better-readability'); }
 
