@@ -338,6 +338,10 @@
     color: #191e23;
 }
 
+a.sp-warning--word {
+    display: inline-block;
+}
+
 .gp-content a.sp-warning--word,
 .gp-content a.sp-warning--word:hover,
 .gp-content a.sp-warning--word:focus,
