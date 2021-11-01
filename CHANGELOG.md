@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8] - 01 novembre 2021
+
+### Fixed
+- Correction du surlignement des mots qui parfois passaient à la ligne et créaient des traits rouges verticaux
+- Suppression des mots potentiellement utilisés dans d'autres locales du fichier data.js
+- Corrige les faux positif avec les pluriels en x entre parenthèses (x)
+
 ## [1.0.7] - 24 septembre 2021
 
 ### Fixed
