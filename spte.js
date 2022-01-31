@@ -599,7 +599,7 @@ function launchProcess(spteSettings = {}) {
 
 				const tabGlossary = Array.from(headers, () => []);
 				for (const tr of html.querySelectorAll('.glossary tr:nth-child(n + 2):not(.editor)')) {
-					if (!tr.textContent.toLowerCase().includes('spte')) {
+					if (!tr.textContent.toLowerCase().includes('spte') && !tr.textContent.toLowerCase().includes('[np]')) {
 						[...tr.children].forEach((th, i) => {
 							tabGlossary[i].push(th.textContent.trim().toLowerCase());
 						});
