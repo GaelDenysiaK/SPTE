@@ -79,6 +79,8 @@ const data = {
 		'eot',
 		'exe',
 		'gif',
+		'git',
+		'github',
 		'htaccess',
 		'html',
 		'ico',
