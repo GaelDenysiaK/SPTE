@@ -15,7 +15,6 @@ currentProjectLocaleSlug = (currentProjectLocaleSlug === '') ? 'fr' : currentPro
 // URLs.
 const typographyURL = 'https://fr.wordpress.org/team/handbook/guide-du-traducteur/les-regles-typographiques-utilisees-pour-la-traduction-de-wp-en-francais/';
 const glossaryURL = `https://translate.wordpress.org/locale/${currentProjectLocaleSlug}/default/glossary/`;
-const consistencyURL = `https://translate.wordpress.org/consistency/?search=&set=${currentProjectLocaleSlug}%2Fdefault&project=`;
 
 // Settings (localStorage doesn't have booleans).
 let lsHideCaption = localStorage.getItem('spteHideCaption') === 'true';
@@ -31,10 +30,12 @@ if (bulkActions) {
 }
 const tableTranslations = document.querySelector('#translations');
 const filterToolbar = document.querySelector('.filter-toolbar');
+const filterToolbarsDiv = document.querySelector('.filters-toolbar>div:first-child');
 const isConnected = document.querySelector('body.logged-in') !== null;
 const GDmayBeOnBoard = localStorage.getItem('gd_language') !== null;
 
 // Main elements created.
+const gpSeparator = createElement('SPAN', { class: 'separator' }, '•');
 const spPopup = createElement('DIV', { id: 'sp-the-popup', class: 'sp-the-popup--hidden' });
 const spGDNoticesContainer = createElement('DIV', { id: 'sp-gd-notices-container' });
 const spConsistency = createElement('DIV', { id: 'sp-consist-container' });
@@ -57,9 +58,8 @@ typographyLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link-
 const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 glossaryLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link--glossary" target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
 const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
-const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel' }, '📕');
-const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: typographyURL, target: '_blank', title: 'Règles typographiques' }, '📕');
-const linkConsistency = createElement('A', { id: 'sp-results__link-consist', class: 'sp-results__buttons', href: consistencyURL, target: '_blank', title: 'Cohérence des traductions' }, '📘');
+const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel global' }, 'Glossaire');
+const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: typographyURL, target: '_blank', title: 'Règles typographiques' }, 'Typographie');
 
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
 const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
@@ -549,12 +549,12 @@ function mainProcesses(spteSettings) {
 	}
 
 	if ((onFrenchLocale || onOtherLocale) && gpContent && tableTranslations) {
-		if (filterToolbar && onFrenchLocale) {
-			filterToolbar.append(linkGlossary, linkTypography, linkConsistency);
-		} else if (filterToolbar && onOtherLocale) {
-			filterToolbar.append(linkGlossary, linkConsistency);
-			linkGlossary.style.right = '70px';
+		if (filterToolbarsDiv && onFrenchLocale) {
+			filterToolbarsDiv.append(linkGlossary, gpSeparator, linkTypography);
+		} else if (filterToolbarsDiv && onOtherLocale) {
+			filterToolbarsDiv.append(linkGlossary);
 		}
+
 		setColors(spteSettings.spteColorWord, spteSettings.spteColorQuote, spteSettings.spteColorChar);
 		preventGlotDictTags();
 		translations.forEach(checkTranslation);
