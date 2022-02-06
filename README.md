@@ -80,4 +80,4 @@ Il peut être nécessaire de désactiver l’extension uBlock Origin sur transla
 Toute extension bloquant les scripts peut avoir besoin du même processus.
 
 ## Remerciements
-Merci à <a href="https://wpgridbuilder.com/">Loïc Blascos</a> pour avoir fait passer mon code de l’âge de pierre à l’âge de raison en me faisant découvrir l’API DOM et l’API CSSOM et en me convertissant aux expressions régulières.
+Merci à <a href="https://wpgridbuilder.com/">Loïc Blascos</a> pour m’avoir fait découvrir l’API DOM et l’API CSSOM et pour m’avoir converti aux expressions régulières.
