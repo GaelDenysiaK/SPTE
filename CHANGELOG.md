@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.9] - 06 février 2022
+
+### Changed
+- Amélioration de l’affichage des liens Glossaire officiel et Règles typographiques
+
+### Added
+- Ajout des exceptions textuelles : ics, git et github
+- Ajout test import glossaire sur code « [np] » pour futur remplacement de « spte » dans le glossaire
 ## [1.0.8] - 01 novembre 2021
 
 ### Fixed
