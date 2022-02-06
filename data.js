@@ -84,7 +84,7 @@ const data = {
 		'htaccess',
 		'html',
 		'ico',
-		'ics,
+		'ics',
 		'jpg',
 		'jpeg',
 		'js',
