@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0] - 03 avril 2022
+
+### Changed
+- Suppression des liens Glossaire officiel et Typographie qui vont être ajoutés par GlotDict dans la prochaine version
+
+### Fixed
+- Correction des styles cassés suite à mise à jour de GlotPress
+
 ## [1.0.9] - 06 février 2022
 
 ### Changed
