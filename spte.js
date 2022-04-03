@@ -58,9 +58,6 @@ typographyLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link-
 const glossaryLink = createElement('P', { class: 'sp-results__caption sp-results__caption--link' });
 glossaryLink.innerHTML = `Consultez <a class="sp-caption-link sp-caption-link--glossary" target="_blank" href="${glossaryURL}">le glossaire officiel</a> à respecter pour les mots.`;
 const hideCaption = createElement('A', { id: 'sp-results__toggle-caption', href: '#', title: 'Légende' });
-const linkGlossary = createElement('A', { id: 'sp-results__link-glossary', class: 'sp-results__buttons', href: glossaryURL, target: '_blank', title: 'Glossaire officiel global' }, 'Glossaire');
-const linkTypography = createElement('A', { id: 'sp-results__link-typo', class: 'sp-results__buttons', href: typographyURL, target: '_blank', title: 'Règles typographiques' }, 'Typographie');
-
 const spFilters = createElement('DIV', { class: 'sp-controls__filters' }, 'Afficher  ');
 const showEverything = createElement('INPUT', { type: 'radio', id: 'sp-show-all-translations', name: 'showEverything', value: 'showEverything', checked: 'checked' });
 const showEverythingLabel = createElement('LABEL', { for: 'sp-show-all-translations' }, 'Tout');
@@ -549,12 +546,6 @@ function mainProcesses(spteSettings) {
 	}
 
 	if ((onFrenchLocale || onOtherLocale) && gpContent && tableTranslations) {
-		if (filterToolbarsDiv && onFrenchLocale) {
-			filterToolbarsDiv.append(linkGlossary, gpSeparator, linkTypography);
-		} else if (filterToolbarsDiv && onOtherLocale) {
-			filterToolbarsDiv.append(linkGlossary);
-		}
-
 		setColors(spteSettings.spteColorWord, spteSettings.spteColorQuote, spteSettings.spteColorChar);
 		preventGlotDictTags();
 		translations.forEach(checkTranslation);
