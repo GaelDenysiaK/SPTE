@@ -14,6 +14,10 @@ const data = {
 		'roter l\'image',
 		'responsif',
 		's4est',
+		'template',
+		'templates',
+		'add-on',
+		'add-ons',
 	],
 	slash: [
 		'/',
