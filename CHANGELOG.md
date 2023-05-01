@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.0] - 01 mai 2023
+- Migrate extension to Manifest V3
+
+### Changed
+- Suppression des liens Glossaire officiel et Typographie qui vont être ajoutés par GlotDict dans la prochaine version
 ## [1.1.0] - 03 avril 2022
 
 ### Changed

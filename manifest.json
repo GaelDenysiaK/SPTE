@@ -1,7 +1,7 @@
 {
 	"name": "SPTE",
 	"description": "Affiche des erreurs typographiques sur les traductions françaises WordPress",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"manifest_version": 3,
 	"icons": {
 		"16": "icons/icon16.png",
